@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
+    <meta name="theme-color" content="#0e1012" />
+    <meta name="description" content="Landmarked — a daily architecture geography game. Five famous buildings, one clue each: find them on the globe." />
+    <title>Landmarked</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230e1012'/%3E%3Cpath d='M16 5c-4.4 0-8 3.4-8 7.8C8 19 16 27 16 27s8-8 8-14.2C24 8.4 20.4 5 16 5z' fill='%23e3b261'/%3E%3Ccircle cx='16' cy='12.6' r='3' fill='%230e1012'/%3E%3C/svg%3E" />
+  </head>
+  <body>
+    <div id="app">
+      <header class="topbar">
+        <button id="menu-btn" class="icon-btn" aria-label="How it works" aria-haspopup="dialog">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+        <div class="logo" aria-label="Landmarked">
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M12 2.5c-3.9 0-7 3-7 6.9 0 5.4 7 12.1 7 12.1s7-6.7 7-12.1c0-3.9-3.1-6.9-7-6.9z" fill="currentColor"/><circle cx="12" cy="9.4" r="2.6" fill="var(--bg)"/></svg>
+          <span>LANDMARKED</span>
+        </div>
+        <div id="date" class="date"></div>
+      </header>
+
+      <section class="hud">
+        <div class="scorebox">
+          <div class="label">SCORE</div>
+          <div id="score" class="score">0</div>
+        </div>
+        <div class="question">
+          <div class="qhead">
+            <span id="qnum">QUESTION 1 OF 5</span>
+            <span id="qtier" class="tier">EASY</span>
+            <span id="dots" class="dots" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+          </div>
+          <p id="clue" class="clue">Five famous buildings. One clue each. Tap the globe where you think it stands.</p>
+        </div>
+      </section>
+
+      <main id="stage" class="stage">
+        <div id="globe" class="globe" aria-label="Globe. Tap to place your guess."></div>
+        <div id="globe-placeholder" class="placeholder"><div class="orb"></div><span id="globe-status">Loading globe…</span></div>
+        <div id="credits" class="credits"></div>
+
+        <div id="result" class="card result" hidden>
+          <div class="result-top">
+            <div><span id="r-points" class="points">0</span><span class="pts">PTS</span></div>
+            <div id="r-distance" class="distance"></div>
+          </div>
+          <h2 id="r-name"></h2>
+          <dl class="facts">
+            <dt>Architect</dt><dd id="r-architect"></dd>
+            <dt>Year</dt><dd id="r-year"></dd>
+            <dt>Place</dt><dd id="r-city"></dd>
+          </dl>
+          <button id="next-btn" class="btn primary">Next</button>
+        </div>
+      </main>
+
+      <footer class="bottombar">
+        <label class="check">
+          <input id="confirm-toggle" type="checkbox" />
+          <span class="box" aria-hidden="true"></span>
+          <span>Confirm location before locking in</span>
+        </label>
+        <button id="lock-btn" class="btn primary small" hidden>Lock in</button>
+        <button id="results-btn" class="btn small" hidden>Results</button>
+      </footer>
+
+      <!-- Intro -->
+      <div id="intro" class="overlay">
+        <div class="panel intro">
+          <div class="intro-mark">
+            <svg viewBox="0 0 24 24" width="40" height="40" aria-hidden="true"><path d="M12 2.5c-3.9 0-7 3-7 6.9 0 5.4 7 12.1 7 12.1s7-6.7 7-12.1c0-3.9-3.1-6.9-7-6.9z" fill="currentColor"/><circle cx="12" cy="9.4" r="2.6" fill="var(--panel)"/></svg>
+          </div>
+          <h1>Landmarked</h1>
+          <p class="lede">Five famous buildings a day. One clue each.<br />Find them on the globe.</p>
+          <ul class="tiers">
+            <li><b class="t-easy">2 easy</b></li>
+            <li><b class="t-medium">1 medium</b></li>
+            <li><b class="t-hard">2 hard</b></li>
+          </ul>
+          <button id="play-btn" class="btn primary big">Play today's five</button>
+          <p id="intro-note" class="note">Same buildings for everyone. New ones at midnight.</p>
+        </div>
+      </div>
+
+      <!-- How it works -->
+      <div id="help" class="overlay" hidden role="dialog" aria-modal="true" aria-labelledby="help-title">
+        <div class="panel help">
+          <button class="icon-btn close" data-close aria-label="Close">✕</button>
+          <h2 id="help-title">How it works</h2>
+          <ol>
+            <li>Every day there are <b>5 buildings</b>, the same for everyone: two easy, one medium, two hard.</li>
+            <li>Read the clue, then <b>tap the globe</b> where you think the building stands. Drag to spin, pinch or scroll to zoom.</li>
+            <li>Want a second look? Tick <b>Confirm location before locking in</b>: your tap drops a pin, and <b>Lock in</b> makes it final.</li>
+            <li>Each building is worth <b>200 points</b>. Within 10 km you get them all; after that, points fall off with distance (half at about 565 km away).</li>
+            <li>Best possible day: <b>1,000</b>. Share your score and come back tomorrow.</li>
+          </ol>
+          <h3>Credits</h3>
+          <p class="small-print">
+            Globe: <a href="https://cesium.com/platform/cesiumjs/" target="_blank" rel="noopener">CesiumJS</a> (Apache 2.0).
+            Satellite: Sentinel-2 cloudless – <a href="https://s2maps.eu" target="_blank" rel="noopener">s2maps.eu</a> by EOX IT Services GmbH (contains modified Copernicus Sentinel data 2016 &amp; 2017), CC BY 4.0.
+            Night lights: NASA Earth Observatory / GIBS, Black Marble.
+            Borders: <a href="https://www.naturalearthdata.com" target="_blank" rel="noopener">Natural Earth</a>.
+          </p>
+        </div>
+      </div>
+
+      <!-- End of day -->
+      <div id="end" class="overlay" hidden role="dialog" aria-modal="true" aria-labelledby="end-title">
+        <div class="panel end">
+          <button class="icon-btn close" data-close aria-label="Close">✕</button>
+          <div class="end-label" id="end-title">TODAY'S SCORE</div>
+          <div class="end-total"><span id="end-score">0</span><span class="of">/ 1000</span></div>
+          <div id="end-bars" class="bars"></div>
+          <ol id="end-list" class="end-list"></ol>
+          <div class="share">
+            <pre id="share-text"></pre>
+            <button id="share-btn" class="btn primary">Copy result</button>
+          </div>
+          <button id="showall-btn" class="btn">See today's buildings on the globe</button>
+          <div class="countdown">Next buildings in <span id="countdown">--:--:--</span></div>
+        </div>
+      </div>
+
+      <div id="toast" class="toast" hidden></div>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
