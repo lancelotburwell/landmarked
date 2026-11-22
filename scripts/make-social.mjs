@@ -15,7 +15,7 @@
 //
 // Writes public/social/<date>-1.jpg and -2.jpg (served from landmarked.land so
 // Metricool can fetch them) and social/out/captions.json (gitignored) with each
-// post's caption: the teaser line, the catchphrase and link, hashtags, and the photo credit that CC BY and
+// post's caption: the teaser line, the catchphrase with the difficulty square, the link, hashtags, and the photo credit that CC BY and
 // CC BY-SA require (creator, licence, "cropped").
 import puppeteer from 'puppeteer-core';
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
@@ -34,6 +34,9 @@ const credits = JSON.parse(read('public/photos/credits.json'));
 const schedule = Object.fromEntries(JSON.parse(read('data/schedule.json')).map((d) => [d.date, d]));
 const font = (w) => readFileSync(new URL(`node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-${w}-normal.woff2`, root)).toString('base64');
 const W = 1080, H = 1350;
+// The building's difficulty, in the app's tier colours (src/game.ts TIER_COLOR:
+// easy #8cc5a0, medium #e3b261, hard #e2775c) as the nearest emoji squares.
+const TIER_SQUARE = { easy: '🟩', medium: '🟨', hard: '🟥' };
 mkdirSync(new URL('public/social/', root), { recursive: true });
 mkdirSync(new URL('social/out/', root), { recursive: true });
 
@@ -88,13 +91,13 @@ for (const p of todo) {
   const credit = /public domain|cc0/i.test(c.license) ? '📷 Wikimedia Commons' : `📷 ${artist} · ${c.license} · cropped · Wikimedia Commons`;
   const text = `${p.line}
 
-Can you find it on the globe?
+Can you find it on the globe? ${TIER_SQUARE[b.tier]}
 Play at landmarked.land (link in bio)
 
 #architecture #geography #dailypuzzle #guessthebuilding
 
 ${credit}`;
-  captions.push({ date: p.date, id: p.id, name: b.name, round: round + 1, sourcePx: Math.round(w * iw), first: p.first, images: (p.first === 'photo' ? [2, 1] : [1, 2]).map((n) => `https://landmarked.land/social/${p.date}-${n}.jpg`), clue, text });
+  captions.push({ date: p.date, id: p.id, name: b.name, tier: b.tier, round: round + 1, sourcePx: Math.round(w * iw), first: p.first, images: (p.first === 'photo' ? [2, 1] : [1, 2]).map((n) => `https://landmarked.land/social/${p.date}-${n}.jpg`), clue, text });
   console.log(p.date, p.id, `round ${round + 1}`, `${p.first} first`, `crop is ${Math.round(w * iw)} px of source${w * iw < 500 ? ' (soft)' : ''}`);
 }
 writeFileSync(new URL('social/out/captions.json', root), JSON.stringify(captions, null, 2));
