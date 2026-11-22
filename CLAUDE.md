@@ -13,7 +13,7 @@ A daily architecture geography game: a static Vite + TypeScript site with a Cesi
 
 ## Rules and decisions
 - **No Cesium ion**: `Ion.defaultAccessToken = ''`, and every imagery provider is passed explicitly. Don't add anything that needs a token.
-- Imagery layers, bottom to top: bundled NaturalEarthII (instant and offline), then EOX Sentinel-2 cloudless 2016 (levels 0–14).
+- Imagery layers, bottom to top: bundled NaturalEarthII (instant and offline), then EOX Sentinel-2 cloudless 2016 (levels 0–14). `?imagery=nasa` swaps EOX for public-domain NASA imagery (Blue Marble NG to level 8, then Landsat WELD 2000 to level 12, shown only from terrain level 8 because its no-data gaps make dark blocks over the sea). The user is weighing NASA as the free commercial option (2026-11-22).
 - **Lighting is Google Earth style, not real sun time.** `scene.light` is a `DirectionalLight` that `preUpdate` re-aims every frame from over the viewer's left shoulder, so the visible face is always lit and only the lower-right limb is shaded. Sun and moon are hidden (they'd sit in the wrong place), and `globe.dynamicAtmosphereLightingFromSun = false` keeps the atmosphere on the same light. Shading fades out as you zoom in (`lightingFadeOut/InDistance`). The user dropped the NASA night-lights layer on purpose (2026-11-22); don't re-add a real-time day/night line without asking.
 - Import core math types (`Cartesian3`, `Color`, `Math`, …) from `@cesium/core`, not `@cesium/engine`. Engine re-exports are deprecated and will be removed in Cesium 1.150.
 - Camera: no tilt and no look, minimum zoom 15 km (Sentinel-2 is ~10 m/px, so closer is only blur), guesses come from `LEFT_CLICK` (fires only without a drag) + `pickEllipsoid`.

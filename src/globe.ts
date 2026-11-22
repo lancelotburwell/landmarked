@@ -43,6 +43,12 @@ Ion.defaultAccessToken = '';
 const EOX_CREDIT =
   'Sentinel-2 cloudless – <a href="https://s2maps.eu" target="_blank" rel="noopener">https://s2maps.eu</a> by EOX IT Services GmbH (Contains modified Copernicus Sentinel data 2016 &amp; 2017)';
 
+const GIBS = 'https://gibs.earthdata.nasa.gov/wmts/epsg3857/best';
+const NASA_CREDIT = 'Imagery: NASA Blue Marble &amp; Landsat WELD (USGS/NASA), via NASA GIBS';
+
+/** 'eox': Sentinel-2 cloudless (sharp, non-commercial server). 'nasa': public-domain NASA imagery. */
+export type Imagery = 'eox' | 'nasa';
+
 const HOME_ALT = 1.6e7; // m, whole globe in view
 const MARK_H = 40; // m above the ellipsoid, keeps markers out of z-fighting
 const LINE_H = 300;
@@ -68,7 +74,7 @@ export class Globe {
   /** Resolves when the first full set of tiles has been drawn. */
   readonly tilesLoaded: Promise<void>;
 
-  constructor(el: HTMLElement, creditEl: HTMLElement) {
+  constructor(el: HTMLElement, creditEl: HTMLElement, imagery: Imagery = 'eox') {
     const dpr = window.devicePixelRatio || 1;
     const widget = new CesiumWidget(el, {
       // 1. Bundled NaturalEarthII: shows a globe instantly, even offline.
@@ -90,15 +96,36 @@ export class Globe {
     const scene = widget.scene;
     const layers = scene.imageryLayers;
 
-    // 2. Daytime satellite: Sentinel-2 cloudless 2016, ~10 m/px.
-    layers.addImageryProvider(
-      new UrlTemplateImageryProvider({
-        url: 'https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless_3857/default/g/{z}/{y}/{x}.jpg',
-        tilingScheme: new WebMercatorTilingScheme(),
-        maximumLevel: 14,
-        credit: new Credit(EOX_CREDIT, true),
-      }),
-    );
+    if (imagery === 'eox') {
+      // 2. Daytime satellite: Sentinel-2 cloudless 2016, ~10 m/px.
+      layers.addImageryProvider(
+        new UrlTemplateImageryProvider({
+          url: 'https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless_3857/default/g/{z}/{y}/{x}.jpg',
+          tilingScheme: new WebMercatorTilingScheme(),
+          maximumLevel: 14,
+          credit: new Credit(EOX_CREDIT, true),
+        }),
+      );
+    } else {
+      // 2. NASA Blue Marble Next Generation, ~500 m/px, public domain.
+      layers.addImageryProvider(
+        new UrlTemplateImageryProvider({
+          url: `${GIBS}/BlueMarble_NextGeneration/default/GoogleMapsCompatible_Level8/{z}/{y}/{x}.jpeg`,
+          tilingScheme: new WebMercatorTilingScheme(),
+          maximumLevel: 8,
+          credit: new Credit(NASA_CREDIT, true),
+        }),
+      );
+      // 3. Landsat WELD annual composite (year 2000), ~30-40 m/px, public domain.
+      // Only on close-ups: zoomed out, its no-data gaps show as dark blocks over the sea.
+      layers.add(
+        new ImageryLayer(new UrlTemplateImageryProvider({
+          url: `${GIBS}/Landsat_WELD_CorrectedReflectance_TrueColor_Global_Annual/default/2000-12-01/GoogleMapsCompatible_Level12/{z}/{y}/{x}.jpg`,
+          tilingScheme: new WebMercatorTilingScheme(),
+          maximumLevel: 12,
+        }), { minimumTerrainLevel: 8 }),
+      );
+    }
 
     const globe = scene.globe;
     globe.baseColor = Color.fromCssColorString('#0a1622');

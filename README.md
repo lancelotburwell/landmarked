@@ -28,6 +28,7 @@ Requires Node 22.17+ (needed by `@cesium/core`); CI uses Node 24.
 |---|---|
 | `npm run verify-coords` | Checks every building's lon/lat against Wikipedia and Wikidata. Add `-- --write` to adopt Wikipedia's coordinates. |
 | `node scripts/playtest.mjs [url] [outDir] [phone\|desktop]` | Plays a full day in headless Chrome at phone and desktop sizes and saves screenshots. Needs a running preview. |
+| `node scripts/compare-imagery.mjs [url] [outDir]` | Screenshots the same views with EOX and NASA imagery for comparison. |
 | `npm run measure -- [url] [runs]` | Measures time to an interactive globe on a throttled "Fast 4G" connection, cold and warm. |
 | `node scripts/build-borders.mjs <dir>` | Rebuilds `public/borders.json` from Natural Earth 1:50m GeoJSON. |
 

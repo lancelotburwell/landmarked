@@ -96,8 +96,10 @@ if (state.guesses.length >= ROUNDS) {
 performance.mark('ui-ready');
 const globeReady = import('./globe')
   .then(({ Globe }) => {
+    // ?imagery=nasa switches to public-domain NASA imagery (for comparing).
+    const imagery = new URLSearchParams(location.search).get('imagery') === 'nasa' ? 'nasa' : 'eox';
     performance.mark('cesium-loaded');
-    const g = new Globe(el.globe, el.credits);
+    const g = new Globe(el.globe, el.credits, imagery);
     globe = g;
     g.onClick(onGlobeClick);
     void g.tilesLoaded.then(() => {
