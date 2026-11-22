@@ -20,7 +20,7 @@ npm run build        # tsc + vite build → dist/
 npm run preview      # http://localhost:4173/landmarked/
 ```
 
-Requires Node 22.17+ (needed by `@cesium/core`).
+Requires Node 22.17+ (needed by `@cesium/core`); CI uses Node 24.
 
 ### Scripts
 
