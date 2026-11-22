@@ -1,0 +1,41 @@
+# Keeps the daily puzzles planned 28 days ahead, so the game never runs out.
+# Runs every night: npm run schedule (it never changes days up to tomorrow),
+# and if the plan changed, commits data/schedule.json and pushes, which
+# makes Vercel redeploy. Commits use the repo's identity "Burwell Projects",
+# because Vercel Hobby skips builds from any other commit author.
+name: Refresh schedule
+
+on:
+  schedule:
+    - cron: '17 2 * * *' # 02:17 UTC daily
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: schedule
+  cancel-in-progress: false
+
+jobs:
+  schedule:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      # The scheduler only uses Node built-ins, so no npm install is needed.
+      - run: node scripts/schedule.mjs
+      - run: node scripts/export-days.mjs
+      - name: Commit and push if the plan changed
+        run: |
+          if git diff --quiet data/schedule.json; then
+            echo "Schedule unchanged."
+            exit 0
+          fi
+          git config user.name "Burwell Projects"
+          git config user.email "burwell.projects@gmail.com"
+          git add data/schedule.json
+          git commit -m "Refresh daily schedule"
+          git push
