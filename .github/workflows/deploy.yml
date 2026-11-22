@@ -23,7 +23,8 @@ jobs:
         with:
           node-version: 24
           cache: npm
-      - run: npm ci
+      # npm ci can trip over platform-specific optional deps in the lockfile; fall back to install.
+      - run: npm ci || npm install --no-audit --no-fund
       - run: npm run build
         env:
           BASE: /landmarked/
