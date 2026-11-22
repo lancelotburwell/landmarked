@@ -62,15 +62,18 @@ Adding buildings changes which buildings appear on future days (see `pickDay` in
 ## Credits and licences
 
 - Globe: CesiumJS, Apache 2.0.
-- Daytime imagery: **Sentinel-2 cloudless – https://s2maps.eu by EOX IT Services GmbH (Contains modified Copernicus Sentinel data 2016 & 2017)**, CC BY 4.0. Tiles come from EOX's public tile server (see the commercial-use note below).
+- Imagery: **NASA Blue Marble Next Generation** (globe, ~500 m/px) and **Landsat WELD 2000** (close-ups, ~30–40 m/px), served by NASA GIBS. Both are public domain, free for commercial use, no API key. Landsat imagery is from the year 2000, so newer coastline changes (e.g. Dubai's Palm islands) are missing.
 - Borders and country codes: Natural Earth (public domain).
 - Font: IBM Plex Mono (SIL OFL), bundled with `@fontsource`.
 
-### Before a commercial launch
+Everything above is fine for commercial use, including ads.
 
-The 2016 Sentinel-2 cloudless mosaic is licensed CC BY 4.0, which allows commercial use with attribution. **EOX's public tile server, however, is meant for non-commercial use.** Before launching commercially, either:
+### Comparing with Sentinel-2 cloudless
 
-1. **Self-host the tiles.** Render or buy the 2016 mosaic (EOX sells the data, and the CC BY 2016 version can be self-processed from Copernicus data), cut it into Web Mercator tiles up to level 14, and serve them from object storage behind a CDN. Then change the URL in `src/globe.ts`. Levels 0–14 for the whole world add up to hundreds of GB, so a common approach is to serve levels 0–10 globally and higher levels only around the buildings in the pool.
-2. **Get an EOX licence** for commercial use of their tile service (EOX offers commercial subscriptions for s2maps).
+`?imagery=eox` swaps in **Sentinel-2 cloudless – https://s2maps.eu by EOX IT Services GmbH (Contains modified Copernicus Sentinel data 2016 & 2017)**: sharper at country scale (~10 m/px) and newer, but EOX's public tile server is for non-commercial use. Use it as the default only with an EOX commercial licence or self-hosted tiles. `node scripts/compare-imagery.mjs` screenshots both side by side.
 
-Natural Earth and CesiumJS are fine either way. For a free commercial-friendly fallback, NASA GIBS imagery (public domain, ~250–500 m/px) needs no key.
+### Before adding ads
+
+- A cookie-consent banner (ad networks set tracking cookies; Swiss/EU visitors must opt in).
+- A privacy policy and impressum.
+- Consider moving hosting to Cloudflare Pages: GitHub Pages' terms discourage running an online business on it.

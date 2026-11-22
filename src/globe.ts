@@ -74,7 +74,7 @@ export class Globe {
   /** Resolves when the first full set of tiles has been drawn. */
   readonly tilesLoaded: Promise<void>;
 
-  constructor(el: HTMLElement, creditEl: HTMLElement, imagery: Imagery = 'eox') {
+  constructor(el: HTMLElement, creditEl: HTMLElement, imagery: Imagery = 'nasa') {
     const dpr = window.devicePixelRatio || 1;
     const widget = new CesiumWidget(el, {
       // 1. Bundled NaturalEarthII: shows a globe instantly, even offline.
@@ -163,7 +163,8 @@ export class Globe {
     const ctrl = scene.screenSpaceCameraController;
     ctrl.enableTilt = false;
     ctrl.enableLook = false;
-    ctrl.minimumZoomDistance = 15_000; // Sentinel-2 tops out at ~10 m/px; closer is just blur
+    // Closest zoom before the imagery is just blur: Sentinel-2 ~10 m/px, Landsat ~38 m/px.
+    ctrl.minimumZoomDistance = imagery === 'eox' ? 15_000 : 35_000;
     ctrl.maximumZoomDistance = 4.0e7;
 
     // Start over the player's own longitude (from their time zone), mid-latitudes.

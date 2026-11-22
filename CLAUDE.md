@@ -13,10 +13,10 @@ A daily architecture geography game: a static Vite + TypeScript site with a Cesi
 
 ## Rules and decisions
 - **No Cesium ion**: `Ion.defaultAccessToken = ''`, and every imagery provider is passed explicitly. Don't add anything that needs a token.
-- Imagery layers, bottom to top: bundled NaturalEarthII (instant and offline), then EOX Sentinel-2 cloudless 2016 (levels 0–14). `?imagery=nasa` swaps EOX for public-domain NASA imagery (Blue Marble NG to level 8, then Landsat WELD 2000 to level 12, shown only from terrain level 8 because its no-data gaps make dark blocks over the sea). The user is weighing NASA as the free commercial option (2026-11-22).
+- Imagery layers, bottom to top: bundled NaturalEarthII (instant and offline), then by default (since 2026-11-22, chosen by the user so ads are allowed) public-domain NASA imagery via GIBS: Blue Marble Next Generation (levels 0–8) and Landsat WELD 2000 (to level 12). Landsat is shown only from terrain level 8, because its no-data gaps make dark blocks over the sea when zoomed out. `?imagery=eox` switches to EOX Sentinel-2 cloudless (levels 0–14, non-commercial server) for comparison.
 - **Lighting is Google Earth style, not real sun time.** `scene.light` is a `DirectionalLight` that `preUpdate` re-aims every frame from over the viewer's left shoulder, so the visible face is always lit and only the lower-right limb is shaded. Sun and moon are hidden (they'd sit in the wrong place), and `globe.dynamicAtmosphereLightingFromSun = false` keeps the atmosphere on the same light. Shading fades out as you zoom in (`lightingFadeOut/InDistance`). The user dropped the NASA night-lights layer on purpose (2026-11-22); don't re-add a real-time day/night line without asking.
 - Import core math types (`Cartesian3`, `Color`, `Math`, …) from `@cesium/core`, not `@cesium/engine`. Engine re-exports are deprecated and will be removed in Cesium 1.150.
-- Camera: no tilt and no look, minimum zoom 15 km (Sentinel-2 is ~10 m/px, so closer is only blur), guesses come from `LEFT_CLICK` (fires only without a drag) + `pickEllipsoid`.
+- Camera: no tilt and no look, minimum zoom 35 km with NASA (15 km with EOX), since closer is only blur, guesses come from `LEFT_CLICK` (fires only without a drag) + `pickEllipsoid`.
 - Static copy: only `Workers`, `ThirdParty`, `Assets` and `Widgets` from `node_modules/cesium/Build/Cesium` go to `dist/cesium/` (`stripBase: 4`).
 - **Daily picker** (`pickDay`): draws days in order from `EPOCH` (2026-11-01; never change it) with an RNG seeded by the day number. A building rests for ~60% of its tier's cycle before it can return, and the day's five are ≥1500 km apart when possible. Adding buildings changes future days. A day in progress keeps its stored ids (`load()`), and the ids are saved as soon as the page loads.
 - Scoring: 200 points within 10 km, then `200·exp(-(km-10)/800)`, rounded. Distance uses the haversine formula with R = 6371.0088 km.
@@ -30,5 +30,4 @@ A daily architecture geography game: a static Vite + TypeScript site with a Cesi
 - The Claude desktop app's built-in browser pane throttles rAF to ~2 fps with WebGL, so its screenshots lag behind. Use the Puppeteer scripts instead.
 
 ## Open items
-- The user plans ads, which makes it commercial: before ads go live, get an EOX licence or switch imagery (see README). Ads also need a cookie-consent banner (CH/EU visitors).
-- EOX's public tile server is for non-commercial use. A commercial launch needs self-hosted tiles or an EOX licence (see README).
+- The user plans ads. The imagery is now commercial-safe (NASA). Still needed before ads: a cookie-consent banner, a privacy policy and impressum, and possibly moving hosting to Cloudflare Pages.

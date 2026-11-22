@@ -96,8 +96,8 @@ if (state.guesses.length >= ROUNDS) {
 performance.mark('ui-ready');
 const globeReady = import('./globe')
   .then(({ Globe }) => {
-    // ?imagery=nasa switches to public-domain NASA imagery (for comparing).
-    const imagery = new URLSearchParams(location.search).get('imagery') === 'nasa' ? 'nasa' : 'eox';
+    // Public-domain NASA imagery by default; ?imagery=eox shows Sentinel-2 cloudless for comparison.
+    const imagery = new URLSearchParams(location.search).get('imagery') === 'eox' ? 'eox' : 'nasa';
     performance.mark('cesium-loaded');
     const g = new Globe(el.globe, el.credits, imagery);
     globe = g;
