@@ -15,7 +15,7 @@
 //
 // Writes public/social/<date>-1.jpg and -2.jpg (served from landmarked.land so
 // Metricool can fetch them) and social/out/captions.json (gitignored) with each
-// post's caption: the teaser line, the link, hashtags, and the photo credit that CC BY and
+// post's caption: the teaser line, the catchphrase and link, hashtags, and the photo credit that CC BY and
 // CC BY-SA require (creator, licence, "cropped").
 import puppeteer from 'puppeteer-core';
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
@@ -88,6 +88,7 @@ for (const p of todo) {
   const credit = /public domain|cc0/i.test(c.license) ? '📷 Wikimedia Commons' : `📷 ${artist} · ${c.license} · cropped · Wikimedia Commons`;
   const text = `${p.line}
 
+Can you find it on the globe?
 Play at landmarked.land (link in bio)
 
 #architecture #geography #dailypuzzle #guessthebuilding
