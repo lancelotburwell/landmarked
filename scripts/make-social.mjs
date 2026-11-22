@@ -8,6 +8,8 @@
 // large photo in social/src/<id>.jpg (get it with scripts/social-photos.mjs);
 // the height follows from the 4:5 frame. line is the caption's teaser: one
 // surprising fact about the building that doesn't give it away or repeat the clue.
+// first is "clue" or "photo": which slide leads. Missing ones are picked at
+// random and written back, so the feed varies and a re-render keeps the order.
 //
 //   node scripts/make-social.mjs [date ...]     (default: every date from today on)
 //
@@ -23,6 +25,10 @@ import { findChrome } from './chrome.mjs';
 const root = new URL('../', import.meta.url);
 const read = (p) => readFileSync(new URL(p, root), 'utf8');
 const posts = JSON.parse(read('data/social.json'));
+if (posts.some((p) => !p.first)) {
+  for (const p of posts) p.first ??= Math.random() < 0.5 ? 'clue' : 'photo';
+  writeFileSync(new URL('data/social.json', root), `[\n${posts.map((p) => '  ' + JSON.stringify(p)).join(',\n')}\n]\n`);
+}
 const buildings = Object.fromEntries(JSON.parse(read('data/buildings.json')).map((b) => [b.id, b]));
 const credits = JSON.parse(read('public/photos/credits.json'));
 const schedule = Object.fromEntries(JSON.parse(read('data/schedule.json')).map((d) => [d.date, d]));
@@ -87,8 +93,8 @@ Play at landmarked.land (link in bio)
 #architecture #geography #dailypuzzle #guessthebuilding
 
 ${credit}`;
-  captions.push({ date: p.date, id: p.id, name: b.name, round: round + 1, sourcePx: Math.round(w * iw), images: [1, 2].map((n) => `https://landmarked.land/social/${p.date}-${n}.jpg`), text });
-  console.log(p.date, p.id, `round ${round + 1}`, `crop is ${Math.round(w * iw)} px of source${w * iw < 500 ? ' (soft)' : ''}`);
+  captions.push({ date: p.date, id: p.id, name: b.name, round: round + 1, sourcePx: Math.round(w * iw), first: p.first, images: (p.first === 'photo' ? [2, 1] : [1, 2]).map((n) => `https://landmarked.land/social/${p.date}-${n}.jpg`), clue, text });
+  console.log(p.date, p.id, `round ${round + 1}`, `${p.first} first`, `crop is ${Math.round(w * iw)} px of source${w * iw < 500 ? ' (soft)' : ''}`);
 }
 writeFileSync(new URL('social/out/captions.json', root), JSON.stringify(captions, null, 2));
 await browser.close();
