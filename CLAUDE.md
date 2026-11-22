@@ -49,6 +49,36 @@ A daily architecture geography game: a static Vite + TypeScript site with a Cesi
 
 **Next:** start the weekly batches from the 264 shortlisted buildings without clues (in fame order). The user hasn't ruled on the earlier curation ideas (cut weak "hard" picks, cap castles and cathedrals, favour modern architecture and Africa, South America and East Asia); `data/selection.json` can be browsed in the private artifact https://claude.ai/artifact/4WfScLwJ6BKAmSHqoiKYf4.
 
+## Weekly building batch (cloud routine, Mondays)
+A scheduled Claude routine follows these steps every week. Do them in order and don't skip checks.
+
+1. Work on a new branch `claude/buildings-<YYYY-MM-DD>` from `main`. Set the commit identity first: `git config user.name "Burwell Projects"` and `git config user.email "burwell.projects@gmail.com"`.
+2. `node scripts/next-batch.mjs 35` writes `data/.cache/next-batch.json`: the next 35 shortlisted buildings in the daily tier ratio, with Wikidata facts and the Wikipedia intro.
+3. Decide for each one: keep, or drop with a short reason. Drop it if it is:
+   - not one building (a campus, district, city, bridge, park, ruin field or statue);
+   - a site of atrocity or war, or politically charged (see `data/clues/001-drops.json`);
+   - in a place whose country is disputed (Jerusalem, Crimea and so on): use the reason `"HOLD: disputed location, needs owner decision"`;
+   - a near-duplicate of a building already in `data/buildings.json`, or too obscure to be fair.
+   Places of worship are fine.
+4. Write `data/clues/<NNN>-batch-<YYYY-MM-DD>.json`, where NNN is the next free number, with one entry per id: `{ name, architect, year, city, country, clue, blurb }` or `{ drop }`.
+   - **name:** the common English name. **architect:** the architect or firm; for ancient buildings use `Commissioned by …` or `Unknown builders`. **year:** completion, as a string (`"1889"`, `"c. 126 AD"`, `"1248–1880"`). **city, country:** as on a map, in short English form.
+   - **clue:** 1–2 sentences, 15–35 words. Hint at form, materials, setting and one memorable story. Never name the building, its city or its country, or anything that gives the answer away alone (for example "Gaudí" or "Eiffel"). Describe places indirectly ("a harbour point", "a northern capital", "beside a red-roofed old town"). Hard ones must stay fair: give a regional hint (climate, a sea, a river, the continent's style).
+   - **blurb:** 2 sentences of surprising, fun facts; names are fine. Use British spelling (colour, centre, metres), plain words and no em-dashes.
+   - Use only facts from the Wikipedia intro or very well-established knowledge. If unsure, leave the fact out, and never invent numbers.
+   - Match the tone of the existing ones, for example:
+     - Sydney Opera House: clue "White concrete shells, all cut from one imaginary sphere, sit on a harbour point. Its architect resigned mid-build and never came back to see it finished." Blurb "The sails are covered in more than a million Swedish-made tiles that clean themselves when it rains. Utzon's winning entry was little more than a set of sketches."
+     - Kunsthaus Graz (hard): clue "A blue acrylic blob with nozzle-shaped skylights, nicknamed 'the friendly alien', moored beside a red-roofed old town."
+5. `node scripts/build-buildings.mjs`, then fix every problem it lists for the new buildings (missing fields, clues containing the name).
+6. `node scripts/verify-coords.mjs --write` adopts Wikipedia's coordinates. Then check `git diff data/buildings.json`: only the new lines may change. Revert any change to an existing building.
+7. Photos: if `python3 -c "import PIL"` fails, run `pip install pillow`. Then `node scripts/fetch-photos.mjs` (rerun it if it hits rate limits). Buildings with no usable photo are fine; list them in the PR.
+8. Don't touch `data/schedule.json`: the nightly Action adds the new buildings to the schedule after the merge.
+9. `npm ci && npm run build` must pass.
+10. Commit the clue file, `data/buildings.json`, the new photos and `public/photos/credits.json`, then push the branch. Open a PR titled `Weekly buildings: <n> new (<date>)`. Its body has:
+    - a table of name, tier, city and country, and clue;
+    - the dropped and held buildings with their reasons;
+    - photo gaps and anything you were unsure about.
+    If you can't open a PR, push the branch and say so in your final message.
+
 ## Verify changes
 - `npm run build && npx vite preview --port 4173`, then `node scripts/playtest.mjs http://localhost:4173/ <outDir>` (also try `?practice=new`). It plays a full day at phone and desktop sizes in headless Chrome, opens a pin card and saves screenshots. `vite preview` caches its file list: restart it after a rebuild.
 - `npm run measure -- <url>` gives Fast-4G timings. `node scripts/compare-imagery.mjs` shows EOX and NASA side by side.

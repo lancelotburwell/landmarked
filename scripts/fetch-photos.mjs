@@ -85,7 +85,7 @@ for (const b of todo) {
   if (!res.ok) { skipped.push(`${b.id}: download ${res.status}`); continue; }
   writeFileSync(raw, Buffer.from(await res.arrayBuffer()));
   const out = new URL(`${b.id}.jpg`, outDir);
-  const py = spawnSync('python', ['-I', new URL('scripts/resize-photo.py', root).pathname.replace(/^\/([A-Z]:)/, '$1'), raw.pathname.replace(/^\/([A-Z]:)/, '$1'), out.pathname.replace(/^\/([A-Z]:)/, '$1')], { encoding: 'utf8' });
+  const py = spawnSync(process.env.PYTHON ?? (process.platform === 'win32' ? 'python' : 'python3'), ['-I', new URL('scripts/resize-photo.py', root).pathname.replace(/^\/([A-Z]:)/, '$1'), raw.pathname.replace(/^\/([A-Z]:)/, '$1'), out.pathname.replace(/^\/([A-Z]:)/, '$1')], { encoding: 'utf8' });
   if (py.status !== 0) { skipped.push(`${b.id}: resize failed ${py.stderr.slice(0, 120)}`); continue; }
   const [w, h] = py.stdout.trim().split('x').map(Number);
   photos[b.id] = {
