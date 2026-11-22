@@ -188,14 +188,8 @@ button { font: inherit; color: inherit; }
 .bcard { background: var(--bg); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
 /* Photos keep their own shape, never cropped: landscape fills the card width,
    tall ones are capped in height and centred on the panel colour. */
-.bphoto { margin: 0; background: var(--panel-2); }
+.bphoto { position: relative; margin: 0; background: var(--panel-2); }
 .bphoto img { display: block; margin: 0 auto; width: auto; height: auto; max-width: 100%; max-height: 60vh; }
-.bphoto figcaption {
-  padding: 5px 10px; font-size: 9.5px; line-height: 1.3; color: var(--muted);
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
-.bphoto figcaption a { color: inherit; text-decoration: none; }
-.bphoto figcaption a:hover { text-decoration: underline; }
 .bbody { padding: 12px 14px 14px; }
 .btop { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .bres { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
@@ -289,8 +283,9 @@ button { font: inherit; color: inherit; }
 .rphoto-box { position: relative; height: min(24vh, 210px); background: var(--panel-2); overflow: hidden; }
 .rphoto-box::before { content: ""; position: absolute; inset: -24px; background: var(--photo) center / cover no-repeat; filter: blur(18px) brightness(0.5); }
 .rphoto-box img { position: relative; display: block; width: 100%; height: 100%; object-fit: contain; }
-/* Credit hidden behind a faint "i" in the corner; tapping it shows the credit over the photo. */
-/* Barely visible: a 12px glyph at low opacity, inside a larger invisible tap area. */
+/* Photo credits (result card and end-screen cards) hide behind a barely visible "i"
+   in the photo's corner: a 12px glyph at low opacity in a larger invisible tap area.
+   Tapping it shows the credit over the bottom of the photo. */
 .rphoto-info {
   position: absolute; right: 0; bottom: 0; width: 30px; height: 30px; padding: 0;
   border: 0; background: none; cursor: pointer; opacity: 0.3;
@@ -300,14 +295,14 @@ button { font: inherit; color: inherit; }
   border: 1px solid rgba(255, 255, 255, 0.8); color: #fff; font: italic 600 8px/11px Georgia, serif; text-align: center;
 }
 .rphoto-info:hover, .rphoto-info:focus-visible, .credit-on .rphoto-info { opacity: 0.85; }
-.rphoto figcaption {
+.rphoto figcaption, .bphoto figcaption {
   position: absolute; left: 0; right: 0; bottom: 0; padding: 18px 30px 6px 10px; font-size: 10px; line-height: 1.3;
   background: linear-gradient(transparent, rgba(0, 0, 0, 0.75)); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   opacity: 0; pointer-events: none; transition: opacity 0.15s;
 }
 .credit-on figcaption { opacity: 1; pointer-events: auto; }
-.rphoto figcaption a { color: rgba(255, 255, 255, 0.9); text-decoration: none; }
-.rphoto figcaption a:hover { text-decoration: underline; }
+.rphoto figcaption a, .bphoto figcaption a { color: rgba(255, 255, 255, 0.9); text-decoration: none; }
+.rphoto figcaption a:hover, .bphoto figcaption a:hover { text-decoration: underline; }
 @media (max-height: 560px) and (orientation: landscape) {
   .rphoto { margin: -10px -14px 8px; }
   .rphoto-box { height: 30vh; }

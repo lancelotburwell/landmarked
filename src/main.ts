@@ -411,7 +411,16 @@ function buildingCard(i: number, cr: Record<string, PhotoCredit>): HTMLElement {
           link.target = '_blank';
           link.rel = 'noopener';
           cap.append(link);
-          fig.append(img, cap);
+          // Same barely visible "i" as the result card; it toggles the credit.
+          const info = h('button', 'rphoto-info');
+          info.type = 'button';
+          info.setAttribute('aria-label', 'Photo credit');
+          info.setAttribute('aria-expanded', 'false');
+          info.addEventListener('click', () => {
+            const on = fig.classList.toggle('credit-on');
+            info.setAttribute('aria-expanded', String(on));
+          });
+          fig.append(img, cap, info);
           card.append(fig);
         }
         const body = h('div', 'bbody');
