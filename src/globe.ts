@@ -15,6 +15,7 @@ import {
 import {
   BillboardCollection,
   CesiumWidget,
+  DirectionalLight,
   Credit,
   HorizontalOrigin,
   ImageryLayer,
@@ -41,7 +42,6 @@ Ion.defaultAccessToken = '';
 
 const EOX_CREDIT =
   'Sentinel-2 cloudless – <a href="https://s2maps.eu" target="_blank" rel="noopener">https://s2maps.eu</a> by EOX IT Services GmbH (Contains modified Copernicus Sentinel data 2016 &amp; 2017)';
-const NASA_CREDIT = 'Night lights: NASA Black Marble (Earthdata GIBS)';
 
 const HOME_ALT = 1.6e7; // m, whole globe in view
 const MARK_H = 40; // m above the ellipsoid, keeps markers out of z-fighting
@@ -100,49 +100,43 @@ export class Globe {
       }),
     );
 
-    // 3. City lights, only on the night side.
-    const night = layers.addImageryProvider(
-      new UrlTemplateImageryProvider({
-        url: 'https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/VIIRS_Black_Marble/default/2016-01-01/GoogleMapsCompatible_Level8/{z}/{y}/{x}.png',
-        tilingScheme: new WebMercatorTilingScheme(),
-        maximumLevel: 8,
-        credit: new Credit(NASA_CREDIT, true),
-      }),
-    );
-    night.dayAlpha = 0.0;
-    night.nightAlpha = 1.0;
-    night.brightness = 2.0;
-
     const globe = scene.globe;
     globe.baseColor = Color.fromCssColorString('#0a1622');
     globe.enableLighting = true;
     globe.showGroundAtmosphere = true;
     globe.dynamicAtmosphereLighting = true;
-    // Day/night line from far away; fully lit once you zoom in, so a guess
-    // on the night side is still readable.
+    globe.dynamicAtmosphereLightingFromSun = false; // atmosphere follows scene.light
+    // Shading is strongest on the whole-globe view and fades out as you zoom
+    // in, so close-ups are always evenly lit.
     globe.lightingFadeOutDistance = 2.5e6;
     globe.lightingFadeInDistance = 8.0e6;
     globe.tileCacheSize = 300;
     globe.preloadAncestors = true;
 
-    // Once lighting has faded out (zoomed in), Cesium no longer separates day
-    // from night, and the upsampled light tiles would smear over the daytime
-    // imagery. Only show them while the day/night split is drawn.
-    scene.preRender.addEventListener(() => {
-      const show = scene.camera.positionCartographic.height > globe.lightingFadeOutDistance;
-      if (night.show !== show) {
-        night.show = show;
-        scene.requestRender();
-      }
+    // Google Earth-style light: it comes from over the viewer's left shoulder
+    // and follows the camera, so whatever you look at is in daylight and only
+    // the lower-right limb falls into shadow. (No real sun, no night side.)
+    const light = new DirectionalLight({ direction: Cartesian3.negate(Cartesian3.UNIT_Z, new Cartesian3()), intensity: 2.0 });
+    scene.light = light;
+    const dir = new Cartesian3();
+    const tmp = new Cartesian3();
+    scene.preUpdate.addEventListener(() => {
+      const cam = scene.camera;
+      Cartesian3.clone(cam.directionWC, dir);
+      Cartesian3.add(dir, Cartesian3.multiplyByScalar(cam.rightWC, 0.85, tmp), dir);
+      Cartesian3.add(dir, Cartesian3.multiplyByScalar(cam.upWC, -0.75, tmp), dir);
+      Cartesian3.normalize(dir, light.direction);
     });
 
     if (scene.skyAtmosphere) scene.skyAtmosphere.show = true;
-    if (scene.sun) scene.sun.show = true;
+    // The real sun and moon would sit in the wrong place for this light.
+    if (scene.sun) scene.sun.show = false;
+    if (scene.moon) scene.moon.show = false;
 
     const ctrl = scene.screenSpaceCameraController;
     ctrl.enableTilt = false;
     ctrl.enableLook = false;
-    ctrl.minimumZoomDistance = 5_000;
+    ctrl.minimumZoomDistance = 15_000; // Sentinel-2 tops out at ~10 m/px; closer is just blur
     ctrl.maximumZoomDistance = 4.0e7;
 
     // Start over the player's own longitude (from their time zone), mid-latitudes.

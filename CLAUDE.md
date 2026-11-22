@@ -9,14 +9,14 @@ A daily architecture geography game: a static Vite + TypeScript site with a Cesi
 - `src/globe.ts`: everything Cesium. It uses `CesiumWidget`, not `Viewer`, so there are no Entities and DataSources. Markers are Billboard/Label/PointPrimitive collections, and the dashed line is a `Primitive` with `PolylineDash`.
 - `src/data/buildings.json`: the 50 buildings. Coordinates were checked against Wikipedia and Wikidata with `npm run verify-coords`.
 - `public/borders.json`: Natural Earth 1:50m land boundaries plus ISO-A2 label points. Generate it with `scripts/build-borders.mjs`.
-- `public/sw.js`: service worker. The build stamps `__BUILD_ID__` (plugin in `vite.config.ts`). It serves the page network-first, same-origin files cache-first, and keeps a bounded cache of EOX/GIBS tiles.
+- `public/sw.js`: service worker. The build stamps `__BUILD_ID__` (plugin in `vite.config.ts`). It serves the page network-first, same-origin files cache-first, and keeps a bounded cache of EOX tiles.
 
 ## Rules and decisions
 - **No Cesium ion**: `Ion.defaultAccessToken = ''`, and every imagery provider is passed explicitly. Don't add anything that needs a token.
-- Imagery layers, bottom to top: bundled NaturalEarthII (instant and offline), EOX Sentinel-2 cloudless 2016 (levels 0–14), then NASA Black Marble (`dayAlpha 0`, `nightAlpha 1`, levels 0–8).
-- When zoomed in past `lightingFadeOutDistance`, Cesium stops separating day from night and the upsampled light tiles smear over daytime imagery. A `preRender` listener therefore hides the night layer below that altitude. Keep it.
+- Imagery layers, bottom to top: bundled NaturalEarthII (instant and offline), then EOX Sentinel-2 cloudless 2016 (levels 0–14).
+- **Lighting is Google Earth style, not real sun time.** `scene.light` is a `DirectionalLight` that `preUpdate` re-aims every frame from over the viewer's left shoulder, so the visible face is always lit and only the lower-right limb is shaded. Sun and moon are hidden (they'd sit in the wrong place), and `globe.dynamicAtmosphereLightingFromSun = false` keeps the atmosphere on the same light. Shading fades out as you zoom in (`lightingFadeOut/InDistance`). The user dropped the NASA night-lights layer on purpose (2026-11-22); don't re-add a real-time day/night line without asking.
 - Import core math types (`Cartesian3`, `Color`, `Math`, …) from `@cesium/core`, not `@cesium/engine`. Engine re-exports are deprecated and will be removed in Cesium 1.150.
-- Camera: no tilt and no look, minimum zoom 5 km, guesses come from `LEFT_CLICK` (fires only without a drag) + `pickEllipsoid`.
+- Camera: no tilt and no look, minimum zoom 15 km (Sentinel-2 is ~10 m/px, so closer is only blur), guesses come from `LEFT_CLICK` (fires only without a drag) + `pickEllipsoid`.
 - Static copy: only `Workers`, `ThirdParty`, `Assets` and `Widgets` from `node_modules/cesium/Build/Cesium` go to `dist/cesium/` (`stripBase: 4`).
 - **Daily picker** (`pickDay`): draws days in order from `EPOCH` (2026-11-01; never change it) with an RNG seeded by the day number. A building rests for ~60% of its tier's cycle before it can return, and the day's five are ≥1500 km apart when possible. Adding buildings changes future days. A day in progress keeps its stored ids (`load()`), and the ids are saved as soon as the page loads.
 - Scoring: 200 points within 10 km, then `200·exp(-(km-10)/800)`, rounded. Distance uses the haversine formula with R = 6371.0088 km.
@@ -30,4 +30,5 @@ A daily architecture geography game: a static Vite + TypeScript site with a Cesi
 - The Claude desktop app's built-in browser pane throttles rAF to ~2 fps with WebGL, so its screenshots lag behind. Use the Puppeteer scripts instead.
 
 ## Open items
+- The user plans ads, which makes it commercial: before ads go live, get an EOX licence or switch imagery (see README). Ads also need a cookie-consent banner (CH/EU visitors).
 - EOX's public tile server is for non-commercial use. A commercial launch needs self-hosted tiles or an EOX licence (see README).

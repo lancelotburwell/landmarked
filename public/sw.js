@@ -5,7 +5,7 @@ const BUILD = '__BUILD_ID__';
 const APP = `landmarked-app-${BUILD}`;
 const TILES = 'landmarked-tiles-v1';
 const MAX_TILES = 1500;
-const TILE_HOSTS = ['tiles.maps.eox.at', 'gibs.earthdata.nasa.gov'];
+const TILE_HOSTS = ['tiles.maps.eox.at'];
 
 self.addEventListener('install', () => self.skipWaiting());
 self.addEventListener('activate', (e) => {

@@ -62,7 +62,6 @@ Adding buildings changes which buildings appear on future days (see `pickDay` in
 
 - Globe: CesiumJS, Apache 2.0.
 - Daytime imagery: **Sentinel-2 cloudless – https://s2maps.eu by EOX IT Services GmbH (Contains modified Copernicus Sentinel data 2016 & 2017)**, CC BY 4.0. Tiles come from EOX's public tile server (see the commercial-use note below).
-- Night lights: NASA Black Marble, served through NASA GIBS.
 - Borders and country codes: Natural Earth (public domain).
 - Font: IBM Plex Mono (SIL OFL), bundled with `@fontsource`.
 
@@ -73,4 +72,4 @@ The 2016 Sentinel-2 cloudless mosaic is licensed CC BY 4.0, which allows commerc
 1. **Self-host the tiles.** Render or buy the 2016 mosaic (EOX sells the data, and the CC BY 2016 version can be self-processed from Copernicus data), cut it into Web Mercator tiles up to level 14, and serve them from object storage behind a CDN. Then change the URL in `src/globe.ts`. Levels 0–14 for the whole world add up to hundreds of GB, so a common approach is to serve levels 0–10 globally and higher levels only around the buildings in the pool.
 2. **Get an EOX licence** for commercial use of their tile service (EOX offers commercial subscriptions for s2maps).
 
-NASA GIBS imagery is free to use, including commercially, with attribution. Natural Earth and CesiumJS are fine either way.
+Natural Earth and CesiumJS are fine either way. For a free commercial-friendly fallback, NASA GIBS imagery (public domain, ~250–500 m/px) needs no key.

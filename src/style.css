@@ -208,3 +208,8 @@ button { font: inherit; color: inherit; }
   .dots { gap: 3px; }
   .dots i { width: 9px; }
 }
+/* Phones: the result card sits at the bottom, so keep the imagery credit visible at the top. */
+@media (max-width: 759px) {
+  .credits { top: 4px; bottom: auto; }
+}
+.credits > .cesium-widget-credits { position: static !important; display: block; }
