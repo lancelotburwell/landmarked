@@ -7,7 +7,6 @@ A daily architecture geography game: a static Vite + TypeScript site with a Cesi
 - **Commits must use this repo's git identity, "Burwell Projects"** (set in the repo's `git config`, same as the Spura repo). Vercel Hobby silently skips builds from any other commit author. Don't override it with `-c user.email=…`.
 - The Vercel CLI is not logged in on this machine; deploy by `git push`.
 - Domain is registered at Namecheap: apex A record `216.198.79.1`, `www` CNAME to Vercel. **Open:** `www.landmarked.land` still has to be added in Vercel → Settings → Domains (redirect to the apex); until then it fails over HTTPS.
-- The old GitHub Pages workflow (`.github/workflows/deploy.yml`, BASE=/landmarked/) still deploys a copy to lancelotburwell.ch/landmarked. It can be removed once the user agrees.
 - Vite `base` defaults to `/`; `vercel.json` sets cache headers.
 
 ## Layout
@@ -60,4 +59,3 @@ Then write clue and blurb for each new building in batches from its Wikipedia in
 ## Open items
 - `www.landmarked.land` in Vercel (see above).
 - Before ads: cookie-consent banner, privacy policy and impressum; fact-check the clues and blurbs.
-- Decide whether to retire the GitHub Pages copy.

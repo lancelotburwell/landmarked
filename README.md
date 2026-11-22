@@ -2,7 +2,7 @@
 
 A daily architecture geography game. Each day there are five famous buildings (2 easy, 1 medium, 2 hard), the same for everyone. You get one clue per building and tap the 3D globe where you think it stands. Each building is worth up to 200 points, so the best possible day is 1,000.
 
-**Play:** https://lancelotburwell.github.io/landmarked/
+**Play:** https://landmarked.land
 
 Built with Vite + TypeScript and [CesiumJS](https://cesium.com/platform/cesiumjs/) (Apache 2.0). It's a static site with no API keys and no Cesium ion.
 
@@ -36,9 +36,9 @@ The Puppeteer scripts use your local Chrome or Edge. Set `CHROME_PATH` if it isn
 
 ## Deploy
 
-Every push to `main` runs `.github/workflows/deploy.yml`, which builds the site and publishes it to GitHub Pages. The site is served from `/landmarked/`. For another host or path, build with `BASE=/your/path/ npm run build`. The Vite `base` and Cesium's `CESIUM_BASE_URL` both follow `BASE`.
+The site is hosted on **Vercel** at https://landmarked.land. Every push to `main` deploys automatically; `vercel.json` holds the build and cache settings. Commits must use the repo's "Burwell Projects" git identity, or Vercel skips the build.
 
-One-time setup (already done for this repo): **Settings → Pages → Source: GitHub Actions**.
+The site is served from the domain root. For a host that serves it from a sub-path, build with `BASE=/your/path/ npm run build`. The Vite `base` and Cesium's `CESIUM_BASE_URL` both follow `BASE`.
 
 ## Add buildings
 
@@ -76,4 +76,3 @@ Everything above is fine for commercial use, including ads.
 
 - A cookie-consent banner (ad networks set tracking cookies; Swiss/EU visitors must opt in).
 - A privacy policy and impressum.
-- Consider moving hosting to Cloudflare Pages: GitHub Pages' terms discourage running an online business on it.
