@@ -6,3 +6,6 @@ playtest-shots
 data/.cache
 public/days
 public/pool.json
+
+.vercel
+.env*
