@@ -290,14 +290,18 @@ button { font: inherit; color: inherit; }
 .rphoto-box::before { content: ""; position: absolute; inset: -24px; background: var(--photo) center / cover no-repeat; filter: blur(18px) brightness(0.5); }
 .rphoto-box img { position: relative; display: block; width: 100%; height: 100%; object-fit: contain; }
 /* Credit hidden behind a faint "i" in the corner; tapping it shows the credit over the photo. */
+/* Barely visible: a 12px glyph at low opacity, inside a larger invisible tap area. */
 .rphoto-info {
-  position: absolute; right: 8px; bottom: 8px; width: 22px; height: 22px; padding: 0; border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.35); background: rgba(0, 0, 0, 0.35); color: rgba(255, 255, 255, 0.75);
-  font: italic 600 12px/20px Georgia, serif; cursor: pointer; opacity: 0.6;
+  position: absolute; right: 0; bottom: 0; width: 30px; height: 30px; padding: 0;
+  border: 0; background: none; cursor: pointer; opacity: 0.3;
 }
-.rphoto-info:hover, .rphoto-info:focus-visible, .credit-on .rphoto-info { opacity: 1; }
+.rphoto-info::before {
+  content: "i"; position: absolute; right: 6px; bottom: 6px; width: 12px; height: 12px; border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.8); color: #fff; font: italic 600 8px/11px Georgia, serif; text-align: center;
+}
+.rphoto-info:hover, .rphoto-info:focus-visible, .credit-on .rphoto-info { opacity: 0.85; }
 .rphoto figcaption {
-  position: absolute; left: 0; right: 0; bottom: 0; padding: 18px 38px 7px 12px; font-size: 10px; line-height: 1.3;
+  position: absolute; left: 0; right: 0; bottom: 0; padding: 18px 30px 6px 10px; font-size: 10px; line-height: 1.3;
   background: linear-gradient(transparent, rgba(0, 0, 0, 0.75)); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   opacity: 0; pointer-events: none; transition: opacity 0.15s;
 }
