@@ -97,10 +97,14 @@ export class Globe {
       maximumRenderTimeChange: Infinity,
       useBrowserRecommendedResolution: false,
       showRenderLoopErrors: true,
+      // No multisample anti-aliasing: it multiplies the GPU's work per pixel, and
+      // at 1.5× resolution the edges look fine without it.
+      msaaSamples: 1,
     });
     this.widget = widget;
-    // Sharp on retina, but never render more than 2× (phones have 3×).
-    widget.resolutionScale = Math.min(dpr, 2) / dpr;
+    // Render at most 1.5× CSS pixels (phones are 3×): about half the pixels of 2×,
+    // still crisp, and much lighter on phone GPUs.
+    widget.resolutionScale = Math.min(dpr, 1.5) / dpr;
 
     const scene = widget.scene;
     const layers = scene.imageryLayers;
@@ -117,7 +121,7 @@ export class Globe {
       );
     } else {
       // 2. NASA Blue Marble Next Generation, ~500 m/px, public domain.
-      layers.addImageryProvider(
+      const marble = layers.addImageryProvider(
         new UrlTemplateImageryProvider({
           url: `${GIBS}/BlueMarble_NextGeneration/default/GoogleMapsCompatible_Level8/{z}/{y}/{x}.jpeg`,
           tilingScheme: new WebMercatorTilingScheme(),
@@ -125,21 +129,22 @@ export class Globe {
           credit: new Credit(NASA_CREDIT, true),
         }),
       );
-      // 3. Landsat WELD annual composite (year 2000), ~30-40 m/px, public domain.
-      // Only on close-ups: zoomed out, its no-data gaps show as dark blocks over the sea.
-      layers.add(
-        new ImageryLayer(new UrlTemplateImageryProvider({
-          url: `${GIBS}/Landsat_WELD_CorrectedReflectance_TrueColor_Global_Annual/default/2000-12-01/GoogleMapsCompatible_Level12/{z}/{y}/{x}.jpg`,
-          tilingScheme: new WebMercatorTilingScheme(),
-          maximumLevel: 12,
-        }), { minimumTerrainLevel: 8 }),
-      );
+      // Brighter, slightly richer colours stand in for the ground atmosphere (off,
+      // see below), so the oceans read blue rather than black.
+      marble.gamma = 1.6;
+      marble.brightness = 1.15;
+      marble.saturation = 1.15;
+      // No close-up Landsat layer: switching it on while zooming in froze the globe
+      // for 1-2 s on phones, and Blue Marble is detailed enough to place a guess.
     }
 
     const globe = scene.globe;
     globe.baseColor = Color.fromCssColorString('#0a1622');
     globe.enableLighting = true;
-    globe.showGroundAtmosphere = true;
+    // Ground atmosphere off: when zooming in it switches to another shader, and
+    // compiling that froze the globe for 1-2 s (even pre-warming left ~0.25 s).
+    // The sky atmosphere (the halo) stays; the imagery is brightened instead.
+    globe.showGroundAtmosphere = false;
     globe.dynamicAtmosphereLighting = true;
     globe.dynamicAtmosphereLightingFromSun = false; // atmosphere follows scene.light
     // Shading is strongest on the whole-globe view and fades out as you zoom
@@ -172,8 +177,8 @@ export class Globe {
     const ctrl = scene.screenSpaceCameraController;
     ctrl.enableTilt = false;
     ctrl.enableLook = false;
-    // Closest zoom before the imagery is just blur: Sentinel-2 ~10 m/px, Landsat ~38 m/px.
-    ctrl.minimumZoomDistance = imagery === 'eox' ? 15_000 : 35_000;
+    // Closest zoom before the imagery is just blur: Sentinel-2 ~10 m/px, Blue Marble ~500 m/px (closer is just blur).
+    ctrl.minimumZoomDistance = imagery === 'eox' ? 15_000 : 250_000;
     ctrl.maximumZoomDistance = 4.0e7;
 
     // Start over the player's own longitude (from their time zone), mid-latitudes.
