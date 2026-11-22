@@ -12,7 +12,7 @@ import { findChrome } from './chrome.mjs';
 const url = process.argv[2] ?? 'http://localhost:4173/landmarked/';
 const out = process.argv[3] ?? 'playtest-shots';
 mkdirSync(out, { recursive: true });
-const buildings = JSON.parse(readFileSync(new URL('../src/data/buildings.json', import.meta.url), 'utf8'));
+const buildings = JSON.parse(readFileSync(new URL('../data/buildings.json', import.meta.url), 'utf8'));
 
 const DEVICES = {
   phone: { width: 390, height: 844, deviceScaleFactor: 2, isMobile: true, hasTouch: true },

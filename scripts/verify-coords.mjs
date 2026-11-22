@@ -3,7 +3,7 @@
 // Usage: node scripts/verify-coords.mjs [--write]
 import { readFileSync, writeFileSync } from 'node:fs';
 
-const FILE = new URL('../src/data/buildings.json', import.meta.url);
+const FILE = new URL('../data/buildings.json', import.meta.url);
 const UA = { 'User-Agent': 'landmarked-coord-check/1.0 (static game data check)' };
 const buildings = JSON.parse(readFileSync(FILE, 'utf8'));
 
@@ -63,5 +63,5 @@ console.log(`\n${buildings.length} buildings, ${bad} to check`);
 if (write) {
   const lines = buildings.map((b) => '  ' + JSON.stringify(b));
   writeFileSync(FILE, '[\n' + lines.join(',\n') + '\n]\n');
-  console.log('Wrote Wikipedia coordinates to src/data/buildings.json');
+  console.log('Wrote Wikipedia coordinates to data/buildings.json');
 }

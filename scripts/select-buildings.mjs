@@ -8,7 +8,7 @@
 //   (English Wikipedia page views over 60 days): views say who's recognised today.
 // - Greedy by fame, with spread caps: at most CITY_CAP buildings within
 //   CITY_KM of each other, and at most COUNTRY_CAP per country.
-// - The current src/data/buildings.json entries are always kept (matched by
+// - The current data/buildings.json entries are always kept (matched by
 //   Wikipedia title), with their hand-written clues.
 // - Tiers come from fame rank within the final pool.
 // - Fetches the English Wikipedia intro of each new building, as source
@@ -44,7 +44,7 @@ const slug = (s) =>
   s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 48);
 
 const { items } = JSON.parse(readFileSync(new URL('../data/candidates.json', import.meta.url), 'utf8'));
-const existing = JSON.parse(readFileSync(new URL('../src/data/buildings.json', import.meta.url), 'utf8'));
+const existing = JSON.parse(readFileSync(new URL('../data/buildings.json', import.meta.url), 'utf8'));
 const norm = (t) => t.toLowerCase().replace(/_/g, ' ');
 
 // ---------- filter ----------

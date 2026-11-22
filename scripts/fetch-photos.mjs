@@ -32,7 +32,7 @@ async function api(base, params) {
 }
 const strip = (html = '') => html.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
 
-const bFile = new URL('src/data/buildings.json', root);
+const bFile = new URL('data/buildings.json', root);
 const buildings = JSON.parse(readFileSync(bFile, 'utf8'));
 const pFile = new URL('public/photos/credits.json', root);
 const photos = existsSync(pFile) ? JSON.parse(readFileSync(pFile, 'utf8')) : {};

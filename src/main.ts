@@ -3,7 +3,6 @@ import {
   DAY_TIERS,
   ROUNDS,
   TIER_COLOR,
-  byId,
   distanceKm,
   formatKm,
   load,
@@ -15,6 +14,8 @@ import {
   formatDay,
   peek,
   pickPractice,
+  loadDay,
+  loadPool,
   type Building,
   type DayState,
 } from './game';
@@ -70,13 +71,17 @@ const params = new URLSearchParams(location.search);
 const today = todayKey();
 const practice = params.has('practice');
 const date = practice ? 'practice' : today;
-const newPractice = (): DayState => ({ date: 'practice', ids: pickPractice().map((b) => b.id), guesses: [] });
+// Start fetching Cesium now, in parallel with the day's buildings.
+const globeModule = import('./globe');
+// Practice draws from the whole pool; a normal day is that date's five.
+const buildings: Building[] = practice ? await loadPool() : await loadDay(date);
+const newPractice = (): DayState => ({ date: 'practice', ids: pickPractice(buildings).map((b) => b.id), guesses: [] });
 if (practice && params.get('practice') === 'new') history.replaceState(null, '', `${import.meta.env.BASE_URL}?practice`);
 const state: DayState = practice
-  ? (params.get('practice') !== 'new' && peek('practice')) || newPractice()
-  : load(date);
+  ? (params.get('practice') !== 'new' && peek('practice', buildings)) || newPractice()
+  : load(date, buildings);
 save(state); // pin this round's ids right away
-const day: Building[] = state.ids.map((id) => byId(id)!);
+const day: Building[] = state.ids.map((id) => buildings.find((b) => b.id === id)!);
 let globe: Globe | null = null;
 let awaiting = false; // waiting for a guess on the current round
 let shownScore = 0;
@@ -101,7 +106,7 @@ if (state.guesses.length >= ROUNDS) {
 
 // ---------- globe (loaded in the background) ----------
 performance.mark('ui-ready');
-const globeReady = import('./globe')
+const globeReady = globeModule
   .then(({ Globe }) => {
     // Public-domain NASA imagery by default; ?imagery=eox shows Sentinel-2 cloudless for comparison.
     const imagery = new URLSearchParams(location.search).get('imagery') === 'eox' ? 'eox' : 'nasa';

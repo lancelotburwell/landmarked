@@ -1,82 +1,93 @@
-// Step 3 of the building pipeline: merge the selection with hand-written clues.
+// Adds newly written buildings to the pool (data/buildings.json).
 //
-//   node scripts/build-buildings.mjs [count=300]   → src/data/buildings.json
+//   node scripts/build-buildings.mjs
 //
 // Inputs:
-//   data/selection.json   chosen candidates, ranked by fame (select-buildings.mjs)
-//   data/clues/*.json     { "<id>": { name, architect, year, city, country, clue } }
-//                         or { "<id>": { "drop": "reason" } } to leave one out,
-//                         optional "tier" to override the fame-based tier.
-//   src/data/buildings.json  existing entries keep their clue and fields.
+//   data/selection.json   ranked candidates (select-buildings.mjs)
+//   data/clues/*.json     { "<id>": { name, architect, year, city, country, clue | clues, blurb, tier? } }
+//                         or { "<id>": { "drop": "reason" } } to leave one out.
+//   data/buildings.json   the pool itself.
 //
-// The final pool is the top `count` non-dropped buildings by fame. Tiers are
-// recomputed from fame rank within that pool (37% easy, 26% medium, 37% hard).
+// The pool only grows: existing buildings keep their fields and tier, because
+// past days in data/schedule.json point at them. A clue file entry for an
+// existing id updates its text fields, and extra clues are appended (used when
+// the building comes back). A "drop" on an existing id marks it retired, so it
+// is never scheduled again. New buildings get a tier from their fame rank in
+// the whole selection: top 37% easy, next 26% medium, rest hard.
 import { readFileSync, writeFileSync, readdirSync } from 'node:fs';
 
-const COUNT = Number(process.argv[2] ?? 300);
 const root = new URL('../', import.meta.url);
-const sel = JSON.parse(readFileSync(new URL('data/selection.json', root), 'utf8')).items;
-const current = JSON.parse(readFileSync(new URL('src/data/buildings.json', root), 'utf8'));
-const byId = new Map(current.map((b) => [b.id, b]));
+const read = (p) => JSON.parse(readFileSync(new URL(p, root), 'utf8'));
+const sel = read('data/selection.json').items;
+const pool = read('data/buildings.json');
+const byId = new Map(pool.map((b) => [b.id, b]));
+const rank = new Map(sel.map((s, i) => [s.id, i]));
+const tierFor = (id) => {
+  const r = (rank.get(id) ?? sel.length) / sel.length;
+  return r < 0.37 ? 'easy' : r < 0.63 ? 'medium' : 'hard';
+};
 
 const clues = {};
 for (const f of readdirSync(new URL('data/clues/', root)).filter((f) => f.endsWith('.json')).sort()) {
-  Object.assign(clues, JSON.parse(readFileSync(new URL(`data/clues/${f}`, root), 'utf8')));
+  Object.assign(clues, read(`data/clues/${f}`));
 }
+const listOf = (c) => (c.clues ?? (c.clue ? [c.clue] : [])).filter(Boolean);
 
-const missing = [];
-const rows = [];
-for (const s of sel) {
-  const c = clues[s.id];
-  if (c?.drop) continue;
-  const old = byId.get(s.id);
-  if (!old && !c?.clue) {
-    missing.push(s.id);
+let added = 0, updated = 0, retired = 0;
+// Existing buildings: retire, or update text and append new clues.
+for (const b of pool) {
+  const c = clues[b.id];
+  if (!c) continue;
+  if (c.drop) {
+    if (!b.retired) { b.retired = c.drop; retired++; }
     continue;
   }
-  const base = old ?? {};
-  rows.push({
-    s,
-    b: {
-      id: s.id,
-      qid: s.qid,
-      name: c?.name ?? base.name ?? s.name,
-      architect: c?.architect ?? base.architect,
-      year: String(c?.year ?? base.year ?? s.year ?? ''),
-      city: c?.city ?? base.city,
-      country: c?.country ?? base.country ?? s.country,
-      tier: c?.tier,
-      wiki: s.wiki,
-      // Existing coordinates were verified against Wikipedia; new ones come from Wikidata.
-      lon: base.lon ?? s.lon,
-      lat: base.lat ?? s.lat,
-      clue: c?.clue ?? base.clue,
-      blurb: c?.blurb ?? base.blurb,
-    },
-  });
+  for (const k of ['name', 'architect', 'city', 'country', 'blurb']) if (c[k]) b[k] = c[k];
+  if (c.year) b.year = String(c.year);
+  const extra = listOf(c).filter((t) => !b.clues.includes(t));
+  if (extra.length) { b.clues.push(...extra); updated++; }
 }
-
-const final = rows.slice(0, COUNT);
-const short = COUNT - final.length;
-const nEasy = Math.round(final.length * 0.37);
-const nMed = Math.round(final.length * 0.26);
-final.forEach((r, i) => {
-  r.b.tier ??= i < nEasy ? 'easy' : i < nEasy + nMed ? 'medium' : 'hard';
-});
+// New buildings: any selection entry with a written clue.
+const missing = [];
+for (const s of sel) {
+  const c = clues[s.id];
+  if (byId.has(s.id) || c?.drop) continue;
+  if (!c || !listOf(c).length) { missing.push(s.id); continue; }
+  const b = {
+    id: s.id,
+    name: c.name ?? s.name,
+    architect: c.architect ?? (s.architects ?? []).join(', '),
+    year: String(c.year ?? s.year ?? ''),
+    city: c.city,
+    country: c.country ?? s.country,
+    tier: c.tier ?? tierFor(s.id),
+    wiki: s.wiki,
+    lon: s.lon,
+    lat: s.lat,
+    clues: listOf(c),
+    blurb: c.blurb,
+    qid: s.qid,
+  };
+  pool.push(b);
+  byId.set(b.id, b);
+  added++;
+}
 
 const problems = [];
-for (const { b } of final) {
-  for (const k of ['name', 'architect', 'year', 'city', 'country', 'clue', 'blurb']) if (!b[k]) problems.push(`${b.id}: missing ${k}`);
-  // The clue must not give the name away.
-  const words = b.name.toLowerCase().replace(/\(.*?\)/g, '').split(/[^a-zà-ÿ0-9]+/).filter((w) => w.length > 4 && !['tower', 'house', 'palace', 'castle', 'church', 'cathedral', 'temple', 'mosque', 'museum', 'building', 'centre', 'center', 'basilica', 'national', 'great', 'royal', 'saint', 'grand', 'opera', 'theatre', 'library', 'station', 'hotel', 'stadium', 'hall'].includes(w));
-  for (const w of words) if (b.clue.toLowerCase().includes(w)) problems.push(`${b.id}: clue contains "${w}"`);
+const COMMON = ['tower', 'towers','house', 'palace', 'castle', 'church', 'cathedral', 'temple', 'mosque', 'museum', 'building', 'centre', 'center', 'basilica', 'national', 'great', 'royal', 'saint', 'grand', 'opera', 'theatre', 'library', 'station', 'hotel', 'stadium', 'hall'];
+for (const b of pool) {
+  if (b.retired) continue;
+  for (const k of ['name', 'architect', 'year', 'city', 'country', 'blurb']) if (!b[k]) problems.push(`${b.id}: missing ${k}`);
+  if (!b.clues?.length) problems.push(`${b.id}: no clue`);
+  // A clue must not give the name away.
+  const words = b.name.toLowerCase().replace(/\(.*?\)/g, '').split(/[^a-zà-ÿ0-9]+/).filter((w) => w.length > 4 && !COMMON.includes(w));
+  for (const clue of b.clues ?? []) for (const w of words) if (clue.toLowerCase().includes(w)) problems.push(`${b.id}: clue contains "${w}"`);
 }
 
-const out = final.map(({ b }) => b);
-const lines = out.map((b) => '  ' + JSON.stringify(b));
-writeFileSync(new URL('src/data/buildings.json', root), '[\n' + lines.join(',\n') + '\n]\n');
-const tally = out.reduce((m, b) => ((m[b.tier] = (m[b.tier] ?? 0) + 1), m), {});
-console.log(`wrote ${out.length} buildings`, tally);
-if (short > 0) console.log(`short by ${short}: write clues for more of the selection`);
-if (missing.length) console.log(`${missing.length} without clues (skipped): ${missing.slice(0, 20).join(', ')}${missing.length > 20 ? ' …' : ''}`);
+writeFileSync(new URL('data/buildings.json', root), '[\n' + pool.map((b) => '  ' + JSON.stringify(b)).join(',\n') + '\n]\n');
+const live = pool.filter((b) => !b.retired);
+const tally = live.reduce((m, b) => ((m[b.tier] = (m[b.tier] ?? 0) + 1), m), {});
+console.log(`pool: ${live.length} buildings`, tally, `(+${added} new, ${updated} with new clues, ${retired} retired)`);
+if (missing.length) console.log(`${missing.length} in the selection still need clues, next up: ${missing.slice(0, 15).join(', ')}${missing.length > 15 ? ' …' : ''}`);
 if (problems.length) console.log(`problems:\n  ${problems.join('\n  ')}`);
+console.log('Next: node scripts/fetch-photos.mjs, then npm run schedule.');

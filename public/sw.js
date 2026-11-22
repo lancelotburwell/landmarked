@@ -31,6 +31,16 @@ self.addEventListener('fetch', (e) => {
     return;
   }
 
+  // The day's puzzle and the pool: network first, so a new schedule shows up at once.
+  if (url.origin === self.location.origin && (url.pathname.includes('/days/') || url.pathname.endsWith('/pool.json'))) {
+    e.respondWith(
+      fetch(req)
+        .then((res) => { if (res.ok) { const copy = res.clone(); caches.open(APP).then((c) => c.put(req, copy)); } return res; })
+        .catch(() => caches.match(req).then((r) => r || Response.error())),
+    );
+    return;
+  }
+
   // Same-origin static files (hashed JS/CSS, Cesium Workers/Assets, borders): cache first.
   if (url.origin === self.location.origin) {
     e.respondWith(cacheFirst(APP, req));

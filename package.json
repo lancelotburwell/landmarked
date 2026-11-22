@@ -3,9 +3,12 @@
   "version": "1.0.0",
   "description": "Daily architecture geography game on a 3D globe",
   "scripts": {
+    "predev": "node scripts/export-days.mjs",
     "dev": "vite",
+    "prebuild": "node scripts/export-days.mjs",
     "build": "tsc && vite build",
     "preview": "vite preview",
+    "schedule": "node scripts/schedule.mjs",
     "verify-coords": "node scripts/verify-coords.mjs",
     "measure": "node scripts/measure.mjs"
   },
