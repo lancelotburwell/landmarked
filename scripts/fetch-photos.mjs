@@ -72,6 +72,7 @@ for (let i = 0; i < todo.length; i += 40) {
 let ok = 0;
 const skipped = [];
 for (const b of todo) {
+  try {
   const file = fileOf[b.id];
   if (!file) { skipped.push(`${b.id}: no image on Wikidata`); continue; }
   const j = await api('https://commons.wikimedia.org/w/api.php', { action: 'query', titles: `File:${file}`, prop: 'imageinfo', iiprop: 'url|extmetadata', iiurlwidth: '960' });
@@ -95,7 +96,11 @@ for (const b of todo) {
     page: info.descriptionurl,
   };
   ok++;
-  await sleep(200);
+  writeFileSync(pFile, JSON.stringify(photos, null, 1) + '\n'); // save as we go
+  } catch (e) {
+    skipped.push(`${b.id}: ${String(e).slice(0, 80)} (rerun to retry)`);
+  }
+  await sleep(1500);
 }
 
 writeFileSync(bFile, '[\n' + buildings.map((b) => '  ' + JSON.stringify(b)).join(',\n') + '\n]\n');

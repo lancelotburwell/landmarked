@@ -1,0 +1,80 @@
+{
+ "university-of-pennsylvania": {
+  "drop": "a university, not one building"
+ },
+ "syracuse-university": {
+  "drop": "a university"
+ },
+ "united-states-naval-academy": {
+  "drop": "an institution"
+ },
+ "university-of-tehran": {
+  "drop": "a university"
+ },
+ "king-saud-university": {
+  "drop": "a university"
+ },
+ "taras-shevchenko-national-university-of-kyiv": {
+  "drop": "a university"
+ },
+ "q737945": {
+  "drop": "no English name in Wikidata"
+ },
+ "fukushima-daiichi-nuclear-power-plant": {
+  "drop": "a power plant, famous for a disaster"
+ },
+ "td-garden": {
+  "drop": "a sports arena"
+ },
+ "avicii-arena": {
+  "drop": "a sports arena"
+ },
+ "smithsonian-institution": {
+  "drop": "an institution spread over many buildings"
+ },
+ "bosnian-pyramid-claims": {
+  "drop": "a pseudo-archaeology claim, not a building"
+ },
+ "library-of-ashurbanipal": {
+  "drop": "no longer exists"
+ },
+ "prague-metro": {
+  "drop": "a metro system"
+ },
+ "european-investment-bank": {
+  "drop": "an institution"
+ },
+ "royal-swedish-academy-of-sciences": {
+  "drop": "an institution"
+ },
+ "icelandic-phallological-museum": {
+  "drop": "famous for its collection, not its building"
+ },
+ "spanish-steps": {
+  "drop": "a staircase, not a building"
+ },
+ "dubai-mall": {
+  "drop": "a shopping mall"
+ },
+ "putin-s-palace": {
+  "drop": "politically charged"
+ },
+ "mar-a-lago": {
+  "drop": "politically charged"
+ },
+ "trump-international-hotel-and-tower": {
+  "drop": "politically charged"
+ },
+ "valley-of-cuelgamuros": {
+  "drop": "politically charged (Franco monument)"
+ },
+ "yasukuni-shrine": {
+  "drop": "politically charged"
+ },
+ "lubyanka-building": {
+  "drop": "politically charged (secret police HQ)"
+ },
+ "yad-vashem": {
+  "drop": "a Holocaust memorial; not right for a game"
+ }
+}

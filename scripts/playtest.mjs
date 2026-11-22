@@ -84,19 +84,7 @@ async function run(name) {
     if (i === 0) await page.screenshot({ path: join(out, `${name}-2-question.png`) });
 
     const [dx, dy] = OFFSETS[i];
-    const useConfirm = i === 3;
-    if (useConfirm) {
-      await page.click('.check');
-      await tapLonLat(page, b.lon + dx + 3, b.lat + dy, touch); // first pin, then move it
-      await sleep(400);
-      await tapLonLat(page, b.lon + dx, b.lat + dy, touch);
-      await sleep(400);
-      await page.screenshot({ path: join(out, `${name}-3-pending.png`) });
-      await page.click('#lock-btn');
-      await page.click('.check'); // back off
-    } else {
-      await tapLonLat(page, b.lon + dx, b.lat + dy, touch);
-    }
+    await tapLonLat(page, b.lon + dx, b.lat + dy, touch);
     await waitIdle(page, 800);
     await page.screenshot({ path: join(out, `${name}-4-result-${i + 1}.png`) });
     const r = await page.evaluate(() => ({

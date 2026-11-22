@@ -1,0 +1,7784 @@
+{
+ "count": 330,
+ "unmatchedExisting": [
+  "colosseum",
+  "parthenon",
+  "pantheon",
+  "hagia-sophia",
+  "alhambra",
+  "angkor-wat",
+  "lalibela-st-george",
+  "zeitz-mocaa",
+  "cardboard-cathedral",
+  "yoyogi-gymnasium"
+ ],
+ "items": [
+  {
+   "id": "eiffel-tower",
+   "qid": "Q243",
+   "name": "Eiffel Tower",
+   "wiki": "Eiffel Tower",
+   "tier": "easy",
+   "score": 0.9992,
+   "sitelinks": 191,
+   "views": 240908,
+   "lon": 2.29448,
+   "lat": 48.8583,
+   "architects": [
+    "Stéphen Sauvestre"
+   ],
+   "year": 1889,
+   "country": "France",
+   "locatedIn": "7th arrondissement of Paris",
+   "classes": [
+    "lattice tower",
+    "observation tower",
+    "architectural landmark"
+   ],
+   "hasClue": true
+  },
+  {
+   "id": "taj-mahal",
+   "qid": "Q9141",
+   "name": "Taj Mahal",
+   "wiki": "Taj Mahal",
+   "tier": "easy",
+   "score": 0.9987,
+   "sitelinks": 186,
+   "views": 217369,
+   "lon": 78.04194,
+   "lat": 27.175,
+   "architects": [
+    "Ahmad Lahori"
+   ],
+   "year": 1653,
+   "country": "India",
+   "locatedIn": "Agra",
+   "classes": [
+    "mausoleum",
+    "tomb"
+   ],
+   "hasClue": true
+  },
+  {
+   "id": "burj-khalifa",
+   "qid": "Q12495",
+   "name": "Burj Khalifa",
+   "wiki": "Burj Khalifa",
+   "tier": "easy",
+   "score": 0.9979,
+   "sitelinks": 140,
+   "views": 204911,
+   "lon": 55.27417,
+   "lat": 25.19722,
+   "architects": [
+    "Adrian Smith",
+    "Marshall Strabala",
+    "George J. Efstathiou",
+    "William F. Baker",
+    "Q459464"
+   ],
+   "year": 2010,
+   "country": "United Arab Emirates",
+   "locatedIn": "Dubai",
+   "classes": [
+    "skyscraper",
+    "architectural landmark"
+   ],
+   "hasClue": true
+  },
+  {
+   "id": "sagrada-familia",
+   "qid": "Q48435",
+   "name": "Sagrada Família",
+   "wiki": "Sagrada Família",
+   "tier": "easy",
+   "score": 0.9977,
+   "sitelinks": 110,
+   "views": 251859,
+   "lon": 2.17433,
+   "lat": 41.40369,
+   "architects": [
+    "Antoni Gaudí"
+   ],
+   "year": 1882,
+   "country": "Spain",
+   "locatedIn": "Sagrada Família",
+   "classes": [
+    "minor basilica",
+    "expiatory temple"
+   ],
+   "hasClue": true
+  },
+  {
+   "id": "white-house",
+   "qid": "Q35525",
+   "name": "White House",
+   "wiki": "White House",
+   "tier": "easy",
+   "score": 0.9972,
+   "sitelinks": 143,
+   "views": 144805,
+   "lon": -77.03667,
+   "lat": 38.89778,
+   "architects": [
+    "James Hoban"
+   ],
+   "year": 1800,
+   "country": "United States",
+   "locatedIn": "Washington, D.C.",
+   "classes": [
+    "mansion",
+    "civic building",
+    "presidential palace"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "empire-state-building",
+   "qid": "Q9188",
+   "name": "Empire State Building",
+   "wiki": "Empire State Building",
+   "tier": "easy",
+   "score": 0.9971,
+   "sitelinks": 125,
+   "views": 166838,
+   "lon": -73.98556,
+   "lat": 40.74833,
+   "architects": [
+    "Shreve, Lamb & Harmon"
+   ],
+   "year": 1931,
+   "country": "United States",
+   "locatedIn": "Manhattan",
+   "classes": [
+    "office building",
+    "skyscraper"
+   ],
+   "hasClue": true
+  },
+  {
+   "id": "st-peter-s-basilica",
+   "qid": "Q12512",
+   "name": "St. Peter's Basilica",
+   "wiki": "St. Peter's Basilica",
+   "tier": "easy",
+   "score": 0.9947,
+   "sitelinks": 133,
+   "views": 103377,
+   "lon": 12.45342,
+   "lat": 41.90222,
+   "architects": [
+    "Michelangelo",
+    "Giuliano da Sangallo",
+    "Donato Bramante",
+    "Raphael",
+    "Giovanni Giocondo",
+    "Antonio da Sangallo the Younger",
+    "Baldassare Peruzzi",
+    "Bernardo Rossellino",
+    "Giacomo della Porta",
+    "Giacomo Barozzi da Vignola",
+    "Pirro Ligorio",
+    "Carlo Maderno",
+    "Gian Lorenzo Bernini"
+   ],
+   "year": 1506,
+   "country": "Vatican City",
+   "locatedIn": "Vatican City",
+   "classes": [
+    "major basilica",
+    "papal basilica",
+    "architectural landmark",
+    "parish church",
+    "patriarchal basilica"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "neuschwanstein",
+   "qid": "Q4152",
+   "name": "Neuschwanstein Castle",
+   "wiki": "Neuschwanstein Castle",
+   "tier": "easy",
+   "score": 0.9934,
+   "sitelinks": 93,
+   "views": 108538,
+   "lon": 10.74944,
+   "lat": 47.55749,
+   "architects": [
+    "Christian Jank",
+    "Eduard Riedel",
+    "Georg von Dollmann",
+    "Julius Hofmann"
+   ],
+   "year": 1869,
+   "country": "Germany",
+   "locatedIn": "Schwangau",
+   "classes": [
+    "palace",
+    "castle",
+    "château",
+    "museum"
+   ],
+   "hasClue": true
+  },
+  {
+   "id": "forbidden-city",
+   "qid": "Q80290",
+   "name": "Forbidden City",
+   "wiki": "Forbidden City",
+   "tier": "easy",
+   "score": 0.9929,
+   "sitelinks": 106,
+   "views": 100559,
+   "lon": 116.39083,
+   "lat": 39.91583,
+   "architects": [
+    "Kuai Xiang"
+   ],
+   "year": 1923,
+   "country": "People's Republic of China",
+   "locatedIn": "Donghuamen Subdistrict",
+   "classes": [
+    "palace",
+    "building complex",
+    "museum",
+    "Chinese AAAAA-rated tourist attraction"
+   ],
+   "hasClue": true
+  },
+  {
+   "id": "palace-of-versailles",
+   "qid": "Q2946",
+   "name": "Palace of Versailles",
+   "wiki": "Palace of Versailles",
+   "tier": "easy",
+   "score": 0.9927,
+   "sitelinks": 109,
+   "views": 99352,
+   "lon": 2.12028,
+   "lat": 48.80472,
+   "architects": [
+    "Louis Le Vau",
+    "François d'Orbay",
+    "Jules Hardouin-Mansart",
+    "André Le Nôtre",
+    "Charles Le Brun",
+    "Robert de Cotte",
+    "Ange-Jacques Gabriel"
+   ],
+   "year": 1661,
+   "country": "France",
+   "locatedIn": "Versailles",
+   "classes": [
+    "château",
+    "palace",
+    "royal palace",
+    "art museum"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "notre-dame",
+   "qid": "Q2981",
+   "name": "Notre-Dame de Paris",
+   "wiki": "Notre-Dame de Paris",
+   "tier": "easy",
+   "score": 0.9925,
+   "sitelinks": 125,
+   "views": 93916,
+   "lon": 2.3498,
+   "lat": 48.853,
+   "architects": [
+    "Jean de Chelles",
+    "Pierre de Montreuil",
+    "Pierre de Chelles",
+    "Jean Ravy",
+    "Raymond du Temple"
+   ],
+   "year": 2024,
+   "country": "France",
+   "locatedIn": "Quartier Notre-Dame",
+   "classes": [
+    "Catholic cathedral",
+    "minor basilica"
+   ],
+   "hasClue": true
+  },
+  {
+   "id": "big-ben",
+   "qid": "Q41225",
+   "name": "Elizabeth Tower (Big Ben)",
+   "wiki": "Big Ben",
+   "tier": "easy",
+   "score": 0.9915,
+   "sitelinks": 88,
+   "views": 103538,
+   "lon": -0.12457,
+   "lat": 51.50067,
+   "architects": [
+    "Augustus Pugin",
+    "Charles Barry"
+   ],
+   "year": 1843,
+   "country": "United Kingdom",
+   "locatedIn": "City of Westminster",
+   "classes": [
+    "cultural icon",
+    "national symbol",
+    "striking clock",
+    "architectural element",
+    "inclined tower",
+    "clock tower",
+    "belfry",
+    "steeple",
+    "clock bell",
+    "bell"
+   ],
+   "hasClue": true
+  },
+  {
+   "id": "leaning-tower-pisa",
+   "qid": "Q39054",
+   "name": "Leaning Tower of Pisa",
+   "wiki": "Leaning Tower of Pisa",
+   "tier": "easy",
+   "score": 0.9912,
+   "sitelinks": 119,
+   "views": 91363,
+   "lon": 10.39662,
+   "lat": 43.72301,
+   "architects": [
+    "Bonanno Pisano",
+    "Guglielmo",
+    "Diotisalvi"
+   ],
+   "year": 1373,
+   "country": "Italy",
+   "locatedIn": "Pisa",
+   "classes": [
+    "tourist attraction",
+    "museum",
+    "church tower",
+    "inclined tower",
+    "religious museum",
+    "free-standing tower"
+   ],
+   "hasClue": true
+  },
+  {
+   "id": "university-of-pennsylvania",
+   "qid": "Q49117",
+   "name": "University of Pennsylvania",
+   "wiki": "University of Pennsylvania",
+   "tier": "easy",
+   "score": 0.9911,
+   "sitelinks": 86,
+   "views": 106237,
+   "lon": -75.19361,
+   "lat": 39.95194,
+   "architects": [
+    "Louis Kahn",
+    "Wilson Eyre",
+    "Frank Miles Day",
+    "Edgar Viguers Seeler"
+   ],
+   "year": 1740,
+   "country": "United States",
+   "locatedIn": "Philadelphia",
+   "classes": [
+    "private university",
+    "research university",
+    "colonial colleges",
+    "private not-for-profit educational institution"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "cologne-cathedral",
+   "qid": "Q4176",
+   "name": "Cologne Cathedral",
+   "wiki": "Cologne Cathedral",
+   "tier": "easy",
+   "score": 0.9908,
+   "sitelinks": 86,
+   "views": 104228,
+   "lon": 6.95833,
+   "lat": 50.94139,
+   "architects": [
+    "Andreas von Everdingen",
+    "Arnold Wolff",
+    "Barbara Schock-Werner",
+    "Bernhard Hertel",
+    "Ernst Friedrich Zwirner",
+    "Erwin von Steinbach",
+    "Friedrich Adolf Ahlert",
+    "Fritz Schaller",
+    "Hans Alex Güldenpfennig",
+    "Johann Kuene van Franckenberg",
+    "Johannes von Köln",
+    "Karl Friedrich Schinkel",
+    "Kaspar Kraemer",
+    "Master Builder of Cologne Cathedral",
+    "Konrad Kuene",
+    "Master Gerhard",
+    "Nikolaus van Bueren",
+    "Peter Parler",
+    "Richard Voigtel",
+    "Willy Weyres"
+   ],
+   "year": 1880,
+   "country": "Germany",
+   "locatedIn": "Altstadt-Nord",
+   "classes": [
+    "Catholic cathedral"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "willis-tower",
+   "qid": "Q29294",
+   "name": "Willis Tower",
+   "wiki": "Willis Tower",
+   "tier": "easy",
+   "score": 0.9891,
+   "sitelinks": 97,
+   "views": 89655,
+   "lon": -87.63583,
+   "lat": 41.87861,
+   "architects": [
+    "Q459464",
+    "Bruce Graham",
+    "Fazlur Khan"
+   ],
+   "year": 1973,
+   "country": "United States",
+   "locatedIn": "Chicago",
+   "classes": [
+    "skyscraper",
+    "office building"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "buckingham-palace",
+   "qid": "Q42182",
+   "name": "Buckingham Palace",
+   "wiki": "Buckingham Palace",
+   "tier": "easy",
+   "score": 0.9883,
+   "sitelinks": 95,
+   "views": 84217,
+   "lon": -0.142,
+   "lat": 51.501,
+   "architects": [
+    "William Winde",
+    "John Nash"
+   ],
+   "year": 1849,
+   "country": "United Kingdom",
+   "locatedIn": "City of Westminster",
+   "classes": [
+    "royal palace",
+    "historic house museum",
+    "art collection",
+    "country house",
+    "Residence of the British Royal Family"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "one-world-trade-center",
+   "qid": "Q11245",
+   "name": "One World Trade Center",
+   "wiki": "One World Trade Center",
+   "tier": "easy",
+   "score": 0.9872,
+   "sitelinks": 74,
+   "views": 122502,
+   "lon": -74.0135,
+   "lat": 40.713,
+   "architects": [
+    "David Childs",
+    "Q459464",
+    "Daniel Libeskind"
+   ],
+   "year": 2014,
+   "country": "United States",
+   "locatedIn": "Manhattan",
+   "classes": [
+    "skyscraper",
+    "office building"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "windsor-castle",
+   "qid": "Q42646",
+   "name": "Windsor Castle",
+   "wiki": "Windsor Castle",
+   "tier": "easy",
+   "score": 0.9866,
+   "sitelinks": 85,
+   "views": 90986,
+   "lon": -0.60444,
+   "lat": 51.48389,
+   "architects": [
+    "Hugh May"
+   ],
+   "year": 1070,
+   "country": "United Kingdom",
+   "locatedIn": "Windsor and Maidenhead",
+   "classes": [
+    "Residence of the British Royal Family",
+    "castle",
+    "royal palace",
+    "palace",
+    "English country house",
+    "historic house museum",
+    "château"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "dome-of-the-rock",
+   "qid": "Q172077",
+   "name": "Dome of the Rock",
+   "wiki": "Dome of the Rock",
+   "tier": "easy",
+   "score": 0.9848,
+   "sitelinks": 87,
+   "views": 71700,
+   "lon": 35.23528,
+   "lat": 31.77806,
+   "architects": [],
+   "year": 691,
+   "country": "Palestine",
+   "locatedIn": "Old City of Jerusalem",
+   "classes": [
+    "dome",
+    "mosque"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "church-of-the-holy-sepulchre",
+   "qid": "Q187702",
+   "name": "Church of the Holy Sepulchre",
+   "wiki": "Church of the Holy Sepulchre",
+   "tier": "easy",
+   "score": 0.9845,
+   "sitelinks": 76,
+   "views": 93717,
+   "lon": 35.22975,
+   "lat": 31.77844,
+   "architects": [],
+   "year": 335,
+   "country": "Palestine",
+   "locatedIn": "Old City of Jerusalem",
+   "classes": [
+    "minor basilica",
+    "patriarchal basilica",
+    "cathedral",
+    "church building",
+    "sanctuary",
+    "heritage site",
+    "architectural heritage monument"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "taipei-101",
+   "qid": "Q83101",
+   "name": "Taipei 101",
+   "wiki": "Taipei 101",
+   "tier": "easy",
+   "score": 0.9838,
+   "sitelinks": 85,
+   "views": 72010,
+   "lon": 121.56472,
+   "lat": 25.03361,
+   "architects": [
+    "C. Y. Lee"
+   ],
+   "year": 2005,
+   "country": "Taiwan",
+   "locatedIn": "Xicun Village",
+   "classes": [
+    "skyscraper"
+   ],
+   "hasClue": true
+  },
+  {
+   "id": "sydney-opera-house",
+   "qid": "Q45178",
+   "name": "Sydney Opera House",
+   "wiki": "Sydney Opera House",
+   "tier": "easy",
+   "score": 0.9834,
+   "sitelinks": 99,
+   "views": 59679,
+   "lon": 151.2149,
+   "lat": -33.85706,
+   "architects": [
+    "Jørn Utzon",
+    "Peter Hall"
+   ],
+   "year": 1973,
+   "country": "Australia",
+   "locatedIn": "City of Sydney",
+   "classes": [
+    "opera house",
+    "architectural landmark",
+    "historical cultural heritage site"
+   ],
+   "hasClue": true
+  },
+  {
+   "id": "petronas-towers",
+   "qid": "Q83063",
+   "name": "Petronas Towers",
+   "wiki": "Petronas Towers",
+   "tier": "easy",
+   "score": 0.983,
+   "sitelinks": 90,
+   "views": 62168,
+   "lon": 101.71167,
+   "lat": 3.15778,
+   "architects": [
+    "César Pelli",
+    "Adamson Associates"
+   ],
+   "year": 1999,
+   "country": "Malaysia",
+   "locatedIn": "Kuala Lumpur",
+   "classes": [
+    "twin towers",
+    "skyscraper"
+   ],
+   "hasClue": true
+  },
+  {
+   "id": "al-masjid-al-haram",
+   "qid": "Q428858",
+   "name": "Al-Masjid Al-Haram",
+   "wiki": "Masjid al-Haram",
+   "tier": "easy",
+   "score": 0.9825,
+   "sitelinks": 109,
+   "views": 53140,
+   "lon": 39.82611,
+   "lat": 21.4225,
+   "architects": [],
+   "year": null,
+   "country": "Saudi Arabia",
+   "locatedIn": "Mecca",
+   "classes": [
+    "congregational mosque",
+    "architectural landmark",
+    "educational institution",
+    "mosque"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "british-museum",
+   "qid": "Q6373",
+   "name": "British Museum",
+   "wiki": "British Museum",
+   "tier": "easy",
+   "score": 0.9816,
+   "sitelinks": 110,
+   "views": 51546,
+   "lon": -0.12694,
+   "lat": 51.51944,
+   "architects": [
+    "Robert Smirke"
+   ],
+   "year": 1759,
+   "country": "United Kingdom",
+   "locatedIn": "London Borough of Camden",
+   "classes": [
+    "national museum",
+    "non-departmental public body",
+    "art museum",
+    "museum",
+    "charitable organization"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "metropolitan-museum-of-art",
+   "qid": "Q160236",
+   "name": "Metropolitan Museum of Art",
+   "wiki": "Metropolitan Museum of Art",
+   "tier": "easy",
+   "score": 0.9812,
+   "sitelinks": 89,
+   "views": 54216,
+   "lon": -73.96333,
+   "lat": 40.77944,
+   "architects": [
+    "Richard Morris Hunt",
+    "Calvert Vaux",
+    "Jacob Wrey Mould",
+    "McKim, Mead & White"
+   ],
+   "year": 1870,
+   "country": "United States",
+   "locatedIn": "Manhattan",
+   "classes": [
+    "art museum",
+    "publishing house",
+    "production company",
+    "nonprofit organization"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "cn-tower",
+   "qid": "Q134883",
+   "name": "CN Tower",
+   "wiki": "CN Tower",
+   "tier": "easy",
+   "score": 0.9802,
+   "sitelinks": 80,
+   "views": 60216,
+   "lon": -79.38715,
+   "lat": 43.64275,
+   "architects": [
+    "John Andrews"
+   ],
+   "year": 1976,
+   "country": "Canada",
+   "locatedIn": "Toronto",
+   "classes": [
+    "television tower",
+    "observation tower",
+    "architectural landmark"
+   ],
+   "hasClue": true
+  },
+  {
+   "id": "united-states-capitol",
+   "qid": "Q54109",
+   "name": "United States Capitol",
+   "wiki": "United States Capitol",
+   "tier": "easy",
+   "score": 0.9801,
+   "sitelinks": 77,
+   "views": 65961,
+   "lon": -77.00917,
+   "lat": 38.88972,
+   "architects": [
+    "William Thornton",
+    "Étienne Sulpice Hallet",
+    "Benjamin Henry Latrobe",
+    "Charles Bulfinch",
+    "Thomas Ustick Walter",
+    "August Schoenborn",
+    "James Hoban",
+    "George Hadfield",
+    "Robert Mills",
+    "Montgomery C. Meigs",
+    "Edward Clark",
+    "Elliott Woods",
+    "David Lynn",
+    "J. George Stewart",
+    "George M. White",
+    "Alan Hantman",
+    "Stephen T. Ayers",
+    "Brett Blanton"
+   ],
+   "year": 1793,
+   "country": "United States",
+   "locatedIn": "Washington, D.C.",
+   "classes": [
+    "capitol building"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "st-paul-s-cathedral",
+   "qid": "Q173882",
+   "name": "St Paul's Cathedral",
+   "wiki": "St Paul's Cathedral",
+   "tier": "easy",
+   "score": 0.9801,
+   "sitelinks": 74,
+   "views": 73464,
+   "lon": -0.09831,
+   "lat": 51.51378,
+   "architects": [
+    "Christopher Wren"
+   ],
+   "year": 1675,
+   "country": "United Kingdom",
+   "locatedIn": "City of London",
+   "classes": [
+    "Anglican or Episcopal cathedral",
+    "cathedral library"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "chrysler-building",
+   "qid": "Q11274",
+   "name": "Chrysler Building",
+   "wiki": "Chrysler Building",
+   "tier": "easy",
+   "score": 0.9797,
+   "sitelinks": 75,
+   "views": 68293,
+   "lon": -73.97572,
+   "lat": 40.75143,
+   "architects": [
+    "William Van Alen"
+   ],
+   "year": 1931,
+   "country": "United States",
+   "locatedIn": "Manhattan",
+   "classes": [
+    "skyscraper"
+   ],
+   "hasClue": true
+  },
+  {
+   "id": "rock-and-roll-hall-of-fame",
+   "qid": "Q179191",
+   "name": "Rock and Roll Hall of Fame",
+   "wiki": "Rock and Roll Hall of Fame",
+   "tier": "easy",
+   "score": 0.9789,
+   "sitelinks": 63,
+   "views": 98871,
+   "lon": -81.69556,
+   "lat": 41.50861,
+   "architects": [
+    "I. M. Pei"
+   ],
+   "year": 1983,
+   "country": "United States",
+   "locatedIn": "Cleveland",
+   "classes": [
+    "music museum",
+    "museum building",
+    "hall of fame",
+    "award"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "washington-monument",
+   "qid": "Q178114",
+   "name": "Washington Monument",
+   "wiki": "Washington Monument",
+   "tier": "easy",
+   "score": 0.9738,
+   "sitelinks": 70,
+   "views": 59316,
+   "lon": -77.03524,
+   "lat": 38.88947,
+   "architects": [
+    "Robert Mills",
+    "Thomas Lincoln Casey, Sr.",
+    "United States Army Corps of Engineers"
+   ],
+   "year": 1885,
+   "country": "United States",
+   "locatedIn": "Washington, D.C.",
+   "classes": [
+    "obelisk",
+    "National Memorial of the United States"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "milan-cathedral",
+   "qid": "Q18068",
+   "name": "Milan Cathedral",
+   "wiki": "Milan Cathedral",
+   "tier": "easy",
+   "score": 0.9736,
+   "sitelinks": 78,
+   "views": 46654,
+   "lon": 9.19058,
+   "lat": 45.46397,
+   "architects": [
+    "Simone da Orsenigo"
+   ],
+   "year": 1386,
+   "country": "Italy",
+   "locatedIn": "Milan",
+   "classes": [
+    "Catholic cathedral",
+    "tourist destination",
+    "church building",
+    "architectural ensemble",
+    "domus"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "tokyo-skytree",
+   "qid": "Q57965",
+   "name": "Tokyo Skytree",
+   "wiki": "Tokyo Skytree",
+   "tier": "easy",
+   "score": 0.9736,
+   "sitelinks": 72,
+   "views": 52062,
+   "lon": 139.81072,
+   "lat": 35.71006,
+   "architects": [
+    "Nikken Sekkei"
+   ],
+   "year": 2012,
+   "country": "Japan",
+   "locatedIn": "Oshiage",
+   "classes": [
+    "observation tower",
+    "television tower",
+    "transmitter mast",
+    "communication tower"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "florence-cathedral",
+   "qid": "Q191739",
+   "name": "Florence Cathedral",
+   "wiki": "Florence Cathedral",
+   "tier": "easy",
+   "score": 0.9708,
+   "sitelinks": 71,
+   "views": 49915,
+   "lon": 11.25694,
+   "lat": 43.77306,
+   "architects": [
+    "Arnolfo di Cambio",
+    "Filippo Brunelleschi",
+    "Emilio De Fabris",
+    "Giovanni di Lapo Ghini",
+    "Andrea di Bonaiuto",
+    "Taddeo Gaddi",
+    "Benci di Cione Dami",
+    "Neri di Fioravante",
+    "Andrea Pisano",
+    "Francesco Talenti",
+    "Giotto",
+    "Antonio Ciaccheri"
+   ],
+   "year": 1296,
+   "country": "Italy",
+   "locatedIn": "Florence",
+   "classes": [
+    "minor basilica",
+    "cathedral",
+    "museum"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "reichstag",
+   "qid": "Q151897",
+   "name": "Reichstag",
+   "wiki": "Reichstag building",
+   "tier": "easy",
+   "score": 0.9707,
+   "sitelinks": 75,
+   "views": 44754,
+   "lon": 13.37611,
+   "lat": 52.51861,
+   "architects": [
+    "Paul Wallot",
+    "Norman Foster",
+    "Paul Baumgarten"
+   ],
+   "year": 1894,
+   "country": "Germany",
+   "locatedIn": "Bezirk Mitte",
+   "classes": [
+    "government building",
+    "parliament building"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "q737945",
+   "qid": "Q737945",
+   "name": "Q737945",
+   "wiki": "Jeddah Tower",
+   "tier": "easy",
+   "score": 0.9694,
+   "sitelinks": 54,
+   "views": 149476,
+   "lon": 39.08284,
+   "lat": 21.734,
+   "architects": [
+    "Adrian Smith + Gordon Gill Architecture"
+   ],
+   "year": null,
+   "country": "Saudi Arabia",
+   "locatedIn": "Jeddah",
+   "classes": [
+    "skyscraper",
+    "building or structure under construction"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "fallingwater",
+   "qid": "Q463179",
+   "name": "Fallingwater",
+   "wiki": "Fallingwater",
+   "tier": "easy",
+   "score": 0.9692,
+   "sitelinks": 61,
+   "views": 65628,
+   "lon": -79.46806,
+   "lat": 39.90639,
+   "architects": [
+    "Frank Lloyd Wright"
+   ],
+   "year": 1936,
+   "country": "United States",
+   "locatedIn": "Stewart Township",
+   "classes": [
+    "single-family detached home",
+    "historic house museum"
+   ],
+   "hasClue": true
+  },
+  {
+   "id": "st-basils",
+   "qid": "Q129846",
+   "name": "St Basil's Cathedral",
+   "wiki": "Saint Basil's Cathedral",
+   "tier": "easy",
+   "score": 0.9669,
+   "sitelinks": 79,
+   "views": 38587,
+   "lon": 37.62306,
+   "lat": 55.7525,
+   "architects": [
+    "Postnik Yakovlev"
+   ],
+   "year": 1555,
+   "country": "Russia",
+   "locatedIn": "Tverskoy District",
+   "classes": [
+    "Eastern Orthodox church building",
+    "architectural landmark"
+   ],
+   "hasClue": true
+  },
+  {
+   "id": "winter-palace",
+   "qid": "Q182147",
+   "name": "Winter Palace",
+   "wiki": "Winter Palace",
+   "tier": "easy",
+   "score": 0.9666,
+   "sitelinks": 76,
+   "views": 39628,
+   "lon": 30.31389,
+   "lat": 59.94028,
+   "architects": [
+    "Francesco Bartolomeo Rastrelli"
+   ],
+   "year": 1762,
+   "country": "Russia",
+   "locatedIn": "Dvortsovy Municipal Okrug",
+   "classes": [
+    "palace",
+    "museum building"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "topkap-palace",
+   "qid": "Q170495",
+   "name": "Topkapı Palace",
+   "wiki": "Topkapı Palace",
+   "tier": "easy",
+   "score": 0.966,
+   "sitelinks": 79,
+   "views": 37867,
+   "lon": 28.984,
+   "lat": 41.013,
+   "architects": [
+    "Mehmed II"
+   ],
+   "year": 1475,
+   "country": "Turkey",
+   "locatedIn": "Eminönü",
+   "classes": [
+    "palace",
+    "building or structure under construction",
+    "museum"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "red-fort",
+   "qid": "Q45957",
+   "name": "Red Fort",
+   "wiki": "Red Fort",
+   "tier": "easy",
+   "score": 0.9644,
+   "sitelinks": 76,
+   "views": 38543,
+   "lon": 77.24028,
+   "lat": 28.65583,
+   "architects": [],
+   "year": 1648,
+   "country": "India",
+   "locatedIn": "Central Delhi district",
+   "classes": [
+    "fort"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "sultan-ahmed-mosque",
+   "qid": "Q80541",
+   "name": "Sultan Ahmed Mosque",
+   "wiki": "Blue Mosque, Istanbul",
+   "tier": "easy",
+   "score": 0.9642,
+   "sitelinks": 89,
+   "views": 34194,
+   "lon": 28.97682,
+   "lat": 41.00539,
+   "architects": [
+    "Sedefkar Mehmed Ağa"
+   ],
+   "year": 1616,
+   "country": "Turkey",
+   "locatedIn": "Eminönü",
+   "classes": [
+    "mosque",
+    "historic building"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "smithsonian-institution",
+   "qid": "Q131626",
+   "name": "Smithsonian Institution",
+   "wiki": "Smithsonian Institution",
+   "tier": "easy",
+   "score": 0.9642,
+   "sitelinks": 70,
+   "views": 40206,
+   "lon": -77.026,
+   "lat": 38.88889,
+   "architects": [],
+   "year": 1846,
+   "country": "United States",
+   "locatedIn": null,
+   "classes": [
+    "institution",
+    "nonprofit organization",
+    "museum"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "abraj-al-bait",
+   "qid": "Q189476",
+   "name": "Abraj Al Bait",
+   "wiki": "The Clock Towers",
+   "tier": "easy",
+   "score": 0.964,
+   "sitelinks": 60,
+   "views": 53481,
+   "lon": 39.82639,
+   "lat": 21.41889,
+   "architects": [
+    "Dar Al-Handasah",
+    "Mahmoud Bodo Rasch"
+   ],
+   "year": 2011,
+   "country": "Saudi Arabia",
+   "locatedIn": "Mecca",
+   "classes": [
+    "building complex",
+    "skyscraper",
+    "clock tower"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "shanghai-tower",
+   "qid": "Q18547",
+   "name": "Shanghai Tower",
+   "wiki": "Shanghai Tower",
+   "tier": "easy",
+   "score": 0.9585,
+   "sitelinks": 58,
+   "views": 47249,
+   "lon": 121.501,
+   "lat": 31.2355,
+   "architects": [
+    "Gensler"
+   ],
+   "year": 2014,
+   "country": "People's Republic of China",
+   "locatedIn": "Shanghai",
+   "classes": [
+    "skyscraper"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "jumeirah-burj-al-arab",
+   "qid": "Q62939",
+   "name": "Jumeirah Burj Al Arab",
+   "wiki": "Burj Al Arab",
+   "tier": "easy",
+   "score": 0.957,
+   "sitelinks": 78,
+   "views": 31721,
+   "lon": 55.18528,
+   "lat": 25.14139,
+   "architects": [
+    "Tom Wright"
+   ],
+   "year": 1999,
+   "country": "United Arab Emirates",
+   "locatedIn": "Emirate of Dubai",
+   "classes": [
+    "tower block",
+    "hotel"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "schonbrunn-palace",
+   "qid": "Q131330",
+   "name": "Schönbrunn Palace",
+   "wiki": "Schönbrunn Palace",
+   "tier": "easy",
+   "score": 0.9566,
+   "sitelinks": 65,
+   "views": 36520,
+   "lon": 16.31227,
+   "lat": 48.18479,
+   "architects": [
+    "Johann Bernhard Fischer von Erlach",
+    "Nicolò Pacassi"
+   ],
+   "year": 1638,
+   "country": "Austria",
+   "locatedIn": "Hietzing",
+   "classes": [
+    "château",
+    "tourist attraction",
+    "museum",
+    "royal palace"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "mosque-cathedral-of-cordoba",
+   "qid": "Q33200",
+   "name": "Mosque-Cathedral of Cordoba",
+   "wiki": "Mosque–Cathedral of Córdoba",
+   "tier": "easy",
+   "score": 0.9565,
+   "sitelinks": 62,
+   "views": 38152,
+   "lon": -4.77934,
+   "lat": 37.87887,
+   "architects": [
+    "Hernán Ruiz",
+    "Juan de Ochoa",
+    "Ahmad Ben Baso"
+   ],
+   "year": 786,
+   "country": "Spain",
+   "locatedIn": "Córdoba",
+   "classes": [
+    "congregational mosque",
+    "Catholic cathedral"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "tokyo-tower",
+   "qid": "Q183536",
+   "name": "Tokyo Tower",
+   "wiki": "Tokyo Tower",
+   "tier": "easy",
+   "score": 0.9549,
+   "sitelinks": 69,
+   "views": 33662,
+   "lon": 139.74556,
+   "lat": 35.65861,
+   "architects": [
+    "Tachū Naitō"
+   ],
+   "year": 1958,
+   "country": "Japan",
+   "locatedIn": "Shibakōen",
+   "classes": [
+    "observation tower",
+    "transmitter mast",
+    "lattice tower",
+    "architectural landmark"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "potala-palace",
+   "qid": "Q71229",
+   "name": "Potala Palace",
+   "wiki": "Potala Palace",
+   "tier": "easy",
+   "score": 0.9548,
+   "sitelinks": 85,
+   "views": 29948,
+   "lon": 91.11694,
+   "lat": 29.65778,
+   "architects": [],
+   "year": 637,
+   "country": "Tibet",
+   "locatedIn": "Lhasa District",
+   "classes": [
+    "palace",
+    "Buddhist temple",
+    "sacred place",
+    "Chinese AAAAA-rated tourist attraction"
+   ],
+   "hasClue": true
+  },
+  {
+   "id": "castel-sant-angelo",
+   "qid": "Q486382",
+   "name": "Castel Sant'Angelo",
+   "wiki": "Castel Sant'Angelo",
+   "tier": "easy",
+   "score": 0.9508,
+   "sitelinks": 58,
+   "views": 38623,
+   "lon": 12.46631,
+   "lat": 41.90304,
+   "architects": [
+    "Decriannus"
+   ],
+   "year": 1906,
+   "country": "Italy",
+   "locatedIn": "Rome",
+   "classes": [
+    "museum",
+    "quadrangular castle",
+    "roman mausoleum",
+    "mausoleum",
+    "château"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "saint-catherine-monastery",
+   "qid": "Q185362",
+   "name": "Saint Catherine Monastery",
+   "wiki": "Saint Catherine's Monastery",
+   "tier": "easy",
+   "score": 0.9507,
+   "sitelinks": 75,
+   "views": 29586,
+   "lon": 33.97556,
+   "lat": 28.55583,
+   "architects": [],
+   "year": null,
+   "country": "Egypt",
+   "locatedIn": "South Sinai Governorate",
+   "classes": [
+    "monastery"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "canterbury-cathedral",
+   "qid": "Q29265",
+   "name": "Canterbury Cathedral",
+   "wiki": "Canterbury Cathedral",
+   "tier": "easy",
+   "score": 0.9486,
+   "sitelinks": 66,
+   "views": 30814,
+   "lon": 1.083,
+   "lat": 51.27981,
+   "architects": [
+    "William of Sens",
+    "William the Englishman"
+   ],
+   "year": 601,
+   "country": "United Kingdom",
+   "locatedIn": "Canterbury",
+   "classes": [
+    "Anglican or Episcopal cathedral"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "ryugyong-hotel",
+   "qid": "Q29272",
+   "name": "Ryugyong Hotel",
+   "wiki": "Ryugyong Hotel",
+   "tier": "easy",
+   "score": 0.9486,
+   "sitelinks": 58,
+   "views": 36686,
+   "lon": 125.73083,
+   "lat": 39.03667,
+   "architects": [
+    "Baikdoosan Architects & Engineers"
+   ],
+   "year": null,
+   "country": "North Korea",
+   "locatedIn": "Pyongyang",
+   "classes": [
+    "skyscraper",
+    "hotel",
+    "mixed-use development"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "svalbard-global-seed-vault",
+   "qid": "Q201013",
+   "name": "Svalbard Global Seed Vault",
+   "wiki": "Svalbard Global Seed Vault",
+   "tier": "easy",
+   "score": 0.9484,
+   "sitelinks": 56,
+   "views": 38913,
+   "lon": 15.49137,
+   "lat": 78.23587,
+   "architects": [
+    "Peter W. Søderman"
+   ],
+   "year": 2008,
+   "country": "Norway",
+   "locatedIn": "Longyearbyen",
+   "classes": [
+    "seed bank",
+    "built structure",
+    "subterranea"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "royal-monastery-of-san-lorenzo-de-el-escorial",
+   "qid": "Q28471",
+   "name": "Royal Monastery of San Lorenzo de El Escorial",
+   "wiki": "El Escorial",
+   "tier": "easy",
+   "score": 0.9453,
+   "sitelinks": 82,
+   "views": 25348,
+   "lon": -4.14778,
+   "lat": 40.58917,
+   "architects": [],
+   "year": 1563,
+   "country": "Spain",
+   "locatedIn": "San Lorenzo de El Escorial",
+   "classes": [
+    "Roman Catholic monastery",
+    "royal palace",
+    "Monument (Spain)"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "museo-del-prado",
+   "qid": "Q160112",
+   "name": "Museo del Prado",
+   "wiki": "Museo del Prado",
+   "tier": "easy",
+   "score": 0.9453,
+   "sitelinks": 80,
+   "views": 25473,
+   "lon": -3.69222,
+   "lat": 40.41389,
+   "architects": [
+    "Juan de Villanueva"
+   ],
+   "year": 1819,
+   "country": "Spain",
+   "locatedIn": "Madrid",
+   "classes": [
+    "art museum",
+    "national museum",
+    "organization",
+    "tourist destination"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "prague-castle",
+   "qid": "Q193369",
+   "name": "Prague Castle",
+   "wiki": "Prague Castle",
+   "tier": "easy",
+   "score": 0.944,
+   "sitelinks": 66,
+   "views": 27934,
+   "lon": 14.4,
+   "lat": 50.09,
+   "architects": [
+    "Matthias of Arras",
+    "Benedikt Rejt",
+    "Jože Plečnik"
+   ],
+   "year": 900,
+   "country": "Czech Republic",
+   "locatedIn": "Hradčany",
+   "classes": [
+    "castle",
+    "hillfort",
+    "château"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "umayyad-mosque",
+   "qid": "Q183562",
+   "name": "Umayyad Mosque",
+   "wiki": "Umayyad Mosque",
+   "tier": "easy",
+   "score": 0.9394,
+   "sitelinks": 78,
+   "views": 23909,
+   "lon": 36.30667,
+   "lat": 33.51139,
+   "architects": [],
+   "year": 706,
+   "country": "Syria",
+   "locatedIn": "Damascus",
+   "classes": [
+    "mosque",
+    "architectural landmark",
+    "educational institution"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "yasukuni-shrine",
+   "qid": "Q242803",
+   "name": "Yasukuni Shrine",
+   "wiki": "Yasukuni Shrine",
+   "tier": "easy",
+   "score": 0.9384,
+   "sitelinks": 51,
+   "views": 39422,
+   "lon": 139.74269,
+   "lat": 35.69396,
+   "architects": [
+    "Itō Heizaemon IX"
+   ],
+   "year": 1869,
+   "country": "Japan",
+   "locatedIn": "Kudankita",
+   "classes": [
+    "Shinto shrine",
+    "chokusaisha",
+    "war memorial",
+    "gokoku shrine"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "prahadisvarar-temple",
+   "qid": "Q916943",
+   "name": "Prahadisvarar Temple",
+   "wiki": "Brihadisvara Temple",
+   "tier": "easy",
+   "score": 0.9383,
+   "sitelinks": 55,
+   "views": 32221,
+   "lon": 79.1325,
+   "lat": 10.78306,
+   "architects": [],
+   "year": 1010,
+   "country": "India",
+   "locatedIn": "Thanjavur",
+   "classes": [
+    "Hindu temple",
+    "gopuram"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "temple-of-heaven",
+   "qid": "Q125445",
+   "name": "Temple of Heaven",
+   "wiki": "Temple of Heaven",
+   "tier": "easy",
+   "score": 0.9367,
+   "sitelinks": 70,
+   "views": 24665,
+   "lon": 116.4066,
+   "lat": 39.8822,
+   "architects": [],
+   "year": null,
+   "country": "People's Republic of China",
+   "locatedIn": "Tiantan Subdistrict",
+   "classes": [
+    "temple",
+    "Chinese AAAAA-rated tourist attraction"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "bran-castle",
+   "qid": "Q390275",
+   "name": "Bran Castle",
+   "wiki": "Bran Castle",
+   "tier": "easy",
+   "score": 0.9362,
+   "sitelinks": 50,
+   "views": 38959,
+   "lon": 25.3671,
+   "lat": 45.515,
+   "architects": [],
+   "year": 1289,
+   "country": "Romania",
+   "locatedIn": "Brașov",
+   "classes": [
+    "castle"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "syracuse-university",
+   "qid": "Q617433",
+   "name": "Syracuse University",
+   "wiki": "Syracuse University",
+   "tier": "easy",
+   "score": 0.9358,
+   "sitelinks": 48,
+   "views": 44309,
+   "lon": -76.134,
+   "lat": 43.03764,
+   "architects": [
+    "Horatio Nelson White",
+    "SHoP Architects",
+    "Hideo Sasaki",
+    "Archimedes Russell",
+    "Gluckman Tang Architects",
+    "I. M. Pei",
+    "John Russell Pope",
+    "Dwight James Baum",
+    "Revels & Hallenbeck"
+   ],
+   "year": 1870,
+   "country": "United States",
+   "locatedIn": "Syracuse",
+   "classes": [
+    "private university",
+    "research university",
+    "private not-for-profit educational institution",
+    "group of structures or buildings"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "st-mark-s-basilica",
+   "qid": "Q172988",
+   "name": "St Mark's Basilica",
+   "wiki": "St Mark's Basilica",
+   "tier": "easy",
+   "score": 0.9353,
+   "sitelinks": 65,
+   "views": 24792,
+   "lon": 12.33972,
+   "lat": 45.43444,
+   "architects": [
+    "Domenico I Contarini"
+   ],
+   "year": 828,
+   "country": "Italy",
+   "locatedIn": "Venice",
+   "classes": [
+    "cathedral",
+    "minor basilica"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "notre-dame-de-chartres",
+   "qid": "Q180274",
+   "name": "Notre-Dame de Chartres",
+   "wiki": "Chartres Cathedral",
+   "tier": "easy",
+   "score": 0.9348,
+   "sitelinks": 73,
+   "views": 22500,
+   "lon": 1.48778,
+   "lat": 48.44778,
+   "architects": [
+    "Master of Chartres"
+   ],
+   "year": 1220,
+   "country": "France",
+   "locatedIn": "Chartres",
+   "classes": [
+    "Catholic cathedral",
+    "minor basilica",
+    "collection"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "yad-vashem",
+   "qid": "Q156591",
+   "name": "Yad Vashem",
+   "wiki": "Yad Vashem",
+   "tier": "easy",
+   "score": 0.9338,
+   "sitelinks": 63,
+   "views": 24698,
+   "lon": 35.17725,
+   "lat": 31.77442,
+   "architects": [
+    "Moshe Safdie"
+   ],
+   "year": 1953,
+   "country": "Israel",
+   "locatedIn": "Jerusalem",
+   "classes": [
+    "research institute",
+    "archives",
+    "documentation centre",
+    "memorial",
+    "production team",
+    "publishing house",
+    "museum",
+    "history museum",
+    "statutory corporation"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "guggenheim-bilbao",
+   "qid": "Q179199",
+   "name": "Guggenheim Museum Bilbao",
+   "wiki": "Guggenheim Museum Bilbao",
+   "tier": "easy",
+   "score": 0.9334,
+   "sitelinks": 68,
+   "views": 23680,
+   "lon": -2.9341,
+   "lat": 43.26883,
+   "architects": [
+    "Frank Gehry"
+   ],
+   "year": 1997,
+   "country": "Spain",
+   "locatedIn": "Bilbao",
+   "classes": [
+    "museum building",
+    "museum"
+   ],
+   "hasClue": true
+  },
+  {
+   "id": "malbork-castle",
+   "qid": "Q71279",
+   "name": "Malbork Castle",
+   "wiki": "Malbork Castle",
+   "tier": "easy",
+   "score": 0.9328,
+   "sitelinks": 58,
+   "views": 26918,
+   "lon": 19.02778,
+   "lat": 54.03972,
+   "architects": [],
+   "year": 1270,
+   "country": "Poland",
+   "locatedIn": "Malbork",
+   "classes": [
+    "castle",
+    "Ordensburg",
+    "architectural heritage monument"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "agra-fort",
+   "qid": "Q171857",
+   "name": "Agra Fort",
+   "wiki": "Agra Fort",
+   "tier": "easy",
+   "score": 0.9326,
+   "sitelinks": 78,
+   "views": 21407,
+   "lon": 78.0213,
+   "lat": 27.17958,
+   "architects": [],
+   "year": 1565,
+   "country": "India",
+   "locatedIn": "Agra",
+   "classes": [
+    "fort"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "hawa-mahal",
+   "qid": "Q836531",
+   "name": "Hawa Mahal",
+   "wiki": "Hawa Mahal",
+   "tier": "easy",
+   "score": 0.9322,
+   "sitelinks": 60,
+   "views": 25953,
+   "lon": 75.82672,
+   "lat": 26.924,
+   "architects": [
+    "Lal Chand Ustad"
+   ],
+   "year": 1799,
+   "country": "India",
+   "locatedIn": "Jaipur district",
+   "classes": [
+    "palace"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "kiyomizu-dera",
+   "qid": "Q221716",
+   "name": "Kiyomizu-dera",
+   "wiki": "Kiyomizu-dera",
+   "tier": "easy",
+   "score": 0.9313,
+   "sitelinks": 77,
+   "views": 21344,
+   "lon": 135.785,
+   "lat": 34.99483,
+   "architects": [],
+   "year": 778,
+   "country": "Japan",
+   "locatedIn": "Higashiyama-ku",
+   "classes": [
+    "Buddhist temple"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "uffizi-gallery",
+   "qid": "Q51252",
+   "name": "Uffizi Gallery",
+   "wiki": "Uffizi",
+   "tier": "easy",
+   "score": 0.9305,
+   "sitelinks": 73,
+   "views": 21590,
+   "lon": 11.25528,
+   "lat": 43.76833,
+   "architects": [
+    "Giorgio Vasari",
+    "Bernardo Buontalenti",
+    "Alfonso Parigi"
+   ],
+   "year": 1581,
+   "country": "Italy",
+   "locatedIn": "Florence",
+   "classes": [
+    "palace",
+    "museum building",
+    "art museum"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "summer-palace",
+   "qid": "Q4132",
+   "name": "Summer Palace",
+   "wiki": "Summer Palace",
+   "tier": "easy",
+   "score": 0.929,
+   "sitelinks": 62,
+   "views": 22780,
+   "lon": 116.2689,
+   "lat": 39.9975,
+   "architects": [],
+   "year": null,
+   "country": "People's Republic of China",
+   "locatedIn": "Haidian District",
+   "classes": [
+    "palace"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "lotus-temple",
+   "qid": "Q940843",
+   "name": "Lotus Temple",
+   "wiki": "Lotus Temple",
+   "tier": "easy",
+   "score": 0.9262,
+   "sitelinks": 56,
+   "views": 25500,
+   "lon": 77.2586,
+   "lat": 28.55333,
+   "architects": [
+    "Fariborz Sahba"
+   ],
+   "year": 1986,
+   "country": "India",
+   "locatedIn": "Delhi",
+   "classes": [
+    "temple"
+   ],
+   "hasClue": true
+  },
+  {
+   "id": "ostankino-tower",
+   "qid": "Q181324",
+   "name": "Ostankino Tower",
+   "wiki": "Ostankino Tower",
+   "tier": "easy",
+   "score": 0.9228,
+   "sitelinks": 61,
+   "views": 21880,
+   "lon": 37.61167,
+   "lat": 55.81972,
+   "architects": [
+    "Nikolai Nikitin",
+    "Leonid Batalov",
+    "Dmitri Burdin",
+    "Lev Shchipakin"
+   ],
+   "year": 1967,
+   "country": "Russia",
+   "locatedIn": "Ostankinsky District",
+   "classes": [
+    "television tower",
+    "architectural landmark",
+    "observation tower"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "india-gate",
+   "qid": "Q245347",
+   "name": "India Gate",
+   "wiki": "India Gate",
+   "tier": "easy",
+   "score": 0.9217,
+   "sitelinks": 51,
+   "views": 27985,
+   "lon": 77.22931,
+   "lat": 28.61286,
+   "architects": [
+    "Edwin Lutyens"
+   ],
+   "year": 1931,
+   "country": "India",
+   "locatedIn": "New Delhi district",
+   "classes": [
+    "triumphal arch",
+    "Commonwealth War Graves Commission maintained memorial"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "suleymaniye-mosque",
+   "qid": "Q178643",
+   "name": "Süleymaniye Mosque",
+   "wiki": "Süleymaniye Mosque",
+   "tier": "easy",
+   "score": 0.9212,
+   "sitelinks": 69,
+   "views": 20036,
+   "lon": 28.96389,
+   "lat": 41.01611,
+   "architects": [
+    "Mimar Sinan"
+   ],
+   "year": 1550,
+   "country": "Turkey",
+   "locatedIn": "Istanbul Province",
+   "classes": [
+    "mosque",
+    "historic building"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "casa-batllo",
+   "qid": "Q461371",
+   "name": "Casa Batlló",
+   "wiki": "Casa Batlló",
+   "tier": "easy",
+   "score": 0.9208,
+   "sitelinks": 51,
+   "views": 27165,
+   "lon": 2.16492,
+   "lat": 41.39158,
+   "architects": [
+    "Antoni Gaudí"
+   ],
+   "year": 1877,
+   "country": "Spain",
+   "locatedIn": "Dreta de l'Eixample",
+   "classes": [
+    "multifamily residential",
+    "residential building"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "chhatrapati-shivaji-maharaj-terminus",
+   "qid": "Q235884",
+   "name": "Chhatrapati Shivaji Maharaj Terminus",
+   "wiki": "Chhatrapati Shivaji Terminus",
+   "tier": "easy",
+   "score": 0.9203,
+   "sitelinks": 56,
+   "views": 23431,
+   "lon": 72.8355,
+   "lat": 18.9398,
+   "architects": [
+    "Frederick William Stevens",
+    "Axel Haig"
+   ],
+   "year": null,
+   "country": "India",
+   "locatedIn": "Mumbai City district",
+   "classes": [
+    "station located on surface",
+    "last station",
+    "dead-end railway station"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "belem-tower",
+   "qid": "Q215003",
+   "name": "Belém Tower",
+   "wiki": "Belém Tower",
+   "tier": "easy",
+   "score": 0.9198,
+   "sitelinks": 57,
+   "views": 22307,
+   "lon": -9.21583,
+   "lat": 38.69139,
+   "architects": [
+    "Francisco de Arruda"
+   ],
+   "year": 1515,
+   "country": "Portugal",
+   "locatedIn": "Belém",
+   "classes": [
+    "fort",
+    "fortified tower",
+    "cultural heritage",
+    "architectural heritage monument",
+    "tourist attraction"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "hofburg-palace",
+   "qid": "Q46242",
+   "name": "Hofburg Palace",
+   "wiki": "Hofburg",
+   "tier": "easy",
+   "score": 0.9185,
+   "sitelinks": 55,
+   "views": 23395,
+   "lon": 16.36528,
+   "lat": 48.20639,
+   "architects": [
+    "Filiberto Lucchese"
+   ],
+   "year": 1913,
+   "country": "Austria",
+   "locatedIn": "Innere Stadt",
+   "classes": [
+    "castle",
+    "château",
+    "palace",
+    "official residence",
+    "tourist destination",
+    "museum"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "space-needle",
+   "qid": "Q5317",
+   "name": "Space Needle",
+   "wiki": "Space Needle",
+   "tier": "easy",
+   "score": 0.9183,
+   "sitelinks": 46,
+   "views": 35451,
+   "lon": -122.3491,
+   "lat": 47.6204,
+   "architects": [
+    "John Graham & Company"
+   ],
+   "year": 1962,
+   "country": "United States",
+   "locatedIn": "Seattle",
+   "classes": [
+    "observation tower"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "church-of-the-nativity",
+   "qid": "Q194504",
+   "name": "Church of the Nativity",
+   "wiki": "Church of the Nativity",
+   "tier": "easy",
+   "score": 0.9182,
+   "sitelinks": 62,
+   "views": 20226,
+   "lon": 35.20758,
+   "lat": 31.70431,
+   "architects": [],
+   "year": 327,
+   "country": "Palestine",
+   "locatedIn": "Bethlehem",
+   "classes": [
+    "minor basilica",
+    "basilica",
+    "World Heritage Site"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "charminar",
+   "qid": "Q1771696",
+   "name": "Charminar",
+   "wiki": "Charminar",
+   "tier": "easy",
+   "score": 0.9158,
+   "sitelinks": 51,
+   "views": 25532,
+   "lon": 78.47466,
+   "lat": 17.36161,
+   "architects": [],
+   "year": 1591,
+   "country": "India",
+   "locatedIn": "Hyderabad",
+   "classes": [
+    "monument",
+    "mosque"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "dolmabahce-palace",
+   "qid": "Q274141",
+   "name": "Dolmabahçe Palace",
+   "wiki": "Dolmabahçe Palace",
+   "tier": "easy",
+   "score": 0.9153,
+   "sitelinks": 54,
+   "views": 22284,
+   "lon": 29.00167,
+   "lat": 41.03944,
+   "architects": [
+    "Garabet Amira Balyan",
+    "Nigoğayos Balyan"
+   ],
+   "year": 1856,
+   "country": "Turkey",
+   "locatedIn": "Beşiktaş",
+   "classes": [
+    "palace"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "tokyo-imperial-palace",
+   "qid": "Q500681",
+   "name": "Tokyo Imperial Palace",
+   "wiki": "Tokyo Imperial Palace",
+   "tier": "easy",
+   "score": 0.9141,
+   "sitelinks": 45,
+   "views": 35523,
+   "lon": 139.7521,
+   "lat": 35.6825,
+   "architects": [],
+   "year": 1868,
+   "country": "Japan",
+   "locatedIn": "Chiyoda",
+   "classes": [
+    "royal palace",
+    "Japanese Imperial Facilities"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "monticello",
+   "qid": "Q199618",
+   "name": "Monticello",
+   "wiki": "Monticello",
+   "tier": "easy",
+   "score": 0.9133,
+   "sitelinks": 47,
+   "views": 30292,
+   "lon": -78.45233,
+   "lat": 38.01031,
+   "architects": [
+    "Thomas Jefferson"
+   ],
+   "year": null,
+   "country": "United States",
+   "locatedIn": "Albemarle County",
+   "classes": [
+    "plantation"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "belvedere",
+   "qid": "Q211818",
+   "name": "Belvedere",
+   "wiki": "Belvedere, Vienna",
+   "tier": "easy",
+   "score": 0.9132,
+   "sitelinks": 62,
+   "views": 19068,
+   "lon": 16.38052,
+   "lat": 48.1934,
+   "architects": [
+    "Johann Lukas von Hildebrandt"
+   ],
+   "year": 1714,
+   "country": "Austria",
+   "locatedIn": "Landstraße",
+   "classes": [
+    "palace"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "amber-fort",
+   "qid": "Q456817",
+   "name": "Amber Fort",
+   "wiki": "Amber Fort",
+   "tier": "easy",
+   "score": 0.9128,
+   "sitelinks": 46,
+   "views": 31324,
+   "lon": 75.8507,
+   "lat": 26.9859,
+   "architects": [],
+   "year": 1592,
+   "country": "India",
+   "locatedIn": "Jaipur district",
+   "classes": [
+    "palace",
+    "fortress"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "ulm-minster",
+   "qid": "Q44562",
+   "name": "Ulm Minster",
+   "wiki": "Ulm Minster",
+   "tier": "easy",
+   "score": 0.9112,
+   "sitelinks": 51,
+   "views": 24201,
+   "lon": 9.9925,
+   "lat": 48.39861,
+   "architects": [
+    "Ulrich Ensingen"
+   ],
+   "year": 1377,
+   "country": "Germany",
+   "locatedIn": "Ulm",
+   "classes": [
+    "church building"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "jama-masjid-delhi",
+   "qid": "Q233678",
+   "name": "Jama Masjid, Delhi",
+   "wiki": "Jama Masjid, Delhi",
+   "tier": "easy",
+   "score": 0.9105,
+   "sitelinks": 61,
+   "views": 18960,
+   "lon": 77.23306,
+   "lat": 28.65083,
+   "architects": [],
+   "year": 1656,
+   "country": "India",
+   "locatedIn": "Central Delhi district",
+   "classes": [
+    "mosque"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "hohenzollern-castle",
+   "qid": "Q156457",
+   "name": "Hohenzollern Castle",
+   "wiki": "Hohenzollern Castle",
+   "tier": "easy",
+   "score": 0.9105,
+   "sitelinks": 47,
+   "views": 28725,
+   "lon": 8.9674,
+   "lat": 48.32356,
+   "architects": [
+    "Friedrich August Stüler"
+   ],
+   "year": null,
+   "country": "Germany",
+   "locatedIn": "Bisingen",
+   "classes": [
+    "castle",
+    "museum",
+    "château"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "reims-cathedral",
+   "qid": "Q206823",
+   "name": "Reims Cathedral",
+   "wiki": "Reims Cathedral",
+   "tier": "easy",
+   "score": 0.91,
+   "sitelinks": 60,
+   "views": 19556,
+   "lon": 4.03417,
+   "lat": 49.25389,
+   "architects": [
+    "Jean d'Orbais"
+   ],
+   "year": 1275,
+   "country": "France",
+   "locatedIn": "Reims",
+   "classes": [
+    "Catholic cathedral"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "hungarian-parliament-building",
+   "qid": "Q11819",
+   "name": "Hungarian Parliament Building",
+   "wiki": "Hungarian Parliament Building",
+   "tier": "easy",
+   "score": 0.9099,
+   "sitelinks": 57,
+   "views": 20139,
+   "lon": 19.04556,
+   "lat": 47.50694,
+   "architects": [
+    "Imre Steindl"
+   ],
+   "year": 1904,
+   "country": "Hungary",
+   "locatedIn": "Budapest District V",
+   "classes": [
+    "parliament building"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "rijksmuseum",
+   "qid": "Q190804",
+   "name": "Rijksmuseum",
+   "wiki": "Rijksmuseum",
+   "tier": "easy",
+   "score": 0.9089,
+   "sitelinks": 70,
+   "views": 17144,
+   "lon": 4.88528,
+   "lat": 52.36,
+   "architects": [
+    "Pierre Cuypers"
+   ],
+   "year": 1885,
+   "country": "Netherlands",
+   "locatedIn": "Amsterdam",
+   "classes": [
+    "national museum",
+    "history museum",
+    "production company",
+    "data set"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "canton-tower",
+   "qid": "Q168400",
+   "name": "Canton Tower",
+   "wiki": "Canton Tower",
+   "tier": "easy",
+   "score": 0.9071,
+   "sitelinks": 53,
+   "views": 21094,
+   "lon": 113.31915,
+   "lat": 23.1092,
+   "architects": [
+    "Information Based Architecture"
+   ],
+   "year": 2010,
+   "country": "People's Republic of China",
+   "locatedIn": "Chigang Subdistrict",
+   "classes": [
+    "observation tower",
+    "television tower",
+    "hyperboloid structure"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "newgrange",
+   "qid": "Q339503",
+   "name": "Newgrange",
+   "wiki": "Newgrange",
+   "tier": "easy",
+   "score": 0.9068,
+   "sitelinks": 48,
+   "views": 24915,
+   "lon": -6.47557,
+   "lat": 53.69473,
+   "architects": [],
+   "year": null,
+   "country": "Ireland",
+   "locatedIn": "County Meath",
+   "classes": [
+    "Irish passage tomb",
+    "tomb"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "meenakshi-temple",
+   "qid": "Q1424358",
+   "name": "Meenakshi Temple",
+   "wiki": "Meenakshi Temple",
+   "tier": "easy",
+   "score": 0.9061,
+   "sitelinks": 45,
+   "views": 30488,
+   "lon": 78.11944,
+   "lat": 9.91972,
+   "architects": [],
+   "year": 1200,
+   "country": "India",
+   "locatedIn": "Madurai",
+   "classes": [
+    "Hindu temple",
+    "gopuram"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "palace-of-the-parliament",
+   "qid": "Q164150",
+   "name": "Palace of the Parliament",
+   "wiki": "Palace of the Parliament",
+   "tier": "easy",
+   "score": 0.9058,
+   "sitelinks": 45,
+   "views": 30432,
+   "lon": 26.0875,
+   "lat": 44.4275,
+   "architects": [
+    "Anca Petrescu"
+   ],
+   "year": 1994,
+   "country": "Romania",
+   "locatedIn": "Bucharest",
+   "classes": [
+    "palace",
+    "parliament building",
+    "convention center",
+    "theatre building"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "cathedral-of-our-lady-of-strasbourg",
+   "qid": "Q745460",
+   "name": "Cathedral of Our Lady of Strasbourg",
+   "wiki": "Strasbourg Cathedral",
+   "tier": "easy",
+   "score": 0.9047,
+   "sitelinks": 51,
+   "views": 21698,
+   "lon": 7.75106,
+   "lat": 48.58189,
+   "architects": [
+    "Erwin von Steinbach",
+    "Johannes von Steinbach",
+    "Johannes Gerlach",
+    "Maître Konrad",
+    "Michael Parler",
+    "Claus de Lohre",
+    "Ulrich Ensingen",
+    "Johannes Hültz",
+    "Matthäus Ensinger",
+    "Jost Dotzinger",
+    "Konrad Vogt",
+    "Hans Meiger von Werde",
+    "Conrat Seyfer",
+    "Lorentz de Vendenheim",
+    "Jacob von Landshut",
+    "Gustave Klotz"
+   ],
+   "year": 1015,
+   "country": "France",
+   "locatedIn": "Strasbourg",
+   "classes": [
+    "Catholic cathedral"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "la-scala",
+   "qid": "Q5471",
+   "name": "La Scala",
+   "wiki": "La Scala",
+   "tier": "easy",
+   "score": 0.9026,
+   "sitelinks": 74,
+   "views": 16059,
+   "lon": 9.18917,
+   "lat": 45.4675,
+   "architects": [
+    "Giuseppe Piermarini",
+    "Alessandro Sanquirico",
+    "Luigi Lorenzo Secchi",
+    "Mario Botta"
+   ],
+   "year": 1778,
+   "country": "Italy",
+   "locatedIn": "Milan",
+   "classes": [
+    "opera house",
+    "Italian theater",
+    "tourist attraction",
+    "theatre building",
+    "architectural ensemble"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "gyeongbokgung",
+   "qid": "Q482485",
+   "name": "Gyeongbokgung",
+   "wiki": "Gyeongbokgung",
+   "tier": "easy",
+   "score": 0.9026,
+   "sitelinks": 46,
+   "views": 26206,
+   "lon": 126.9768,
+   "lat": 37.57988,
+   "architects": [],
+   "year": 1395,
+   "country": "South Korea",
+   "locatedIn": "Jongno District",
+   "classes": [
+    "palace"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "atomium",
+   "qid": "Q180901",
+   "name": "Atomium",
+   "wiki": "Atomium",
+   "tier": "easy",
+   "score": 0.9015,
+   "sitelinks": 53,
+   "views": 19729,
+   "lon": 4.34139,
+   "lat": 50.895,
+   "architects": [
+    "André and Jean Polak"
+   ],
+   "year": 1958,
+   "country": "Belgium",
+   "locatedIn": "Brussels",
+   "classes": [
+    "architectural landmark"
+   ],
+   "hasClue": true
+  },
+  {
+   "id": "fukushima-daiichi-nuclear-power-plant",
+   "qid": "Q114295",
+   "name": "Fukushima Daiichi Nuclear Power Plant",
+   "wiki": "Fukushima Daiichi Nuclear Power Plant",
+   "tier": "easy",
+   "score": 0.901,
+   "sitelinks": 59,
+   "views": 17404,
+   "lon": 141.0325,
+   "lat": 37.42139,
+   "architects": [
+    "Ebasco Services"
+   ],
+   "year": 1966,
+   "country": "Japan",
+   "locatedIn": "Okuma",
+   "classes": [
+    "nuclear power plant"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "marina-bay-sands",
+   "qid": "Q548679",
+   "name": "Marina Bay Sands",
+   "wiki": "Marina Bay Sands",
+   "tier": "easy",
+   "score": 0.9009,
+   "sitelinks": 41,
+   "views": 39445,
+   "lon": 103.86,
+   "lat": 1.2825,
+   "architects": [
+    "Moshe Safdie"
+   ],
+   "year": 2010,
+   "country": "Singapore",
+   "locatedIn": "Downtown Core",
+   "classes": [
+    "hotel",
+    "casino hotel",
+    "tower block"
+   ],
+   "hasClue": true
+  },
+  {
+   "id": "aachen-cathedral",
+   "qid": "Q5908",
+   "name": "Aachen Cathedral",
+   "wiki": "Aachen Cathedral",
+   "tier": "easy",
+   "score": 0.8995,
+   "sitelinks": 64,
+   "views": 16353,
+   "lon": 6.08392,
+   "lat": 50.77475,
+   "architects": [
+    "Odo of Metz"
+   ],
+   "year": 801,
+   "country": "Germany",
+   "locatedIn": "Aachen-Mitte",
+   "classes": [
+    "imperial cathedral",
+    "church building"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "basilica-of-san-francesco-d-assisi",
+   "qid": "Q207486",
+   "name": "Basilica of San Francesco d'Assisi",
+   "wiki": "Basilica of Saint Francis of Assisi",
+   "tier": "easy",
+   "score": 0.8995,
+   "sitelinks": 49,
+   "views": 21398,
+   "lon": 12.60581,
+   "lat": 43.07484,
+   "architects": [
+    "Elias of Cortona",
+    "Lapo Tedesco",
+    "Bernardo Rossellino",
+    "Bernardo Rossellino"
+   ],
+   "year": 1228,
+   "country": "Italy",
+   "locatedIn": "Assisi",
+   "classes": [
+    "papal basilica",
+    "minor basilica",
+    "abbey church"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "quba-mosque",
+   "qid": "Q276569",
+   "name": "Quba Mosque",
+   "wiki": "Quba Mosque",
+   "tier": "easy",
+   "score": 0.8987,
+   "sitelinks": 61,
+   "views": 16747,
+   "lon": 39.61722,
+   "lat": 24.43917,
+   "architects": [
+    "Abdel-Wahed El-Wakil"
+   ],
+   "year": 622,
+   "country": "Saudi Arabia",
+   "locatedIn": "Medina",
+   "classes": [
+    "mosque"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "chateau-de-chambord",
+   "qid": "Q205367",
+   "name": "Château de Chambord",
+   "wiki": "Château de Chambord",
+   "tier": "easy",
+   "score": 0.8984,
+   "sitelinks": 55,
+   "views": 18145,
+   "lon": 1.51722,
+   "lat": 47.61611,
+   "architects": [
+    "Pierre Nepveu",
+    "Jacques Sourdeau"
+   ],
+   "year": 1519,
+   "country": "France",
+   "locatedIn": "Chambord",
+   "classes": [
+    "château"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "gateway-of-india",
+   "qid": "Q864862",
+   "name": "Gateway of India",
+   "wiki": "Gateway of India",
+   "tier": "easy",
+   "score": 0.8978,
+   "sitelinks": 44,
+   "views": 27247,
+   "lon": 72.8347,
+   "lat": 18.92184,
+   "architects": [
+    "George Wittet"
+   ],
+   "year": 1924,
+   "country": "India",
+   "locatedIn": "Mumbai City district",
+   "classes": [
+    "triumphal arch"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "sheikh-zayed-mosque",
+   "qid": "Q695604",
+   "name": "Sheikh Zayed Grand Mosque",
+   "wiki": "Sheikh Zayed Grand Mosque",
+   "tier": "easy",
+   "score": 0.8965,
+   "sitelinks": 56,
+   "views": 17361,
+   "lon": 54.474,
+   "lat": 24.412,
+   "architects": [
+    "Yusef Abdelki"
+   ],
+   "year": 2007,
+   "country": "United Arab Emirates",
+   "locatedIn": "Abu Dhabi",
+   "classes": [
+    "mosque"
+   ],
+   "hasClue": true
+  },
+  {
+   "id": "salisbury-cathedral",
+   "qid": "Q390150",
+   "name": "Salisbury Cathedral",
+   "wiki": "Salisbury Cathedral",
+   "tier": "easy",
+   "score": 0.8958,
+   "sitelinks": 50,
+   "views": 20037,
+   "lon": -1.7975,
+   "lat": 51.06472,
+   "architects": [
+    "Richard Poore",
+    "Elias of Dereham"
+   ],
+   "year": 1220,
+   "country": "United Kingdom",
+   "locatedIn": "Salisbury",
+   "classes": [
+    "Anglican or Episcopal cathedral"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "united-states-naval-academy",
+   "qid": "Q559549",
+   "name": "United States Naval Academy",
+   "wiki": "United States Naval Academy",
+   "tier": "easy",
+   "score": 0.8951,
+   "sitelinks": 41,
+   "views": 35037,
+   "lon": -76.485,
+   "lat": 38.9825,
+   "architects": [
+    "Ernest Flagg"
+   ],
+   "year": 1845,
+   "country": "United States",
+   "locatedIn": "Annapolis",
+   "classes": [
+    "naval academy",
+    "public educational institution of the United States",
+    "observatory",
+    "census-designated place in the United States"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "grand-egyptian-museum",
+   "qid": "Q2583681",
+   "name": "Grand Egyptian Museum",
+   "wiki": "Grand Egyptian Museum",
+   "tier": "easy",
+   "score": 0.8942,
+   "sitelinks": 47,
+   "views": 21888,
+   "lon": 31.11972,
+   "lat": 29.99361,
+   "architects": [
+    "Heneghan Peng",
+    "Roisin Heneghan"
+   ],
+   "year": 2025,
+   "country": "Egypt",
+   "locatedIn": "Giza Governorate",
+   "classes": [
+    "museum building",
+    "archaeological museum"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "td-garden",
+   "qid": "Q432105",
+   "name": "TD Garden",
+   "wiki": "TD Garden",
+   "tier": "easy",
+   "score": 0.8928,
+   "sitelinks": 44,
+   "views": 25639,
+   "lon": -71.06222,
+   "lat": 42.36639,
+   "architects": [
+    "Ellerbe Becket"
+   ],
+   "year": 1995,
+   "country": "United States",
+   "locatedIn": "Boston",
+   "classes": [
+    "built structure",
+    "music venue"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "sandringham-house",
+   "qid": "Q935116",
+   "name": "Sandringham House",
+   "wiki": "Sandringham House",
+   "tier": "easy",
+   "score": 0.89,
+   "sitelinks": 40,
+   "views": 36862,
+   "lon": 0.51389,
+   "lat": 52.82972,
+   "architects": [
+    "A. J. Humbert"
+   ],
+   "year": 1870,
+   "country": "United Kingdom",
+   "locatedIn": "Sandringham",
+   "classes": [
+    "English country house",
+    "historic house museum",
+    "royal palace",
+    "country house",
+    "Residence of the British Royal Family"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "cathedral-of-santiago-de-compostela",
+   "qid": "Q205136",
+   "name": "Cathedral of Santiago de Compostela",
+   "wiki": "Santiago de Compostela Cathedral",
+   "tier": "easy",
+   "score": 0.8899,
+   "sitelinks": 65,
+   "views": 14531,
+   "lon": -8.54444,
+   "lat": 42.88056,
+   "architects": [
+    "Fernando de Casas Novoa"
+   ],
+   "year": 801,
+   "country": "Spain",
+   "locatedIn": "Santiago de Compostela",
+   "classes": [
+    "Catholic cathedral",
+    "architectural heritage monument",
+    "Catholic pilgrimage church",
+    "minor basilica",
+    "church building"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "sanssouci-palace",
+   "qid": "Q151330",
+   "name": "Sanssouci Palace",
+   "wiki": "Sanssouci",
+   "tier": "easy",
+   "score": 0.8883,
+   "sitelinks": 53,
+   "views": 16962,
+   "lon": 13.03863,
+   "lat": 52.40326,
+   "architects": [
+    "Georg Wenzeslaus von Knobelsdorff"
+   ],
+   "year": 1747,
+   "country": "Germany",
+   "locatedIn": "Potsdam",
+   "classes": [
+    "palace"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "badshahi-mosque",
+   "qid": "Q330872",
+   "name": "Badshahi Mosque",
+   "wiki": "Badshahi Mosque",
+   "tier": "easy",
+   "score": 0.888,
+   "sitelinks": 68,
+   "views": 13861,
+   "lon": 74.30944,
+   "lat": 31.58806,
+   "architects": [],
+   "year": 1671,
+   "country": "Pakistan",
+   "locatedIn": "Lahore",
+   "classes": [
+    "mosque"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "oriental-pearl-tower",
+   "qid": "Q223207",
+   "name": "Oriental Pearl Tower",
+   "wiki": "Oriental Pearl Tower",
+   "tier": "easy",
+   "score": 0.8875,
+   "sitelinks": 52,
+   "views": 17114,
+   "lon": 121.49472,
+   "lat": 31.24167,
+   "architects": [
+    "East China Architectural Design & Research Institute"
+   ],
+   "year": 1998,
+   "country": "People's Republic of China",
+   "locatedIn": "Shanghai",
+   "classes": [
+    "skyscraper",
+    "observation tower",
+    "television tower",
+    "Chinese AAAAA-rated tourist attraction"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "fernsehturm-berlin",
+   "qid": "Q151356",
+   "name": "Fernsehturm Berlin",
+   "wiki": "Fernsehturm Berlin",
+   "tier": "easy",
+   "score": 0.8868,
+   "sitelinks": 58,
+   "views": 15473,
+   "lon": 13.40944,
+   "lat": 52.52083,
+   "architects": [
+    "Hermann Henselmann",
+    "Günter Franke"
+   ],
+   "year": 1969,
+   "country": "Germany",
+   "locatedIn": "Bezirk Mitte",
+   "classes": [
+    "television tower",
+    "observation tower",
+    "historic site"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "reales-alcazares",
+   "qid": "Q498261",
+   "name": "Reales Alcázares",
+   "wiki": "Alcázar of Seville",
+   "tier": "easy",
+   "score": 0.8859,
+   "sitelinks": 46,
+   "views": 21015,
+   "lon": -5.99119,
+   "lat": 37.38443,
+   "architects": [],
+   "year": 1364,
+   "country": "Spain",
+   "locatedIn": "Seville",
+   "classes": [
+    "alcázar",
+    "palace",
+    "hydraulic structure",
+    "grave",
+    "alcázar"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "mahabodhi-temple",
+   "qid": "Q4513",
+   "name": "Mahabodhi Temple",
+   "wiki": "Mahabodhi Temple",
+   "tier": "easy",
+   "score": 0.8857,
+   "sitelinks": 70,
+   "views": 13294,
+   "lon": 84.99136,
+   "lat": 24.696,
+   "architects": [],
+   "year": null,
+   "country": "India",
+   "locatedIn": "Bodh Gaya",
+   "classes": [
+    "Buddhist temple"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "ram-mandir",
+   "qid": "Q96401169",
+   "name": "Ram Mandir",
+   "wiki": "Ram Mandir",
+   "tier": "medium",
+   "score": 0.8857,
+   "sitelinks": 43,
+   "views": 24830,
+   "lon": 82.1943,
+   "lat": 26.7956,
+   "architects": [
+    "Chandrakant Sompura"
+   ],
+   "year": 2024,
+   "country": "India",
+   "locatedIn": "Ayodhya",
+   "classes": [
+    "Hindu temple"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "jeronimos-monastery",
+   "qid": "Q272781",
+   "name": "Jerónimos Monastery",
+   "wiki": "Jerónimos Monastery",
+   "tier": "medium",
+   "score": 0.8855,
+   "sitelinks": 53,
+   "views": 16650,
+   "lon": -9.2056,
+   "lat": 38.69785,
+   "architects": [
+    "Diogo de Boitaca",
+    "Diego de Torralva",
+    "Nicolau Chanterene"
+   ],
+   "year": 1601,
+   "country": "Portugal",
+   "locatedIn": "Belém",
+   "classes": [
+    "monastery",
+    "cultural heritage"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "mar-a-lago",
+   "qid": "Q1262898",
+   "name": "Mar-a-Lago",
+   "wiki": "Mar-a-Lago",
+   "tier": "medium",
+   "score": 0.8844,
+   "sitelinks": 36,
+   "views": 139824,
+   "lon": -80.03713,
+   "lat": 26.67704,
+   "architects": [
+    "Marion Sims Wyeth",
+    "Joseph Urban"
+   ],
+   "year": 1927,
+   "country": "United States",
+   "locatedIn": "Palm Beach",
+   "classes": [
+    "mansion",
+    "estate",
+    "hotel",
+    "business"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "york-minster",
+   "qid": "Q252575",
+   "name": "York Minster",
+   "wiki": "York Minster",
+   "tier": "medium",
+   "score": 0.8794,
+   "sitelinks": 42,
+   "views": 24275,
+   "lon": -1.08194,
+   "lat": 53.96194,
+   "architects": [],
+   "year": 1220,
+   "country": "United Kingdom",
+   "locatedIn": "York",
+   "classes": [
+    "church building",
+    "cathedral"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "peterhof-palaces-and-complex",
+   "qid": "Q1258473",
+   "name": "Peterhof Palaces and complex",
+   "wiki": "Peterhof Palace",
+   "tier": "medium",
+   "score": 0.8793,
+   "sitelinks": 48,
+   "views": 17458,
+   "lon": 29.90972,
+   "lat": 59.88629,
+   "architects": [
+    "Jean-Baptiste Alexandre Le Blond"
+   ],
+   "year": 1711,
+   "country": "Russia",
+   "locatedIn": "Peterhof",
+   "classes": [
+    "palace complex",
+    "protected area"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "prambanan-temple",
+   "qid": "Q47721",
+   "name": "Prambanan Temple",
+   "wiki": "Prambanan",
+   "tier": "medium",
+   "score": 0.8786,
+   "sitelinks": 73,
+   "views": 12280,
+   "lon": 110.49122,
+   "lat": -7.752,
+   "architects": [],
+   "year": 850,
+   "country": "Indonesia",
+   "locatedIn": "Prambanan",
+   "classes": [
+    "cultural heritage of Sleman Regency",
+    "Candi",
+    "Hindu temple"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "hassan-ii-mosque",
+   "qid": "Q41346",
+   "name": "Hassan II Mosque",
+   "wiki": "Hassan II Mosque",
+   "tier": "medium",
+   "score": 0.8785,
+   "sitelinks": 54,
+   "views": 14877,
+   "lon": -7.63256,
+   "lat": 33.60734,
+   "architects": [
+    "Michel Pinseau"
+   ],
+   "year": 1993,
+   "country": "Morocco",
+   "locatedIn": "Achbarou",
+   "classes": [
+    "mosque"
+   ],
+   "hasClue": true
+  },
+  {
+   "id": "basilica-of-san-vitale",
+   "qid": "Q721817",
+   "name": "Basilica of San Vitale",
+   "wiki": "Basilica of San Vitale",
+   "tier": "medium",
+   "score": 0.8784,
+   "sitelinks": 51,
+   "views": 16476,
+   "lon": 12.19639,
+   "lat": 44.42056,
+   "architects": [],
+   "year": 550,
+   "country": "Italy",
+   "locatedIn": "Ravenna",
+   "classes": [
+    "minor basilica",
+    "tourist destination",
+    "cultural property",
+    "church building"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "spanish-steps",
+   "qid": "Q848072",
+   "name": "Spanish Steps",
+   "wiki": "Spanish Steps",
+   "tier": "medium",
+   "score": 0.8773,
+   "sitelinks": 40,
+   "views": 29488,
+   "lon": 12.48278,
+   "lat": 41.90611,
+   "architects": [
+    "Francesco de Sanctis"
+   ],
+   "year": 1725,
+   "country": "Italy",
+   "locatedIn": "Municipio I",
+   "classes": [
+    "monumental staircase"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "bolshoi-theatre",
+   "qid": "Q138908",
+   "name": "Bolshoi Theatre",
+   "wiki": "Bolshoi Theatre",
+   "tier": "medium",
+   "score": 0.877,
+   "sitelinks": 76,
+   "views": 11960,
+   "lon": 37.61861,
+   "lat": 55.76028,
+   "architects": [
+    "Joseph Bové"
+   ],
+   "year": 1776,
+   "country": "Russia",
+   "locatedIn": "Tverskoy District",
+   "classes": [
+    "organization",
+    "theatre company",
+    "theatre building"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "todai-ji-temple",
+   "qid": "Q460367",
+   "name": "Tōdai-ji Temple",
+   "wiki": "Tōdai-ji",
+   "tier": "medium",
+   "score": 0.8755,
+   "sitelinks": 44,
+   "views": 20408,
+   "lon": 135.83972,
+   "lat": 34.68917,
+   "architects": [],
+   "year": 800,
+   "country": "Japan",
+   "locatedIn": "Nara",
+   "classes": [
+    "Buddhist temple",
+    "provincial temple",
+    "chokugan-ji"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "dolby-theatre",
+   "qid": "Q180615",
+   "name": "Dolby Theatre",
+   "wiki": "Dolby Theatre",
+   "tier": "medium",
+   "score": 0.8753,
+   "sitelinks": 53,
+   "views": 14767,
+   "lon": -118.34028,
+   "lat": 34.10278,
+   "architects": [
+    "David Rockwell"
+   ],
+   "year": 2001,
+   "country": "United States",
+   "locatedIn": "Los Angeles",
+   "classes": [
+    "theatre building",
+    "concert hall"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "palace-of-fontainebleau",
+   "qid": "Q201428",
+   "name": "Palace of Fontainebleau",
+   "wiki": "Palace of Fontainebleau",
+   "tier": "medium",
+   "score": 0.8749,
+   "sitelinks": 56,
+   "views": 13768,
+   "lon": 2.70056,
+   "lat": 48.40222,
+   "architects": [],
+   "year": null,
+   "country": "France",
+   "locatedIn": "Fontainebleau",
+   "classes": [
+    "château",
+    "museum"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "stirling-castle",
+   "qid": "Q756268",
+   "name": "Stirling Castle",
+   "wiki": "Stirling Castle",
+   "tier": "medium",
+   "score": 0.8731,
+   "sitelinks": 43,
+   "views": 21017,
+   "lon": -3.94778,
+   "lat": 56.12389,
+   "architects": [],
+   "year": null,
+   "country": "United Kingdom",
+   "locatedIn": "Stirling",
+   "classes": [
+    "castle"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "lakhta-centre",
+   "qid": "Q4255374",
+   "name": "Lakhta Centre",
+   "wiki": "Lakhta Center",
+   "tier": "medium",
+   "score": 0.8724,
+   "sitelinks": 43,
+   "views": 20910,
+   "lon": 30.17814,
+   "lat": 59.98703,
+   "architects": [
+    "RMJM"
+   ],
+   "year": 2022,
+   "country": "Russia",
+   "locatedIn": "Saint Petersburg",
+   "classes": [
+    "skyscraper"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "palazzo-pitti",
+   "qid": "Q29286",
+   "name": "Palazzo Pitti",
+   "wiki": "Palazzo Pitti",
+   "tier": "medium",
+   "score": 0.8713,
+   "sitelinks": 59,
+   "views": 12769,
+   "lon": 11.25001,
+   "lat": 43.76515,
+   "architects": [
+    "Filippo Brunelleschi",
+    "Luca Fancelli"
+   ],
+   "year": 1919,
+   "country": "Italy",
+   "locatedIn": "Florence",
+   "classes": [
+    "art museum",
+    "museum of modern art",
+    "Italian national museum",
+    "Museum of the Italian Ministry of Culture"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "pashupatinath-temple",
+   "qid": "Q380384",
+   "name": "Pashupatinath Temple",
+   "wiki": "Pashupatinath Temple",
+   "tier": "medium",
+   "score": 0.8697,
+   "sitelinks": 45,
+   "views": 17989,
+   "lon": 85.34865,
+   "lat": 27.7105,
+   "architects": [],
+   "year": null,
+   "country": "Nepal",
+   "locatedIn": "Kathmandu",
+   "classes": [
+    "temple"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "holyrood-palace",
+   "qid": "Q505950",
+   "name": "Holyrood Palace",
+   "wiki": "Holyrood Palace",
+   "tier": "medium",
+   "score": 0.8697,
+   "sitelinks": 44,
+   "views": 18972,
+   "lon": -3.17229,
+   "lat": 55.9527,
+   "architects": [],
+   "year": null,
+   "country": "United Kingdom",
+   "locatedIn": "City of Edinburgh",
+   "classes": [
+    "official residence",
+    "palace",
+    "country house",
+    "Residence of the British Royal Family"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "kailasa-temple-ellora",
+   "qid": "Q1268562",
+   "name": "Kailasa Temple, Ellora",
+   "wiki": "Kailasa Temple, Ellora",
+   "tier": "medium",
+   "score": 0.8678,
+   "sitelinks": 35,
+   "views": 75169,
+   "lon": 75.17917,
+   "lat": 20.02389,
+   "architects": [],
+   "year": 773,
+   "country": "India",
+   "locatedIn": "Aurangabad district",
+   "classes": [
+    "Hindu temple",
+    "monolith"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "shwedagon-pagoda",
+   "qid": "Q464535",
+   "name": "Shwedagon Pagoda",
+   "wiki": "Shwedagon Pagoda",
+   "tier": "medium",
+   "score": 0.8665,
+   "sitelinks": 54,
+   "views": 12938,
+   "lon": 96.14944,
+   "lat": 16.79833,
+   "architects": [
+    "Hsinbyushin"
+   ],
+   "year": null,
+   "country": "Myanmar",
+   "locatedIn": "Dagon Township",
+   "classes": [
+    "Buddhist temple"
+   ],
+   "hasClue": true
+  },
+  {
+   "id": "palace-of-culture-and-science",
+   "qid": "Q167566",
+   "name": "Palace of Culture and Science",
+   "wiki": "Palace of Culture and Science",
+   "tier": "medium",
+   "score": 0.8658,
+   "sitelinks": 51,
+   "views": 14114,
+   "lon": 21.00639,
+   "lat": 52.23167,
+   "architects": [
+    "Lev Rudnev"
+   ],
+   "year": 1955,
+   "country": "Poland",
+   "locatedIn": "Śródmieście",
+   "classes": [
+    "palace",
+    "skyscraper",
+    "architectural landmark",
+    "house of culture",
+    "architectural heritage monument"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "paro-taktsang",
+   "qid": "Q2209873",
+   "name": "Paro Taktsang",
+   "wiki": "Paro Taktsang",
+   "tier": "medium",
+   "score": 0.8632,
+   "sitelinks": 44,
+   "views": 17412,
+   "lon": 89.36333,
+   "lat": 27.49167,
+   "architects": [],
+   "year": 1692,
+   "country": "Bhutan",
+   "locatedIn": "Paro District",
+   "classes": [
+    "Tibetan Buddhist monastery",
+    "Buddhist temple"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "library-of-ashurbanipal",
+   "qid": "Q856544",
+   "name": "Library of Ashurbanipal",
+   "wiki": "Library of Ashurbanipal",
+   "tier": "medium",
+   "score": 0.8602,
+   "sitelinks": 51,
+   "views": 13131,
+   "lon": 43.1528,
+   "lat": 36.3594,
+   "architects": [],
+   "year": null,
+   "country": "Iraq",
+   "locatedIn": "Nineveh",
+   "classes": [
+    "library",
+    "mineral library",
+    "site plan"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "kunsthistorisches-museum",
+   "qid": "Q95569",
+   "name": "Kunsthistorisches Museum",
+   "wiki": "Kunsthistorisches Museum",
+   "tier": "medium",
+   "score": 0.86,
+   "sitelinks": 52,
+   "views": 12769,
+   "lon": 16.3616,
+   "lat": 48.20388,
+   "architects": [],
+   "year": 1891,
+   "country": "Austria",
+   "locatedIn": "Innere Stadt",
+   "classes": [
+    "art museum",
+    "cultural institution",
+    "museum"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "hallgrimskirkja",
+   "qid": "Q271466",
+   "name": "Hallgrímskirkja",
+   "wiki": "Hallgrímskirkja",
+   "tier": "medium",
+   "score": 0.8595,
+   "sitelinks": 43,
+   "views": 17608,
+   "lon": -21.92694,
+   "lat": 64.14194,
+   "architects": [
+    "Guðjón Samúelsson"
+   ],
+   "year": 1986,
+   "country": "Iceland",
+   "locatedIn": "Reykjavíkurborg",
+   "classes": [
+    "church building"
+   ],
+   "hasClue": true
+  },
+  {
+   "id": "mexico-city-metropolitan-cathedral",
+   "qid": "Q610961",
+   "name": "Mexico City Metropolitan Cathedral",
+   "wiki": "Mexico City Metropolitan Cathedral",
+   "tier": "medium",
+   "score": 0.8576,
+   "sitelinks": 61,
+   "views": 11009,
+   "lon": -99.13306,
+   "lat": 19.43417,
+   "architects": [
+    "Claudio de Arciniega",
+    "Juan Gómez de Trasmonte",
+    "José Eduardo de Herrera",
+    "José Damián Ortiz de Castro",
+    "Manuel Tolsá"
+   ],
+   "year": 1570,
+   "country": "Mexico",
+   "locatedIn": "Cuauhtémoc",
+   "classes": [
+    "Catholic cathedral",
+    "tourist destination"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "trump-international-hotel-and-tower",
+   "qid": "Q546221",
+   "name": "Trump International Hotel and Tower",
+   "wiki": "Trump International Hotel and Tower (Chicago)",
+   "tier": "medium",
+   "score": 0.8566,
+   "sitelinks": 40,
+   "views": 21268,
+   "lon": -87.62667,
+   "lat": 41.8891,
+   "architects": [
+    "Adrian Smith",
+    "Q459464"
+   ],
+   "year": 2009,
+   "country": "United States",
+   "locatedIn": "Chicago",
+   "classes": [
+    "skyscraper",
+    "hotel"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "lubyanka-building",
+   "qid": "Q646334",
+   "name": "Lubyanka Building",
+   "wiki": "Lubyanka Building",
+   "tier": "medium",
+   "score": 0.856,
+   "sitelinks": 40,
+   "views": 21099,
+   "lon": 37.62859,
+   "lat": 55.76022,
+   "architects": [
+    "Alexey Shchusev",
+    "Alexander Ivanov"
+   ],
+   "year": null,
+   "country": "Russia",
+   "locatedIn": "Krasnoselsky District",
+   "classes": [
+    "prison",
+    "archive building",
+    "architectural landmark"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "landmark-81",
+   "qid": "Q18640924",
+   "name": "Landmark 81",
+   "wiki": "Landmark 81",
+   "tier": "medium",
+   "score": 0.8559,
+   "sitelinks": 42,
+   "views": 17908,
+   "lon": 106.72194,
+   "lat": 10.795,
+   "architects": [
+    "Atkins"
+   ],
+   "year": 2018,
+   "country": "Vietnam",
+   "locatedIn": "Ho Chi Minh City",
+   "classes": [
+    "skyscraper"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "vaduz-castle",
+   "qid": "Q694782",
+   "name": "Vaduz Castle",
+   "wiki": "Vaduz Castle",
+   "tier": "medium",
+   "score": 0.8558,
+   "sitelinks": 41,
+   "views": 19294,
+   "lon": 9.52444,
+   "lat": 47.13944,
+   "architects": [],
+   "year": null,
+   "country": "Liechtenstein",
+   "locatedIn": "Vaduz",
+   "classes": [
+    "castle"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "avicii-arena",
+   "qid": "Q32926",
+   "name": "Avicii Arena",
+   "wiki": "Avicii Arena",
+   "tier": "medium",
+   "score": 0.8556,
+   "sitelinks": 49,
+   "views": 13068,
+   "lon": 18.08333,
+   "lat": 59.29361,
+   "architects": [
+    "Berg Arkitektkontor"
+   ],
+   "year": 1989,
+   "country": "Sweden",
+   "locatedIn": "Stockholm Municipality",
+   "classes": [
+    "multi-purpose hall"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "etchmiadzin-cathedral",
+   "qid": "Q1294648",
+   "name": "Etchmiadzin Cathedral",
+   "wiki": "Etchmiadzin Cathedral",
+   "tier": "medium",
+   "score": 0.8553,
+   "sitelinks": 49,
+   "views": 13058,
+   "lon": 44.291,
+   "lat": 40.16186,
+   "architects": [],
+   "year": 303,
+   "country": "Armenia",
+   "locatedIn": "Vagharshapat",
+   "classes": [
+    "cathedral",
+    "church building"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "art-institute-of-chicago",
+   "qid": "Q239303",
+   "name": "Art Institute of Chicago",
+   "wiki": "Art Institute of Chicago",
+   "tier": "medium",
+   "score": 0.854,
+   "sitelinks": 41,
+   "views": 18690,
+   "lon": -87.62389,
+   "lat": 41.87944,
+   "architects": [
+    "Renzo Piano"
+   ],
+   "year": 1893,
+   "country": "United States",
+   "locatedIn": "Chicago",
+   "classes": [
+    "art museum",
+    "educational institution",
+    "nonprofit organization"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "buda-castle",
+   "qid": "Q46313",
+   "name": "Buda Castle",
+   "wiki": "Buda Castle",
+   "tier": "medium",
+   "score": 0.8537,
+   "sitelinks": 48,
+   "views": 13264,
+   "lon": 19.03972,
+   "lat": 47.49611,
+   "architects": [
+    "Jean-Nicolas Jadot de Ville-Issey",
+    "Miklós Ybl",
+    "Alajos Hauszmann"
+   ],
+   "year": 1244,
+   "country": "Hungary",
+   "locatedIn": "Budapest District I",
+   "classes": [
+    "castle",
+    "palace"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "basilica-of-santa-croce",
+   "qid": "Q51177",
+   "name": "Basilica of Santa Croce",
+   "wiki": "Santa Croce, Florence",
+   "tier": "medium",
+   "score": 0.8537,
+   "sitelinks": 47,
+   "views": 13948,
+   "lon": 11.26274,
+   "lat": 43.76845,
+   "architects": [
+    "Arnolfo di Cambio"
+   ],
+   "year": 1442,
+   "country": "Italy",
+   "locatedIn": "Florence",
+   "classes": [
+    "minor basilica",
+    "museum",
+    "church building"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "875-north-michigan-avenue",
+   "qid": "Q217727",
+   "name": "875 North Michigan Avenue",
+   "wiki": "John Hancock Center",
+   "tier": "medium",
+   "score": 0.8535,
+   "sitelinks": 40,
+   "views": 20690,
+   "lon": -87.62306,
+   "lat": 41.89889,
+   "architects": [
+    "Q459464",
+    "Bruce Graham",
+    "Fazlur Khan"
+   ],
+   "year": 1969,
+   "country": "United States",
+   "locatedIn": "Chicago",
+   "classes": [
+    "skyscraper",
+    "office building",
+    "residential building"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "lotte-world-tower",
+   "qid": "Q494895",
+   "name": "Lotte World Tower",
+   "wiki": "Lotte World Tower",
+   "tier": "medium",
+   "score": 0.8529,
+   "sitelinks": 37,
+   "views": 26467,
+   "lon": 127.1025,
+   "lat": 37.5125,
+   "architects": [
+    "Kohn Pedersen Fox"
+   ],
+   "year": 2017,
+   "country": "South Korea",
+   "locatedIn": "Songpa District",
+   "classes": [
+    "skyscraper"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "cathedral-of-the-holy-cross-and-saint-eulalia",
+   "qid": "Q17155",
+   "name": "Cathedral of the Holy Cross and Saint Eulalia",
+   "wiki": "Barcelona Cathedral",
+   "tier": "medium",
+   "score": 0.8499,
+   "sitelinks": 44,
+   "views": 15348,
+   "lon": 2.17639,
+   "lat": 41.38389,
+   "architects": [
+    "Jaume Fabre",
+    "Bertran Riquer",
+    "Bernat Roca",
+    "Arnau Bargués",
+    "Jaume Solà",
+    "Bartolomé Gual",
+    "Andreu Escuder",
+    "Josep Oriol Mestres i Esplugas",
+    "August Font i Carreras"
+   ],
+   "year": 1298,
+   "country": "Spain",
+   "locatedIn": "Gothic Quarter",
+   "classes": [
+    "Catholic cathedral",
+    "minor basilica"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "notre-dame-d-amiens",
+   "qid": "Q106934",
+   "name": "Notre-Dame d'Amiens",
+   "wiki": "Amiens Cathedral",
+   "tier": "medium",
+   "score": 0.849,
+   "sitelinks": 57,
+   "views": 10764,
+   "lon": 2.3021,
+   "lat": 49.89457,
+   "architects": [
+    "Robert of Luzarches"
+   ],
+   "year": 1220,
+   "country": "France",
+   "locatedIn": "Amiens",
+   "classes": [
+    "Catholic cathedral",
+    "legal person"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "temple-of-kukulcan",
+   "qid": "Q1128327",
+   "name": "Temple of Kukulcan",
+   "wiki": "El Castillo, Chichen Itza",
+   "tier": "medium",
+   "score": 0.8489,
+   "sitelinks": 40,
+   "views": 19627,
+   "lon": -88.56861,
+   "lat": 20.68289,
+   "architects": [],
+   "year": null,
+   "country": "Mexico",
+   "locatedIn": "Chichen Itza",
+   "classes": [
+    "pyramid",
+    "temple"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "dancing-house",
+   "qid": "Q244816",
+   "name": "Dancing House",
+   "wiki": "Dancing House",
+   "tier": "medium",
+   "score": 0.8473,
+   "sitelinks": 50,
+   "views": 11892,
+   "lon": 14.41417,
+   "lat": 50.07556,
+   "architects": [
+    "Vlado Milunić",
+    "Frank Gehry"
+   ],
+   "year": 1996,
+   "country": "Czech Republic",
+   "locatedIn": "New Town",
+   "classes": [
+    "office building"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "catherine-palace",
+   "qid": "Q2854543",
+   "name": "Catherine Palace",
+   "wiki": "Catherine Palace",
+   "tier": "medium",
+   "score": 0.845,
+   "sitelinks": 57,
+   "views": 10410,
+   "lon": 30.39556,
+   "lat": 59.716,
+   "architects": [
+    "Francesco Bartolomeo Rastrelli"
+   ],
+   "year": 1756,
+   "country": "Russia",
+   "locatedIn": "Pushkin",
+   "classes": [
+    "palace"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "imam-ali-mosque",
+   "qid": "Q838359",
+   "name": "Imam Ali Mosque",
+   "wiki": "Imam Ali Shrine",
+   "tier": "medium",
+   "score": 0.8442,
+   "sitelinks": 52,
+   "views": 11119,
+   "lon": 44.31417,
+   "lat": 31.99611,
+   "architects": [],
+   "year": 977,
+   "country": "Iraq",
+   "locatedIn": "Najaf",
+   "classes": [
+    "mosque",
+    "mausoleum",
+    "architectural landmark"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "church-of-saint-sava",
+   "qid": "Q330385",
+   "name": "Church of Saint Sava",
+   "wiki": "Church of Saint Sava",
+   "tier": "medium",
+   "score": 0.8426,
+   "sitelinks": 47,
+   "views": 12524,
+   "lon": 20.46855,
+   "lat": 44.79808,
+   "architects": [
+    "Aleksandar Deroko"
+   ],
+   "year": 2004,
+   "country": "Serbia",
+   "locatedIn": "Belgrade",
+   "classes": [
+    "Eastern Orthodox cathedral"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "great-mosque-djenne",
+   "qid": "Q683632",
+   "name": "Great Mosque of Djenné",
+   "wiki": "Great Mosque of Djenné",
+   "tier": "medium",
+   "score": 0.8419,
+   "sitelinks": 57,
+   "views": 10176,
+   "lon": -4.55556,
+   "lat": 13.90528,
+   "architects": [],
+   "year": 1907,
+   "country": "Mali",
+   "locatedIn": "Djenné",
+   "classes": [
+    "mosque"
+   ],
+   "hasClue": true
+  },
+  {
+   "id": "kashi-vishwanath-temple",
+   "qid": "Q3675",
+   "name": "Kashi Vishwanath Temple",
+   "wiki": "Kashi Vishwanath Temple",
+   "tier": "medium",
+   "score": 0.8418,
+   "sitelinks": 36,
+   "views": 26287,
+   "lon": 83.01061,
+   "lat": 25.31077,
+   "architects": [],
+   "year": null,
+   "country": "India",
+   "locatedIn": "Varanasi",
+   "classes": [
+    "Hindu temple"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "fisherman-s-bastion",
+   "qid": "Q493117",
+   "name": "Fisherman's Bastion",
+   "wiki": "Fisherman's Bastion",
+   "tier": "medium",
+   "score": 0.8399,
+   "sitelinks": 37,
+   "views": 21922,
+   "lon": 19.03472,
+   "lat": 47.50222,
+   "architects": [
+    "Frigyes Schulek"
+   ],
+   "year": null,
+   "country": "Hungary",
+   "locatedIn": "Budapest District I",
+   "classes": [
+    "bastion",
+    "terrace",
+    "fishing bastion"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "gur-e-amir",
+   "qid": "Q1256223",
+   "name": "Gur-e Amir",
+   "wiki": "Gur-e-Amir",
+   "tier": "medium",
+   "score": 0.8389,
+   "sitelinks": 47,
+   "views": 12051,
+   "lon": 66.96889,
+   "lat": 39.64833,
+   "architects": [],
+   "year": 1403,
+   "country": "Uzbekistan",
+   "locatedIn": "Samarkand",
+   "classes": [
+    "mausoleum"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "transamerica-pyramid",
+   "qid": "Q216865",
+   "name": "Transamerica Pyramid",
+   "wiki": "Transamerica Pyramid",
+   "tier": "medium",
+   "score": 0.836,
+   "sitelinks": 39,
+   "views": 18155,
+   "lon": -122.40275,
+   "lat": 37.79514,
+   "architects": [
+    "William Pereira"
+   ],
+   "year": 1969,
+   "country": "United States",
+   "locatedIn": "San Francisco",
+   "classes": [
+    "skyscraper",
+    "office building"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "galleria-borghese",
+   "qid": "Q841506",
+   "name": "Galleria Borghese",
+   "wiki": "Galleria Borghese",
+   "tier": "medium",
+   "score": 0.8348,
+   "sitelinks": 47,
+   "views": 11642,
+   "lon": 12.49214,
+   "lat": 41.91421,
+   "architects": [
+    "Flaminio Ponzio",
+    "Giovanni Vasanzio"
+   ],
+   "year": 1902,
+   "country": "Italy",
+   "locatedIn": "Roma Capitale",
+   "classes": [
+    "art museum",
+    "museum",
+    "archaeological museum",
+    "Italian national museum",
+    "Istituto museale ad autonomia speciale",
+    "Museum of the Italian Ministry of Culture"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "horyu-ji-temple",
+   "qid": "Q261932",
+   "name": "Hōryū-ji Temple",
+   "wiki": "Hōryū-ji",
+   "tier": "medium",
+   "score": 0.8347,
+   "sitelinks": 54,
+   "views": 10068,
+   "lon": 135.73417,
+   "lat": 34.61444,
+   "architects": [],
+   "year": 607,
+   "country": "Japan",
+   "locatedIn": "Ikaruga",
+   "classes": [
+    "Buddhist temple"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "faisal-mosque",
+   "qid": "Q500983",
+   "name": "Faisal Mosque",
+   "wiki": "Faisal Mosque",
+   "tier": "medium",
+   "score": 0.8345,
+   "sitelinks": 55,
+   "views": 9943,
+   "lon": 73.03722,
+   "lat": 33.72972,
+   "architects": [
+    "Vedat Dalokay"
+   ],
+   "year": 1986,
+   "country": "Pakistan",
+   "locatedIn": "Islamabad",
+   "classes": [
+    "mosque"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "changdeokgung",
+   "qid": "Q477157",
+   "name": "Changdeokgung",
+   "wiki": "Changdeokgung",
+   "tier": "medium",
+   "score": 0.8337,
+   "sitelinks": 51,
+   "views": 10425,
+   "lon": 126.99167,
+   "lat": 37.57944,
+   "architects": [],
+   "year": null,
+   "country": "South Korea",
+   "locatedIn": "Seoul",
+   "classes": [
+    "palace"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "eltz-castle",
+   "qid": "Q153426",
+   "name": "Eltz Castle",
+   "wiki": "Eltz Castle",
+   "tier": "medium",
+   "score": 0.8335,
+   "sitelinks": 40,
+   "views": 16631,
+   "lon": 7.33667,
+   "lat": 50.205,
+   "architects": [],
+   "year": null,
+   "country": "Germany",
+   "locatedIn": "Wierschem",
+   "classes": [
+    "castle",
+    "museum"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "sphere",
+   "qid": "Q60749353",
+   "name": "Sphere",
+   "wiki": "Sphere (venue)",
+   "tier": "medium",
+   "score": 0.8325,
+   "sitelinks": 30,
+   "views": 81787,
+   "lon": -115.16207,
+   "lat": 36.1212,
+   "architects": [
+    "Populous"
+   ],
+   "year": 2023,
+   "country": "United States",
+   "locatedIn": "Clark County",
+   "classes": [
+    "music venue",
+    "built structure",
+    "entertainment venue"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "osborne-house",
+   "qid": "Q565155",
+   "name": "Osborne House",
+   "wiki": "Osborne House",
+   "tier": "medium",
+   "score": 0.8323,
+   "sitelinks": 35,
+   "views": 26446,
+   "lon": -1.27005,
+   "lat": 50.75053,
+   "architects": [
+    "Prince Albert of Saxe-Coburg and Gotha"
+   ],
+   "year": 1851,
+   "country": "United Kingdom",
+   "locatedIn": "East Cowes",
+   "classes": [
+    "historic house museum",
+    "English country house",
+    "history museum"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "chateau-frontenac",
+   "qid": "Q745964",
+   "name": "Château Frontenac",
+   "wiki": "Château Frontenac",
+   "tier": "medium",
+   "score": 0.8319,
+   "sitelinks": 36,
+   "views": 22494,
+   "lon": -71.20538,
+   "lat": 46.81182,
+   "architects": [
+    "Bruce Price",
+    "Daniel John Crighton"
+   ],
+   "year": 1893,
+   "country": "Canada",
+   "locatedIn": "La Cité-Limoilou",
+   "classes": [
+    "hotel",
+    "hotel building"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "anne-frank-house",
+   "qid": "Q165366",
+   "name": "Anne Frank House",
+   "wiki": "Anne Frank House",
+   "tier": "medium",
+   "score": 0.8314,
+   "sitelinks": 38,
+   "views": 18613,
+   "lon": 4.88404,
+   "lat": 52.37515,
+   "architects": [],
+   "year": 1960,
+   "country": "Netherlands",
+   "locatedIn": "Amsterdam",
+   "classes": [
+    "museum",
+    "war memorial"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "chateau-de-chenonceau",
+   "qid": "Q193215",
+   "name": "Château de Chenonceau",
+   "wiki": "Château de Chenonceau",
+   "tier": "medium",
+   "score": 0.8312,
+   "sitelinks": 46,
+   "views": 11621,
+   "lon": 1.0706,
+   "lat": 47.325,
+   "architects": [
+    "Philibert de l'Orme",
+    "Katherine Briçonnet"
+   ],
+   "year": 1411,
+   "country": "France",
+   "locatedIn": "Chenonceaux",
+   "classes": [
+    "château"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "kronborg-castle",
+   "qid": "Q189358",
+   "name": "Kronborg Castle",
+   "wiki": "Kronborg",
+   "tier": "medium",
+   "score": 0.8304,
+   "sitelinks": 55,
+   "views": 9680,
+   "lon": 12.62194,
+   "lat": 56.03861,
+   "architects": [],
+   "year": 1585,
+   "country": "Denmark",
+   "locatedIn": "Helsingør Municipality",
+   "classes": [
+    "fort",
+    "castle",
+    "palace",
+    "museum"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "palais-des-papes",
+   "qid": "Q143463",
+   "name": "Palais des Papes",
+   "wiki": "Palais des Papes",
+   "tier": "medium",
+   "score": 0.829,
+   "sitelinks": 46,
+   "views": 11371,
+   "lon": 4.8075,
+   "lat": 43.9508,
+   "architects": [
+    "Pierre Poisson",
+    "Jean de Louvres",
+    "Bertran Nogayrol"
+   ],
+   "year": null,
+   "country": "France",
+   "locatedIn": "Avignon",
+   "classes": [
+    "palace",
+    "art museum",
+    "palace of the Popes"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "an-tkabir",
+   "qid": "Q615404",
+   "name": "Anıtkabir",
+   "wiki": "Anıtkabir",
+   "tier": "medium",
+   "score": 0.8289,
+   "sitelinks": 53,
+   "views": 9834,
+   "lon": 32.83694,
+   "lat": 39.925,
+   "architects": [
+    "Emin Onat",
+    "Orhan Arda"
+   ],
+   "year": 1953,
+   "country": "Turkey",
+   "locatedIn": "Çankaya",
+   "classes": [
+    "mausoleum",
+    "national museum",
+    "memorial"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "sforza-castle",
+   "qid": "Q23354",
+   "name": "Sforza Castle",
+   "wiki": "Sforza Castle",
+   "tier": "medium",
+   "score": 0.8274,
+   "sitelinks": 44,
+   "views": 12106,
+   "lon": 9.17969,
+   "lat": 45.471,
+   "architects": [
+    "Filarete"
+   ],
+   "year": 1360,
+   "country": "Italy",
+   "locatedIn": "Milan",
+   "classes": [
+    "castle"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "icelandic-phallological-museum",
+   "qid": "Q177174",
+   "name": "Icelandic Phallological Museum",
+   "wiki": "Icelandic Phallological Museum",
+   "tier": "medium",
+   "score": 0.8271,
+   "sitelinks": 41,
+   "views": 13917,
+   "lon": -21.93578,
+   "lat": 64.1485,
+   "architects": [],
+   "year": 1997,
+   "country": "Iceland",
+   "locatedIn": "Reykjavík",
+   "classes": [
+    "museum"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "pena-palace",
+   "qid": "Q69513",
+   "name": "Pena Palace",
+   "wiki": "Pena Palace",
+   "tier": "medium",
+   "score": 0.8262,
+   "sitelinks": 41,
+   "views": 13760,
+   "lon": -9.39056,
+   "lat": 38.78778,
+   "architects": [
+    "Wilhelm Ludwig von Eschwege"
+   ],
+   "year": 1838,
+   "country": "Portugal",
+   "locatedIn": "Sintra (Santa Maria e São Miguel, São Martinho e São Pedro de Penaferrim)",
+   "classes": [
+    "palace",
+    "cultural heritage",
+    "convent"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "getty-center",
+   "qid": "Q29247",
+   "name": "Getty Center",
+   "wiki": "Getty Center",
+   "tier": "medium",
+   "score": 0.8253,
+   "sitelinks": 42,
+   "views": 12852,
+   "lon": -118.475,
+   "lat": 34.0775,
+   "architects": [
+    "Richard Meier"
+   ],
+   "year": 1997,
+   "country": "United States",
+   "locatedIn": "Los Angeles",
+   "classes": [
+    "architectural ensemble",
+    "museum"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "van-gogh-museum",
+   "qid": "Q224124",
+   "name": "Van Gogh Museum",
+   "wiki": "Van Gogh Museum",
+   "tier": "medium",
+   "score": 0.8247,
+   "sitelinks": 60,
+   "views": 8760,
+   "lon": 4.88111,
+   "lat": 52.35833,
+   "architects": [
+    "Gerrit Rietveld",
+    "Kisho Kurokawa",
+    "Rietveld, Van Dillen & Van Tricht",
+    "Hans van Heeswijk"
+   ],
+   "year": 1973,
+   "country": "Netherlands",
+   "locatedIn": "Amsterdam",
+   "classes": [
+    "art museum",
+    "museum",
+    "cultural institution"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "chatsworth-house",
+   "qid": "Q1068289",
+   "name": "Chatsworth House",
+   "wiki": "Chatsworth House",
+   "tier": "medium",
+   "score": 0.822,
+   "sitelinks": 30,
+   "views": 45556,
+   "lon": -1.61,
+   "lat": 53.22778,
+   "architects": [
+    "William Talman",
+    "Thomas Archer",
+    "Jeffry Wyatville",
+    "Joseph Paxton",
+    "James Paine",
+    "Bess of Hardwick"
+   ],
+   "year": null,
+   "country": "United Kingdom",
+   "locatedIn": "Bakewell",
+   "classes": [
+    "English country house",
+    "historic house museum",
+    "country house"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "prague-metro",
+   "qid": "Q190271",
+   "name": "Prague Metro",
+   "wiki": "Prague Metro",
+   "tier": "medium",
+   "score": 0.8219,
+   "sitelinks": 60,
+   "views": 8526,
+   "lon": 14.42139,
+   "lat": 50.0875,
+   "architects": [
+    "Jaroslav Otruba",
+    "Evžen Kyllar"
+   ],
+   "year": 1974,
+   "country": "Czech Republic",
+   "locatedIn": "Prague",
+   "classes": [
+    "rapid transit"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "azadi-tower",
+   "qid": "Q1140026",
+   "name": "Azadi Tower",
+   "wiki": "Azadi Tower",
+   "tier": "medium",
+   "score": 0.8182,
+   "sitelinks": 47,
+   "views": 10166,
+   "lon": 51.33806,
+   "lat": 35.69972,
+   "architects": [
+    "Hossein Amanat"
+   ],
+   "year": 1971,
+   "country": "Iran",
+   "locatedIn": "Tehran",
+   "classes": [
+    "tower",
+    "cultural property",
+    "architectural landmark"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "bibliotheca-alexandrina",
+   "qid": "Q501851",
+   "name": "Bibliotheca Alexandrina",
+   "wiki": "Bibliotheca Alexandrina",
+   "tier": "medium",
+   "score": 0.8179,
+   "sitelinks": 50,
+   "views": 9525,
+   "lon": 29.90917,
+   "lat": 31.20889,
+   "architects": [
+    "Snøhetta"
+   ],
+   "year": 2002,
+   "country": "Egypt",
+   "locatedIn": "Alexandria",
+   "classes": [
+    "national library",
+    "library building",
+    "literary museum",
+    "cultural center"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "merdeka-118",
+   "qid": "Q7969454",
+   "name": "Merdeka 118",
+   "wiki": "Merdeka Maybank",
+   "tier": "medium",
+   "score": 0.8174,
+   "sitelinks": 40,
+   "views": 13731,
+   "lon": 101.70072,
+   "lat": 3.14167,
+   "architects": [
+    "Fender Katsalidis Architects"
+   ],
+   "year": 2023,
+   "country": "Malaysia",
+   "locatedIn": "Kuala Lumpur",
+   "classes": [
+    "skyscraper",
+    "supertall building"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "valley-of-cuelgamuros",
+   "qid": "Q940833",
+   "name": "Valley of Cuelgamuros",
+   "wiki": "Valley of the Fallen",
+   "tier": "medium",
+   "score": 0.8155,
+   "sitelinks": 36,
+   "views": 18718,
+   "lon": -4.15694,
+   "lat": 40.64142,
+   "architects": [
+    "Pedro Muguruza",
+    "Diego Méndez"
+   ],
+   "year": 1959,
+   "country": "Spain",
+   "locatedIn": "San Lorenzo de El Escorial",
+   "classes": [
+    "building complex",
+    "religious complex"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "mysore-palace",
+   "qid": "Q456575",
+   "name": "Mysore Palace",
+   "wiki": "Mysore Palace",
+   "tier": "medium",
+   "score": 0.8116,
+   "sitelinks": 29,
+   "views": 45683,
+   "lon": 76.65444,
+   "lat": 12.30389,
+   "architects": [
+    "Henry Irwin"
+   ],
+   "year": 1912,
+   "country": "India",
+   "locatedIn": "Mysore",
+   "classes": [
+    "palace"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "peles-castle",
+   "qid": "Q917702",
+   "name": "Peleș Castle",
+   "wiki": "Peleș Castle",
+   "tier": "medium",
+   "score": 0.8115,
+   "sitelinks": 36,
+   "views": 17717,
+   "lon": 25.54278,
+   "lat": 45.35972,
+   "architects": [
+    "Carol Benesch",
+    "Karel Zdeněk Líman",
+    "Carl Wilhelm Christian von Doderer"
+   ],
+   "year": 1883,
+   "country": "Romania",
+   "locatedIn": "Sinaia",
+   "classes": [
+    "palace"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "antilia",
+   "qid": "Q576952",
+   "name": "Antilia",
+   "wiki": "Antilia (building)",
+   "tier": "medium",
+   "score": 0.8111,
+   "sitelinks": 28,
+   "views": 79260,
+   "lon": 72.80972,
+   "lat": 18.96833,
+   "architects": [
+    "Perkins & Will"
+   ],
+   "year": 2010,
+   "country": "India",
+   "locatedIn": "Altamount Road",
+   "classes": [
+    "residential building"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "u-s-bank-tower",
+   "qid": "Q57900",
+   "name": "U.S. Bank Tower",
+   "wiki": "U.S. Bank Tower (Los Angeles)",
+   "tier": "medium",
+   "score": 0.8094,
+   "sitelinks": 40,
+   "views": 12638,
+   "lon": -118.25435,
+   "lat": 34.05096,
+   "architects": [
+    "PCF Architects"
+   ],
+   "year": 1989,
+   "country": "United States",
+   "locatedIn": "California",
+   "classes": [
+    "skyscraper"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "st-stephen-s-basilica",
+   "qid": "Q338665",
+   "name": "St. Stephen's Basilica",
+   "wiki": "St. Stephen's Basilica",
+   "tier": "medium",
+   "score": 0.8092,
+   "sitelinks": 42,
+   "views": 11192,
+   "lon": 19.05389,
+   "lat": 47.50083,
+   "architects": [
+    "József Hild",
+    "Miklós Ybl"
+   ],
+   "year": 1905,
+   "country": "Hungary",
+   "locatedIn": "Budapest District V",
+   "classes": [
+    "minor basilica",
+    "co-cathedral",
+    "Catholic church building"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "royal-pavilion",
+   "qid": "Q62364",
+   "name": "Royal Pavilion",
+   "wiki": "Royal Pavilion",
+   "tier": "medium",
+   "score": 0.8084,
+   "sitelinks": 36,
+   "views": 17168,
+   "lon": -0.13772,
+   "lat": 50.82236,
+   "architects": [
+    "John Nash"
+   ],
+   "year": 1787,
+   "country": "United Kingdom",
+   "locatedIn": "Brighton and Hove",
+   "classes": [
+    "palace",
+    "historic house museum",
+    "English country house",
+    "local authority museum"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "basilica-of-our-lady-of-peace-of-yamoussoukro",
+   "qid": "Q815584",
+   "name": "Basilica of Our Lady of Peace of Yamoussoukro",
+   "wiki": "Basilica of Our Lady of Peace",
+   "tier": "medium",
+   "score": 0.8077,
+   "sitelinks": 47,
+   "views": 9496,
+   "lon": -5.29694,
+   "lat": 6.81111,
+   "architects": [
+    "Pierre Fakhoury"
+   ],
+   "year": 1989,
+   "country": "Ivory Coast",
+   "locatedIn": "Yamoussoukro",
+   "classes": [
+    "minor basilica",
+    "Catholic church building"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "ashmolean-museum",
+   "qid": "Q636400",
+   "name": "Ashmolean Museum",
+   "wiki": "Ashmolean Museum",
+   "tier": "medium",
+   "score": 0.8056,
+   "sitelinks": 46,
+   "views": 9605,
+   "lon": -1.26056,
+   "lat": 51.75556,
+   "architects": [
+    "Charles Robert Cockerell",
+    "Rick Mather"
+   ],
+   "year": 1685,
+   "country": "United Kingdom",
+   "locatedIn": "Oxford",
+   "classes": [
+    "art museum",
+    "university museum"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "imam-husayn-mausoleum",
+   "qid": "Q773704",
+   "name": "Imam Husayn Mausoleum",
+   "wiki": "Imam Husayn Shrine",
+   "tier": "medium",
+   "score": 0.805,
+   "sitelinks": 36,
+   "views": 16760,
+   "lon": 44.0325,
+   "lat": 32.61639,
+   "architects": [],
+   "year": null,
+   "country": "Iraq",
+   "locatedIn": "Karbala",
+   "classes": [
+    "mosque",
+    "mausoleum",
+    "architectural landmark"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "warwick-castle",
+   "qid": "Q941276",
+   "name": "Warwick Castle",
+   "wiki": "Warwick Castle",
+   "tier": "medium",
+   "score": 0.8023,
+   "sitelinks": 35,
+   "views": 17959,
+   "lon": -1.58561,
+   "lat": 52.2796,
+   "architects": [],
+   "year": 1068,
+   "country": "United Kingdom",
+   "locatedIn": "Warwick",
+   "classes": [
+    "castle",
+    "historic house museum"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "golestan-palace",
+   "qid": "Q210610",
+   "name": "Golestan Palace",
+   "wiki": "Golestan Palace",
+   "tier": "medium",
+   "score": 0.8015,
+   "sitelinks": 60,
+   "views": 7196,
+   "lon": 51.42028,
+   "lat": 35.67972,
+   "architects": [],
+   "year": null,
+   "country": "Iran",
+   "locatedIn": "Tehran",
+   "classes": [
+    "palace"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "international-commerce-centre",
+   "qid": "Q317034",
+   "name": "International Commerce Centre",
+   "wiki": "International Commerce Centre",
+   "tier": "medium",
+   "score": 0.8015,
+   "sitelinks": 47,
+   "views": 9015,
+   "lon": 114.16017,
+   "lat": 22.30339,
+   "architects": [
+    "Kohn Pedersen Fox",
+    "Wong & Ouyang (HK) Ltd."
+   ],
+   "year": 2010,
+   "country": "People's Republic of China",
+   "locatedIn": "Yau Tsim Mong District",
+   "classes": [
+    "skyscraper"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "corvin-castle",
+   "qid": "Q126576",
+   "name": "Corvin Castle",
+   "wiki": "Corvin Castle",
+   "tier": "medium",
+   "score": 0.8007,
+   "sitelinks": 36,
+   "views": 16290,
+   "lon": 22.8883,
+   "lat": 45.7491,
+   "architects": [],
+   "year": 1440,
+   "country": "Romania",
+   "locatedIn": "Hunedoara County",
+   "classes": [
+    "castle"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "shuri-castle",
+   "qid": "Q907052",
+   "name": "Shuri Castle",
+   "wiki": "Shuri Castle",
+   "tier": "medium",
+   "score": 0.7992,
+   "sitelinks": 40,
+   "views": 11516,
+   "lon": 127.71948,
+   "lat": 26.21703,
+   "architects": [],
+   "year": 1958,
+   "country": "Japan",
+   "locatedIn": "Naha",
+   "classes": [
+    "gusuku",
+    "government agency",
+    "official residence",
+    "museum"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "royal-swedish-academy-of-sciences",
+   "qid": "Q191583",
+   "name": "Royal Swedish Academy of Sciences",
+   "wiki": "Royal Swedish Academy of Sciences",
+   "tier": "medium",
+   "score": 0.7985,
+   "sitelinks": 63,
+   "views": 6683,
+   "lon": 18.05167,
+   "lat": 59.36639,
+   "architects": [
+    "Axel Anderberg"
+   ],
+   "year": 1739,
+   "country": "Sweden",
+   "locatedIn": "Stockholm Municipality",
+   "classes": [
+    "academy of sciences",
+    "Swedish Royal Academies",
+    "building",
+    "national academy"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "museum-of-fine-arts-boston",
+   "qid": "Q49133",
+   "name": "Museum of Fine Arts Boston",
+   "wiki": "Museum of Fine Arts, Boston",
+   "tier": "hard",
+   "score": 0.7949,
+   "sitelinks": 45,
+   "views": 9110,
+   "lon": -71.09417,
+   "lat": 42.33944,
+   "architects": [
+    "Guy Lowell",
+    "Hugh Stubbins",
+    "I. M. Pei"
+   ],
+   "year": 1870,
+   "country": "United States",
+   "locatedIn": "Boston",
+   "classes": [
+    "art museum",
+    "nonprofit organization",
+    "museum"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "kotoku-in-temple",
+   "qid": "Q672056",
+   "name": "Kōtoku-in Temple",
+   "wiki": "Kōtoku-in",
+   "tier": "hard",
+   "score": 0.7949,
+   "sitelinks": 43,
+   "views": 9771,
+   "lon": 139.53572,
+   "lat": 35.31686,
+   "architects": [],
+   "year": 1252,
+   "country": "Japan",
+   "locatedIn": "Hase",
+   "classes": [
+    "Buddhist temple"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "casa-mila",
+   "qid": "Q207870",
+   "name": "Casa Milà",
+   "wiki": "La Pedrera, Barcelona",
+   "tier": "hard",
+   "score": 0.7933,
+   "sitelinks": 52,
+   "views": 7430,
+   "lon": 2.16167,
+   "lat": 41.39528,
+   "architects": [
+    "Antoni Gaudí"
+   ],
+   "year": 1906,
+   "country": "Spain",
+   "locatedIn": "Dreta de l'Eixample",
+   "classes": [
+    "multifamily residential"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "heidelberg-castle",
+   "qid": "Q327265",
+   "name": "Heidelberg Castle",
+   "wiki": "Heidelberg Castle",
+   "tier": "hard",
+   "score": 0.7893,
+   "sitelinks": 40,
+   "views": 10603,
+   "lon": 8.71583,
+   "lat": 49.41056,
+   "architects": [],
+   "year": null,
+   "country": "Germany",
+   "locatedIn": "Heidelberg",
+   "classes": [
+    "castle",
+    "museum"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "university-of-tehran",
+   "qid": "Q737835",
+   "name": "University of Tehran",
+   "wiki": "University of Tehran",
+   "tier": "hard",
+   "score": 0.788,
+   "sitelinks": 54,
+   "views": 6780,
+   "lon": 51.39513,
+   "lat": 35.70411,
+   "architects": [
+    "André Godard"
+   ],
+   "year": 1934,
+   "country": "Iran",
+   "locatedIn": "District 6",
+   "classes": [
+    "public university",
+    "Q209465",
+    "cultural property"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "tomb-of-cyrus-the-great",
+   "qid": "Q2635530",
+   "name": "Tomb of Cyrus the Great",
+   "wiki": "Tomb of Cyrus the Great",
+   "tier": "hard",
+   "score": 0.7878,
+   "sitelinks": 43,
+   "views": 9244,
+   "lon": 53.16719,
+   "lat": 30.19392,
+   "architects": [],
+   "year": -530,
+   "country": "Iran",
+   "locatedIn": "Pasargad County",
+   "classes": [
+    "tomb",
+    "cultural property",
+    "architectural landmark"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "wartburg",
+   "qid": "Q151545",
+   "name": "Wartburg",
+   "wiki": "Wartburg",
+   "tier": "hard",
+   "score": 0.7876,
+   "sitelinks": 58,
+   "views": 6591,
+   "lon": 10.30639,
+   "lat": 50.96611,
+   "architects": [],
+   "year": 1067,
+   "country": "Germany",
+   "locatedIn": "Eisenach",
+   "classes": [
+    "castle",
+    "museum",
+    "building"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "museo-nacional-centro-de-arte-reina-sofia",
+   "qid": "Q460889",
+   "name": "Museo Nacional Centro de Arte Reina Sofía",
+   "wiki": "Museo Nacional Centro de Arte Reina Sofía",
+   "tier": "hard",
+   "score": 0.7876,
+   "sitelinks": 46,
+   "views": 8266,
+   "lon": -3.694,
+   "lat": 40.40857,
+   "architects": [
+    "Francesco Sabatini"
+   ],
+   "year": 1992,
+   "country": "Spain",
+   "locatedIn": "Madrid",
+   "classes": [
+    "art museum",
+    "national museum",
+    "monument",
+    "former hospital",
+    "arts center"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "frauenkirche",
+   "qid": "Q167193",
+   "name": "Frauenkirche",
+   "wiki": "Frauenkirche, Munich",
+   "tier": "hard",
+   "score": 0.7875,
+   "sitelinks": 44,
+   "views": 8882,
+   "lon": 11.57362,
+   "lat": 48.13858,
+   "architects": [
+    "Jörg von Halsbach"
+   ],
+   "year": 1494,
+   "country": "Germany",
+   "locatedIn": "Munich",
+   "classes": [
+    "Catholic cathedral",
+    "Catholic parish church"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "ho-chi-minh-mausoleum",
+   "qid": "Q874234",
+   "name": "Ho Chi Minh Mausoleum",
+   "wiki": "Ho Chi Minh Mausoleum",
+   "tier": "hard",
+   "score": 0.7859,
+   "sitelinks": 35,
+   "views": 15215,
+   "lon": 105.83472,
+   "lat": 21.03667,
+   "architects": [],
+   "year": 1975,
+   "country": "Vietnam",
+   "locatedIn": "Điện Biên",
+   "classes": [
+    "mausoleum",
+    "monument",
+    "memorial"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "conwy-castle",
+   "qid": "Q756830",
+   "name": "Conwy Castle",
+   "wiki": "Conwy Castle",
+   "tier": "hard",
+   "score": 0.7856,
+   "sitelinks": 40,
+   "views": 10271,
+   "lon": -3.82563,
+   "lat": 53.28015,
+   "architects": [
+    "James of Saint George"
+   ],
+   "year": 1283,
+   "country": "United Kingdom",
+   "locatedIn": "Q634054",
+   "classes": [
+    "castle"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "mauritshuis",
+   "qid": "Q221092",
+   "name": "Mauritshuis",
+   "wiki": "Mauritshuis",
+   "tier": "hard",
+   "score": 0.7855,
+   "sitelinks": 49,
+   "views": 7420,
+   "lon": 4.31431,
+   "lat": 52.08039,
+   "architects": [
+    "Jacob van Campen"
+   ],
+   "year": 1822,
+   "country": "Netherlands",
+   "locatedIn": "The Hague",
+   "classes": [
+    "art museum",
+    "national museum"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "peace-palace",
+   "qid": "Q834448",
+   "name": "Peace Palace",
+   "wiki": "Peace Palace",
+   "tier": "hard",
+   "score": 0.7847,
+   "sitelinks": 45,
+   "views": 8373,
+   "lon": 4.2955,
+   "lat": 52.0866,
+   "architects": [
+    "Louis Marie Cordonnier",
+    "Johan Adrianus Gerard van der Steur"
+   ],
+   "year": 1913,
+   "country": "Netherlands",
+   "locatedIn": "The Hague",
+   "classes": [
+    "courthouse"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "hermann-castle",
+   "qid": "Q660001",
+   "name": "Hermann Castle",
+   "wiki": "Hermann Castle",
+   "tier": "hard",
+   "score": 0.7843,
+   "sitelinks": 40,
+   "views": 10179,
+   "lon": 28.20139,
+   "lat": 59.37583,
+   "architects": [],
+   "year": null,
+   "country": "Estonia",
+   "locatedIn": "Narva City",
+   "classes": [
+    "castle"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "griffith-observatory",
+   "qid": "Q575901",
+   "name": "Griffith Observatory",
+   "wiki": "Griffith Observatory",
+   "tier": "hard",
+   "score": 0.7843,
+   "sitelinks": 33,
+   "views": 17003,
+   "lon": -118.30037,
+   "lat": 34.11856,
+   "architects": [
+    "John C. Austin"
+   ],
+   "year": 1935,
+   "country": "United States",
+   "locatedIn": "Los Angeles",
+   "classes": [
+    "astronomical observatory",
+    "organization"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "turning-torso",
+   "qid": "Q206435",
+   "name": "Turning Torso",
+   "wiki": "Turning Torso",
+   "tier": "hard",
+   "score": 0.7838,
+   "sitelinks": 44,
+   "views": 8567,
+   "lon": 12.97639,
+   "lat": 55.61333,
+   "architects": [
+    "Santiago Calatrava"
+   ],
+   "year": 2005,
+   "country": "Sweden",
+   "locatedIn": "Malmö Municipality",
+   "classes": [
+    "skyscraper",
+    "apartment building"
+   ],
+   "hasClue": true
+  },
+  {
+   "id": "q1-tower",
+   "qid": "Q125846",
+   "name": "Q1 Tower",
+   "wiki": "Q1 (building)",
+   "tier": "hard",
+   "score": 0.783,
+   "sitelinks": 42,
+   "views": 9237,
+   "lon": 153.42944,
+   "lat": -28.00611,
+   "architects": [
+    "Sunland Group"
+   ],
+   "year": 2007,
+   "country": "Australia",
+   "locatedIn": "Queensland",
+   "classes": [
+    "skyscraper"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "speyer-cathedral",
+   "qid": "Q22720",
+   "name": "Speyer Cathedral",
+   "wiki": "Speyer Cathedral",
+   "tier": "hard",
+   "score": 0.7829,
+   "sitelinks": 57,
+   "views": 6406,
+   "lon": 8.4425,
+   "lat": 49.31722,
+   "architects": [
+    "Otto of Bamberg"
+   ],
+   "year": 1080,
+   "country": "Germany",
+   "locatedIn": "Speyer",
+   "classes": [
+    "Catholic cathedral",
+    "imperial cathedral"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "cairo-citadel",
+   "qid": "Q1988240",
+   "name": "Cairo Citadel",
+   "wiki": "Cairo Citadel",
+   "tier": "hard",
+   "score": 0.7824,
+   "sitelinks": 37,
+   "views": 11881,
+   "lon": 31.2614,
+   "lat": 30.0294,
+   "architects": [],
+   "year": 1183,
+   "country": "Egypt",
+   "locatedIn": "Cairo Governorate",
+   "classes": [
+    "fortification"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "selimiye-mosque",
+   "qid": "Q184534",
+   "name": "Selimiye Mosque",
+   "wiki": "Selimiye Mosque, Edirne",
+   "tier": "hard",
+   "score": 0.7822,
+   "sitelinks": 67,
+   "views": 5824,
+   "lon": 26.55944,
+   "lat": 41.67806,
+   "architects": [
+    "Mimar Sinan"
+   ],
+   "year": 1574,
+   "country": "Turkey",
+   "locatedIn": "Edirne",
+   "classes": [
+    "mosque",
+    "historic building"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "putin-s-palace",
+   "qid": "Q4392418",
+   "name": "Putin's Palace",
+   "wiki": "Putin's Palace",
+   "tier": "hard",
+   "score": 0.7817,
+   "sitelinks": 31,
+   "views": 19659,
+   "lon": 38.20521,
+   "lat": 44.41921,
+   "architects": [
+    "Lanfranco Cirillo"
+   ],
+   "year": 2005,
+   "country": "Russia",
+   "locatedIn": "Gelendzhik District",
+   "classes": [
+    "palace",
+    "estate",
+    "residenz"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "philadelphia-museum-of-art",
+   "qid": "Q510324",
+   "name": "Philadelphia Museum of Art",
+   "wiki": "Philadelphia Museum of Art",
+   "tier": "hard",
+   "score": 0.7815,
+   "sitelinks": 37,
+   "views": 11840,
+   "lon": -75.18139,
+   "lat": 39.96583,
+   "architects": [
+    "Horace Trumbauer",
+    "Zantzinger, Borie & Medary",
+    "Paul Philippe Cret",
+    "Julian Abele"
+   ],
+   "year": 1876,
+   "country": "United States",
+   "locatedIn": "Philadelphia",
+   "classes": [
+    "art museum",
+    "nonprofit organization"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "stockholm-palace",
+   "qid": "Q750444",
+   "name": "Stockholm Palace",
+   "wiki": "Stockholm Palace",
+   "tier": "hard",
+   "score": 0.781,
+   "sitelinks": 45,
+   "views": 8119,
+   "lon": 18.07167,
+   "lat": 59.32667,
+   "architects": [
+    "Nicodemus Tessin the Younger",
+    "Carl Hårleman"
+   ],
+   "year": 1760,
+   "country": "Sweden",
+   "locatedIn": "Stockholm Municipality",
+   "classes": [
+    "royal palace",
+    "architectural ensemble",
+    "cultural property",
+    "museum"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "louvre-abu-dhabi",
+   "qid": "Q3176133",
+   "name": "Louvre Abu Dhabi",
+   "wiki": "Louvre Abu Dhabi",
+   "tier": "hard",
+   "score": 0.7806,
+   "sitelinks": 36,
+   "views": 12818,
+   "lon": 54.40001,
+   "lat": 24.533,
+   "architects": [
+    "Jean Nouvel"
+   ],
+   "year": 2017,
+   "country": "United Arab Emirates",
+   "locatedIn": "Abu Dhabi",
+   "classes": [
+    "art museum"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "toledo-cathedral",
+   "qid": "Q1123180",
+   "name": "Toledo Cathedral",
+   "wiki": "Toledo Cathedral",
+   "tier": "hard",
+   "score": 0.7795,
+   "sitelinks": 44,
+   "views": 8267,
+   "lon": -4.02389,
+   "lat": 39.85708,
+   "architects": [
+    "Petrus Petri"
+   ],
+   "year": 1226,
+   "country": "Spain",
+   "locatedIn": "Toledo",
+   "classes": [
+    "Catholic cathedral"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "linderhof-palace",
+   "qid": "Q162052",
+   "name": "Linderhof Palace",
+   "wiki": "Linderhof Palace",
+   "tier": "hard",
+   "score": 0.7795,
+   "sitelinks": 41,
+   "views": 9341,
+   "lon": 10.96075,
+   "lat": 47.57162,
+   "architects": [
+    "Georg von Dollmann"
+   ],
+   "year": 1870,
+   "country": "Germany",
+   "locatedIn": "Ettal",
+   "classes": [
+    "palace",
+    "museum"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "wawel-cathedral",
+   "qid": "Q638519",
+   "name": "Wawel Cathedral",
+   "wiki": "Wawel Cathedral",
+   "tier": "hard",
+   "score": 0.7794,
+   "sitelinks": 45,
+   "views": 8042,
+   "lon": 19.93542,
+   "lat": 50.05464,
+   "architects": [
+    "Giovanni Battista Trevano",
+    "Giovanni Battista Gisleni"
+   ],
+   "year": 1020,
+   "country": "Poland",
+   "locatedIn": "Kraków",
+   "classes": [
+    "cathedral",
+    "architectural heritage monument"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "santa-maria-della-salute",
+   "qid": "Q52531",
+   "name": "Santa Maria della Salute",
+   "wiki": "Santa Maria della Salute",
+   "tier": "hard",
+   "score": 0.7787,
+   "sitelinks": 46,
+   "views": 7680,
+   "lon": 12.33473,
+   "lat": 45.43057,
+   "architects": [
+    "Baldassarre Longhena"
+   ],
+   "year": 1631,
+   "country": "Italy",
+   "locatedIn": "Venice",
+   "classes": [
+    "votive church",
+    "minor basilica",
+    "octagonal church"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "royal-alcazar-of-segovia",
+   "qid": "Q557337",
+   "name": "Royal Alcázar of Segovia",
+   "wiki": "Alcázar of Segovia",
+   "tier": "hard",
+   "score": 0.7786,
+   "sitelinks": 38,
+   "views": 10888,
+   "lon": -4.1325,
+   "lat": 40.9525,
+   "architects": [
+    "Francisco de Mora",
+    "Juan de Herrera",
+    "Gaspar de Vega"
+   ],
+   "year": 1200,
+   "country": "Spain",
+   "locatedIn": "Segovia",
+   "classes": [
+    "alcázar",
+    "castle",
+    "museum building",
+    "tourist attraction",
+    "Monument (Spain)",
+    "palace",
+    "royal palace",
+    "museum",
+    "agent"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "roskilde-cathedral",
+   "qid": "Q209705",
+   "name": "Roskilde Cathedral",
+   "wiki": "Roskilde Cathedral",
+   "tier": "hard",
+   "score": 0.7774,
+   "sitelinks": 49,
+   "views": 6874,
+   "lon": 12.08031,
+   "lat": 55.64267,
+   "architects": [
+    "Absalon"
+   ],
+   "year": 1201,
+   "country": "Denmark",
+   "locatedIn": "Roskilde Municipality",
+   "classes": [
+    "Lutheran cathedral"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "hever-castle",
+   "qid": "Q1132683",
+   "name": "Hever Castle",
+   "wiki": "Hever Castle",
+   "tier": "hard",
+   "score": 0.7769,
+   "sitelinks": 30,
+   "views": 20580,
+   "lon": 0.11389,
+   "lat": 51.18694,
+   "architects": [],
+   "year": 1271,
+   "country": "United Kingdom",
+   "locatedIn": "Hever",
+   "classes": [
+    "historic house museum",
+    "English country house",
+    "quadrangular castle",
+    "castle"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "livadia-palace",
+   "qid": "Q1055311",
+   "name": "Livadia Palace",
+   "wiki": "Livadia Palace",
+   "tier": "hard",
+   "score": 0.7757,
+   "sitelinks": 45,
+   "views": 7785,
+   "lon": 34.14361,
+   "lat": 44.46778,
+   "architects": [],
+   "year": 1910,
+   "country": "Russia",
+   "locatedIn": "Livadiya",
+   "classes": [
+    "summer residence",
+    "palace",
+    "museum"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "almudena-cathedral",
+   "qid": "Q849711",
+   "name": "Almudena Cathedral",
+   "wiki": "Almudena Cathedral",
+   "tier": "hard",
+   "score": 0.7757,
+   "sitelinks": 43,
+   "views": 8304,
+   "lon": -3.71444,
+   "lat": 40.41556,
+   "architects": [
+    "Francisco de Cubas"
+   ],
+   "year": 1993,
+   "country": "Spain",
+   "locatedIn": "Madrid",
+   "classes": [
+    "Catholic cathedral"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "ping-an-finance-centre",
+   "qid": "Q1077308",
+   "name": "Ping An Finance Centre",
+   "wiki": "Ping An Finance Centre",
+   "tier": "hard",
+   "score": 0.7747,
+   "sitelinks": 36,
+   "views": 12169,
+   "lon": 114.05028,
+   "lat": 22.53667,
+   "architects": [
+    "Kohn Pedersen Fox"
+   ],
+   "year": 2017,
+   "country": "People's Republic of China",
+   "locatedIn": "Futian Subdistrict",
+   "classes": [
+    "skyscraper"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "kingdom-centre",
+   "qid": "Q656743",
+   "name": "Kingdom Centre",
+   "wiki": "Kingdom Centre",
+   "tier": "hard",
+   "score": 0.7743,
+   "sitelinks": 42,
+   "views": 8531,
+   "lon": 46.67444,
+   "lat": 24.71139,
+   "architects": [
+    "Ellerbe Becket",
+    "Bechtel"
+   ],
+   "year": 2000,
+   "country": "Saudi Arabia",
+   "locatedIn": "Riyadh",
+   "classes": [
+    "skyscraper",
+    "architectural landmark"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "yasnaya-polyana",
+   "qid": "Q749556",
+   "name": "Yasnaya Polyana",
+   "wiki": "Yasnaya Polyana",
+   "tier": "hard",
+   "score": 0.7737,
+   "sitelinks": 46,
+   "views": 7387,
+   "lon": 37.52638,
+   "lat": 54.07513,
+   "architects": [],
+   "year": 1921,
+   "country": "Russia",
+   "locatedIn": "Yasnaya Polyana",
+   "classes": [
+    "estate",
+    "protected area of Russia",
+    "historic site",
+    "museum"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "chateau-de-vincennes",
+   "qid": "Q663673",
+   "name": "Château de Vincennes",
+   "wiki": "Château de Vincennes",
+   "tier": "hard",
+   "score": 0.7727,
+   "sitelinks": 41,
+   "views": 8818,
+   "lon": 2.43583,
+   "lat": 48.84278,
+   "architects": [],
+   "year": 1340,
+   "country": "France",
+   "locatedIn": "Vincennes",
+   "classes": [
+    "castle",
+    "château"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "city-of-arts-and-sciences",
+   "qid": "Q239935",
+   "name": "City of Arts and Sciences",
+   "wiki": "City of Arts and Sciences",
+   "tier": "hard",
+   "score": 0.7723,
+   "sitelinks": 40,
+   "views": 9449,
+   "lon": -0.35036,
+   "lat": 39.45453,
+   "architects": [
+    "Santiago Calatrava"
+   ],
+   "year": 1998,
+   "country": "Spain",
+   "locatedIn": "Valencia",
+   "classes": [
+    "tourist destination",
+    "building complex",
+    "cultural center",
+    "museum"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "las-lajas-sanctuary",
+   "qid": "Q2227269",
+   "name": "Las Lajas Sanctuary",
+   "wiki": "Sanctuary of Las Lajas",
+   "tier": "hard",
+   "score": 0.7722,
+   "sitelinks": 33,
+   "views": 14884,
+   "lon": -77.586,
+   "lat": 0.8055,
+   "architects": [
+    "Lucindo Espinosa"
+   ],
+   "year": 1949,
+   "country": "Colombia",
+   "locatedIn": "Ipiales",
+   "classes": [
+    "church building"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "drottningholm-palace",
+   "qid": "Q208559",
+   "name": "Drottningholm Palace",
+   "wiki": "Drottningholm Palace",
+   "tier": "hard",
+   "score": 0.7721,
+   "sitelinks": 59,
+   "views": 5743,
+   "lon": 17.88638,
+   "lat": 59.32169,
+   "architects": [
+    "Nicodemus Tessin the Elder",
+    "Nicodemus Tessin the Younger"
+   ],
+   "year": 1699,
+   "country": "Sweden",
+   "locatedIn": "Ekerö Municipality",
+   "classes": [
+    "royal palace",
+    "architectural ensemble",
+    "museum",
+    "cultural property",
+    "heritage site in Sweden"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "liverpool-cathedral",
+   "qid": "Q1866506",
+   "name": "Liverpool Cathedral",
+   "wiki": "Liverpool Cathedral",
+   "tier": "hard",
+   "score": 0.7687,
+   "sitelinks": 28,
+   "views": 24489,
+   "lon": -2.97305,
+   "lat": 53.39751,
+   "architects": [
+    "Giles Gilbert Scott"
+   ],
+   "year": 1904,
+   "country": "United Kingdom",
+   "locatedIn": "Liverpool",
+   "classes": [
+    "Anglican or Episcopal cathedral"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "dublin-castle",
+   "qid": "Q742767",
+   "name": "Dublin Castle",
+   "wiki": "Dublin Castle",
+   "tier": "hard",
+   "score": 0.7683,
+   "sitelinks": 39,
+   "views": 9765,
+   "lon": -6.26739,
+   "lat": 53.34311,
+   "architects": [],
+   "year": 1204,
+   "country": "Ireland",
+   "locatedIn": "Dublin",
+   "classes": [
+    "castle"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "kuala-lumpur-tower",
+   "qid": "Q745016",
+   "name": "Kuala Lumpur Tower",
+   "wiki": "Kuala Lumpur Tower",
+   "tier": "hard",
+   "score": 0.7677,
+   "sitelinks": 43,
+   "views": 7874,
+   "lon": 101.70375,
+   "lat": 3.15283,
+   "architects": [],
+   "year": 1996,
+   "country": "Malaysia",
+   "locatedIn": "Kuala Lumpur",
+   "classes": [
+    "skyscraper",
+    "moonsighting location in Malaysia"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "european-investment-bank",
+   "qid": "Q192247",
+   "name": "European Investment Bank",
+   "wiki": "European Investment Bank",
+   "tier": "hard",
+   "score": 0.7673,
+   "sitelinks": 60,
+   "views": 5551,
+   "lon": 6.13523,
+   "lat": 49.62029,
+   "architects": [
+    "Christoph Ingenhoven"
+   ],
+   "year": 1958,
+   "country": "Luxembourg",
+   "locatedIn": "Luxembourg",
+   "classes": [
+    "international financial institution",
+    "body of the European Union"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "elbphilharmonie",
+   "qid": "Q673223",
+   "name": "Elbphilharmonie",
+   "wiki": "Elbphilharmonie",
+   "tier": "hard",
+   "score": 0.7641,
+   "sitelinks": 41,
+   "views": 8244,
+   "lon": 9.98419,
+   "lat": 53.54142,
+   "architects": [
+    "Herzog & de Meuron",
+    "Werner Kallmorgen"
+   ],
+   "year": 2017,
+   "country": "Germany",
+   "locatedIn": "Hamburg-Mitte",
+   "classes": [
+    "concert hall",
+    "hotel",
+    "former warehouse"
+   ],
+   "hasClue": true
+  },
+  {
+   "id": "alexander-nevsky-cathedral",
+   "qid": "Q43282",
+   "name": "Alexander Nevsky Cathedral",
+   "wiki": "Saint Alexander Nevsky Cathedral, Sofia",
+   "tier": "hard",
+   "score": 0.763,
+   "sitelinks": 52,
+   "views": 5835,
+   "lon": 23.33297,
+   "lat": 42.69584,
+   "architects": [
+    "Alexander Pomerantsev"
+   ],
+   "year": 1924,
+   "country": "Bulgaria",
+   "locatedIn": "Oborishte District",
+   "classes": [
+    "cathedral",
+    "museum"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "koutoubia-mosque",
+   "qid": "Q1137533",
+   "name": "Koutoubia Mosque",
+   "wiki": "Kutubiyya Mosque",
+   "tier": "hard",
+   "score": 0.7614,
+   "sitelinks": 42,
+   "views": 7682,
+   "lon": -7.99354,
+   "lat": 31.62412,
+   "architects": [],
+   "year": 1147,
+   "country": "Morocco",
+   "locatedIn": "Marrakech",
+   "classes": [
+    "mosque"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "victoria-memorial",
+   "qid": "Q1356352",
+   "name": "Victoria Memorial",
+   "wiki": "Victoria Memorial, Kolkata",
+   "tier": "hard",
+   "score": 0.7609,
+   "sitelinks": 32,
+   "views": 14196,
+   "lon": 88.3425,
+   "lat": 22.5449,
+   "architects": [
+    "William Emerson"
+   ],
+   "year": 1921,
+   "country": "India",
+   "locatedIn": "Ward No. 63, Kolkata Municipal Corporation",
+   "classes": [
+    "memorial",
+    "museum"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "maiden-tower",
+   "qid": "Q842822",
+   "name": "Maiden Tower",
+   "wiki": "Maiden Tower (Baku)",
+   "tier": "hard",
+   "score": 0.7594,
+   "sitelinks": 48,
+   "views": 6154,
+   "lon": 49.83725,
+   "lat": 40.36617,
+   "architects": [],
+   "year": 1200,
+   "country": "Azerbaijan",
+   "locatedIn": "Sabail raion",
+   "classes": [
+    "tower",
+    "monument"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "cctv-hq",
+   "qid": "Q754321",
+   "name": "CCTV Headquarters",
+   "wiki": "CCTV Headquarters",
+   "tier": "hard",
+   "score": 0.7587,
+   "sitelinks": 37,
+   "views": 9935,
+   "lon": 116.45798,
+   "lat": 39.91384,
+   "architects": [
+    "Office for Metropolitan Architecture"
+   ],
+   "year": 2012,
+   "country": "People's Republic of China",
+   "locatedIn": "Hujialou Subdistrict",
+   "classes": [
+    "skyscraper"
+   ],
+   "hasClue": true
+  },
+  {
+   "id": "christiansborg-palace",
+   "qid": "Q940733",
+   "name": "Christiansborg Palace",
+   "wiki": "Christiansborg Palace",
+   "tier": "hard",
+   "score": 0.7587,
+   "sitelinks": 40,
+   "views": 8406,
+   "lon": 12.57889,
+   "lat": 55.67583,
+   "architects": [
+    "Elias David Häusser"
+   ],
+   "year": 1740,
+   "country": "Denmark",
+   "locatedIn": "Copenhagen Municipality",
+   "classes": [
+    "palace",
+    "building of public administration"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "royal-castle-in-warsaw",
+   "qid": "Q756098",
+   "name": "Royal Castle in Warsaw",
+   "wiki": "Royal Castle, Warsaw",
+   "tier": "hard",
+   "score": 0.7569,
+   "sitelinks": 43,
+   "views": 7077,
+   "lon": 21.01417,
+   "lat": 52.24778,
+   "architects": [
+    "Giovanni Battista Trevano"
+   ],
+   "year": 1598,
+   "country": "Poland",
+   "locatedIn": "Warsaw",
+   "classes": [
+    "royal palace",
+    "castle",
+    "museum",
+    "architectural heritage monument"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "helsinki-cathedral",
+   "qid": "Q738015",
+   "name": "Helsinki Cathedral",
+   "wiki": "Helsinki Cathedral",
+   "tier": "hard",
+   "score": 0.7564,
+   "sitelinks": 51,
+   "views": 5715,
+   "lon": 24.95212,
+   "lat": 60.17039,
+   "architects": [
+    "Carl Ludvig Engel"
+   ],
+   "year": 1852,
+   "country": "Finland",
+   "locatedIn": "Helsinki",
+   "classes": [
+    "Lutheran cathedral",
+    "church building",
+    "landmark"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "melk-abbey",
+   "qid": "Q660082",
+   "name": "Melk Abbey",
+   "wiki": "Melk Abbey",
+   "tier": "hard",
+   "score": 0.7564,
+   "sitelinks": 42,
+   "views": 7397,
+   "lon": 15.33123,
+   "lat": 48.22843,
+   "architects": [
+    "Jakob Prandtauer"
+   ],
+   "year": 1089,
+   "country": "Austria",
+   "locatedIn": "Melk",
+   "classes": [
+    "abbey",
+    "museum",
+    "monastery"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "shah-mosque",
+   "qid": "Q643098",
+   "name": "Shah Mosque",
+   "wiki": "Shah Mosque (Isfahan)",
+   "tier": "hard",
+   "score": 0.7561,
+   "sitelinks": 49,
+   "views": 5847,
+   "lon": 51.67778,
+   "lat": 32.65481,
+   "architects": [
+    "Bahāʾ al-dīn al-ʿĀmilī"
+   ],
+   "year": 1630,
+   "country": "Iran",
+   "locatedIn": "District 3",
+   "classes": [
+    "mosque",
+    "cultural property",
+    "architectural landmark"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "tsarskoye-selo",
+   "qid": "Q1621200",
+   "name": "Tsarskoye Selo",
+   "wiki": "Tsarskoye Selo",
+   "tier": "hard",
+   "score": 0.7555,
+   "sitelinks": 34,
+   "views": 11691,
+   "lon": 30.41583,
+   "lat": 59.72333,
+   "architects": [
+    "Francesco Bartolomeo Rastrelli"
+   ],
+   "year": null,
+   "country": "Russia",
+   "locatedIn": "Pushkin",
+   "classes": [
+    "palace complex",
+    "museum",
+    "protected area of Russia"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "kedarnath-temple",
+   "qid": "Q866014",
+   "name": "Kedarnath Temple",
+   "wiki": "Kedarnath Temple",
+   "tier": "hard",
+   "score": 0.7555,
+   "sitelinks": 27,
+   "views": 24679,
+   "lon": 79.06666,
+   "lat": 30.73334,
+   "architects": [
+    "Ādi Shankara"
+   ],
+   "year": 800,
+   "country": "India",
+   "locatedIn": "Rudraprayag district",
+   "classes": [
+    "Hindu temple"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "geghard",
+   "qid": "Q499285",
+   "name": "Geghard",
+   "wiki": "Geghard",
+   "tier": "hard",
+   "score": 0.754,
+   "sitelinks": 52,
+   "views": 5539,
+   "lon": 44.81859,
+   "lat": 40.14047,
+   "architects": [],
+   "year": 1215,
+   "country": "Armenia",
+   "locatedIn": "Kotayk Province",
+   "classes": [
+    "monastery",
+    "church building"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "imam-reza-shrine",
+   "qid": "Q1791841",
+   "name": "Imam Reza Shrine",
+   "wiki": "Imam Reza Shrine",
+   "tier": "hard",
+   "score": 0.7538,
+   "sitelinks": 40,
+   "views": 8078,
+   "lon": 59.61569,
+   "lat": 36.28797,
+   "architects": [],
+   "year": 1418,
+   "country": "Iran",
+   "locatedIn": "Samen District",
+   "classes": [
+    "imamzadeh",
+    "mausoleum",
+    "architectural ensemble",
+    "cultural property",
+    "architectural landmark"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "monastery-of-saint-john-of-rila",
+   "qid": "Q207945",
+   "name": "Monastery of Saint John of Rila",
+   "wiki": "Rila Monastery",
+   "tier": "hard",
+   "score": 0.753,
+   "sitelinks": 51,
+   "views": 5579,
+   "lon": 23.33955,
+   "lat": 42.13438,
+   "architects": [],
+   "year": 946,
+   "country": "Bulgaria",
+   "locatedIn": "Rila",
+   "classes": [
+    "monastery",
+    "Eastern Orthodox church building",
+    "Stauropegic monastery"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "milad-tower",
+   "qid": "Q622796",
+   "name": "Milad Tower",
+   "wiki": "Milad Tower",
+   "tier": "hard",
+   "score": 0.7527,
+   "sitelinks": 51,
+   "views": 5578,
+   "lon": 51.37533,
+   "lat": 35.74461,
+   "architects": [
+    "Mohammad Reza Hafezi"
+   ],
+   "year": 2008,
+   "country": "Iran",
+   "locatedIn": "District 2",
+   "classes": [
+    "observation tower",
+    "communication tower",
+    "landmark"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "miramare-castle",
+   "qid": "Q165069",
+   "name": "Miramare Castle",
+   "wiki": "Miramare Castle",
+   "tier": "hard",
+   "score": 0.7523,
+   "sitelinks": 38,
+   "views": 8972,
+   "lon": 13.71232,
+   "lat": 45.70245,
+   "architects": [],
+   "year": 1860,
+   "country": "Italy",
+   "locatedIn": "Trieste",
+   "classes": [
+    "castle",
+    "national museum",
+    "history museum",
+    "art museum",
+    "Italian national museum",
+    "museum of modern art",
+    "specialised museum in Finland",
+    "palazzo museum",
+    "Museum of the Italian Ministry of Culture"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "bosnian-pyramid-claims",
+   "qid": "Q746765",
+   "name": "Bosnian pyramid claims",
+   "wiki": "Bosnian pyramid claims",
+   "tier": "hard",
+   "score": 0.7513,
+   "sitelinks": 35,
+   "views": 10811,
+   "lon": 18.17611,
+   "lat": 43.97694,
+   "architects": [],
+   "year": null,
+   "country": "Bosnia and Herzegovina",
+   "locatedIn": "City of Visoko",
+   "classes": [
+    "pyramid",
+    "theory"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "vaux-le-vicomte",
+   "qid": "Q739976",
+   "name": "Vaux-le-Vicomte",
+   "wiki": "Vaux-le-Vicomte",
+   "tier": "hard",
+   "score": 0.7489,
+   "sitelinks": 41,
+   "views": 7286,
+   "lon": 2.71415,
+   "lat": 48.56583,
+   "architects": [
+    "Louis Le Vau"
+   ],
+   "year": 1661,
+   "country": "France",
+   "locatedIn": "Maincy",
+   "classes": [
+    "château"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "amalienborg",
+   "qid": "Q211053",
+   "name": "Amalienborg",
+   "wiki": "Amalienborg",
+   "tier": "hard",
+   "score": 0.7458,
+   "sitelinks": 45,
+   "views": 5996,
+   "lon": 12.59333,
+   "lat": 55.68403,
+   "architects": [
+    "Nicolai Eigtved"
+   ],
+   "year": 1760,
+   "country": "Denmark",
+   "locatedIn": "Copenhagen Municipality",
+   "classes": [
+    "royal palace",
+    "museum building"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "habitat-67",
+   "qid": "Q1032248",
+   "name": "Habitat 67",
+   "wiki": "Habitat 67",
+   "tier": "hard",
+   "score": 0.7453,
+   "sitelinks": 26,
+   "views": 26250,
+   "lon": -73.54389,
+   "lat": 45.5,
+   "architects": [
+    "Moshe Safdie"
+   ],
+   "year": 1967,
+   "country": "Canada",
+   "locatedIn": "Ville-Marie",
+   "classes": [
+    "apartment building"
+   ],
+   "hasClue": true
+  },
+  {
+   "id": "temple-of-the-tooth",
+   "qid": "Q289175",
+   "name": "Temple of the Tooth",
+   "wiki": "Temple of the Tooth",
+   "tier": "hard",
+   "score": 0.7445,
+   "sitelinks": 35,
+   "views": 10246,
+   "lon": 80.64139,
+   "lat": 7.29361,
+   "architects": [],
+   "year": 1595,
+   "country": "Sri Lanka",
+   "locatedIn": "Kandy",
+   "classes": [
+    "Buddhist temple"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "thyssen-bornemisza-museum",
+   "qid": "Q176251",
+   "name": "Thyssen-Bornemisza Museum",
+   "wiki": "Thyssen-Bornemisza Museum",
+   "tier": "hard",
+   "score": 0.7435,
+   "sitelinks": 37,
+   "views": 8776,
+   "lon": -3.69493,
+   "lat": 40.41604,
+   "architects": [
+    "Rafael Moneo"
+   ],
+   "year": 1992,
+   "country": "Spain",
+   "locatedIn": "Madrid",
+   "classes": [
+    "art museum",
+    "museum"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "giant-wild-goose-pagoda",
+   "qid": "Q1047061",
+   "name": "Giant Wild Goose Pagoda",
+   "wiki": "Giant Wild Goose Pagoda",
+   "tier": "hard",
+   "score": 0.7423,
+   "sitelinks": 37,
+   "views": 8636,
+   "lon": 108.95933,
+   "lat": 34.21977,
+   "architects": [],
+   "year": 648,
+   "country": "People's Republic of China",
+   "locatedIn": "Yanta District",
+   "classes": [
+    "pagoda",
+    "inclined tower",
+    "Chinese AAAAA-rated tourist attraction"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "sky-tower",
+   "qid": "Q722125",
+   "name": "Sky Tower",
+   "wiki": "Sky Tower (Auckland)",
+   "tier": "hard",
+   "score": 0.7415,
+   "sitelinks": 38,
+   "views": 8197,
+   "lon": 174.76231,
+   "lat": -36.84847,
+   "architects": [],
+   "year": 1997,
+   "country": "New Zealand",
+   "locatedIn": "Auckland Region",
+   "classes": [
+    "television tower"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "elmina-castle",
+   "qid": "Q55264655",
+   "name": "Elmina Castle",
+   "wiki": "Elmina Castle",
+   "tier": "hard",
+   "score": 0.7402,
+   "sitelinks": 35,
+   "views": 10049,
+   "lon": -1.34821,
+   "lat": 5.08274,
+   "architects": [],
+   "year": 1482,
+   "country": "Ghana",
+   "locatedIn": "Central Region",
+   "classes": [
+    "fort",
+    "cultural heritage",
+    "castle",
+    "factory"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "national-museum-of-anthropology",
+   "qid": "Q524249",
+   "name": "National Museum of Anthropology",
+   "wiki": "National Museum of Anthropology (Mexico)",
+   "tier": "hard",
+   "score": 0.7394,
+   "sitelinks": 41,
+   "views": 6649,
+   "lon": -99.18611,
+   "lat": 19.42611,
+   "architects": [
+    "Pedro Ramírez Vázquez",
+    "Rafael Mijares Alcérreca"
+   ],
+   "year": 1964,
+   "country": "Mexico",
+   "locatedIn": "Miguel Hidalgo",
+   "classes": [
+    "national museum",
+    "museum building",
+    "archaeological museum",
+    "museum"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "bank-of-china-tower",
+   "qid": "Q214855",
+   "name": "Bank of China Tower",
+   "wiki": "Bank of China Tower (Hong Kong)",
+   "tier": "hard",
+   "score": 0.7393,
+   "sitelinks": 45,
+   "views": 5807,
+   "lon": 114.16139,
+   "lat": 22.27917,
+   "architects": [
+    "I. M. Pei"
+   ],
+   "year": 1990,
+   "country": "People's Republic of China",
+   "locatedIn": "Central and Western District",
+   "classes": [
+    "skyscraper",
+    "bank building"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "karlstejn-castle",
+   "qid": "Q266698",
+   "name": "Karlštejn Castle",
+   "wiki": "Karlštejn",
+   "tier": "hard",
+   "score": 0.7385,
+   "sitelinks": 51,
+   "views": 5157,
+   "lon": 14.18793,
+   "lat": 49.93955,
+   "architects": [
+    "Matthias of Arras",
+    "Josef Mocker"
+   ],
+   "year": 1348,
+   "country": "Czech Republic",
+   "locatedIn": "Karlštejn",
+   "classes": [
+    "castle"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "monte-carlo-casino",
+   "qid": "Q1779905",
+   "name": "Monte Carlo Casino",
+   "wiki": "Monte Carlo Casino",
+   "tier": "hard",
+   "score": 0.7378,
+   "sitelinks": 28,
+   "views": 16752,
+   "lon": 7.42796,
+   "lat": 43.73917,
+   "architects": [
+    "Charles Garnier"
+   ],
+   "year": 1865,
+   "country": "Monaco",
+   "locatedIn": "Monte Carlo",
+   "classes": [
+    "building"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "chillon-castle",
+   "qid": "Q372647",
+   "name": "Chillon Castle",
+   "wiki": "Chillon Castle",
+   "tier": "hard",
+   "score": 0.7372,
+   "sitelinks": 48,
+   "views": 5355,
+   "lon": 6.9275,
+   "lat": 46.41417,
+   "architects": [
+    "James of Saint George"
+   ],
+   "year": 1160,
+   "country": "Switzerland",
+   "locatedIn": "Veytaux",
+   "classes": [
+    "water castle",
+    "château",
+    "museum building"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "schwerin-castle",
+   "qid": "Q573656",
+   "name": "Schwerin Castle",
+   "wiki": "Schwerin Castle",
+   "tier": "hard",
+   "score": 0.7368,
+   "sitelinks": 43,
+   "views": 5963,
+   "lon": 11.41889,
+   "lat": 53.62417,
+   "architects": [
+    "Georg Adolph Demmler",
+    "Gottfried Semper",
+    "Friedrich August Stüler",
+    "Ernst Friedrich Zwirner"
+   ],
+   "year": null,
+   "country": "Germany",
+   "locatedIn": "Schwerin",
+   "classes": [
+    "museum",
+    "Schloss",
+    "parliament building",
+    "architectural landmark"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "padrao-dos-descobrimentos",
+   "qid": "Q1133712",
+   "name": "Padrão dos Descobrimentos",
+   "wiki": "Monument of the Discoveries",
+   "tier": "hard",
+   "score": 0.7359,
+   "sitelinks": 32,
+   "views": 11153,
+   "lon": -9.20569,
+   "lat": 38.69368,
+   "architects": [
+    "José Ângelo Cottinelli Telmo"
+   ],
+   "year": 1960,
+   "country": "Portugal",
+   "locatedIn": "Belém",
+   "classes": [
+    "monument",
+    "cultural heritage"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "bibi-khanym-mosque",
+   "qid": "Q679218",
+   "name": "Bibi-Khanym Mosque",
+   "wiki": "Bibi-Khanym Mosque",
+   "tier": "hard",
+   "score": 0.7325,
+   "sitelinks": 43,
+   "views": 5864,
+   "lon": 66.97972,
+   "lat": 39.66056,
+   "architects": [],
+   "year": 1404,
+   "country": "Uzbekistan",
+   "locatedIn": "Samarkand",
+   "classes": [
+    "mosque"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "great-mosque-of-xi-an",
+   "qid": "Q820842",
+   "name": "Great Mosque of Xi'an",
+   "wiki": "Great Mosque of Xi'an",
+   "tier": "hard",
+   "score": 0.7315,
+   "sitelinks": 40,
+   "views": 6673,
+   "lon": 108.93666,
+   "lat": 34.26339,
+   "architects": [],
+   "year": null,
+   "country": "People's Republic of China",
+   "locatedIn": "Xi'an",
+   "classes": [
+    "mosque"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "mole-antonelliana",
+   "qid": "Q201902",
+   "name": "Mole Antonelliana",
+   "wiki": "Mole Antonelliana",
+   "tier": "hard",
+   "score": 0.7312,
+   "sitelinks": 35,
+   "views": 9385,
+   "lon": 7.69324,
+   "lat": 45.06898,
+   "architects": [
+    "Alessandro Antonelli"
+   ],
+   "year": 1889,
+   "country": "Italy",
+   "locatedIn": "Turin",
+   "classes": [
+    "tower",
+    "museum"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "venetian-arsenal",
+   "qid": "Q1262248",
+   "name": "Venetian Arsenal",
+   "wiki": "Venetian Arsenal",
+   "tier": "hard",
+   "score": 0.7298,
+   "sitelinks": 34,
+   "views": 9648,
+   "lon": 12.35306,
+   "lat": 45.43528,
+   "architects": [
+    "Alessandro Tremignon"
+   ],
+   "year": null,
+   "country": "Italy",
+   "locatedIn": "Venice",
+   "classes": [
+    "naval arsenal"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "hwaseong-fortress",
+   "qid": "Q482423",
+   "name": "Hwaseong Fortress",
+   "wiki": "Hwaseong Fortress",
+   "tier": "hard",
+   "score": 0.7295,
+   "sitelinks": 41,
+   "views": 6165,
+   "lon": 127.0102,
+   "lat": 37.28073,
+   "architects": [],
+   "year": null,
+   "country": "South Korea",
+   "locatedIn": "Suwon",
+   "classes": [
+    "palace",
+    "fortress",
+    "historic site"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "palace-of-fine-arts",
+   "qid": "Q1139081",
+   "name": "Palace of Fine arts",
+   "wiki": "Palacio de Bellas Artes",
+   "tier": "hard",
+   "score": 0.7295,
+   "sitelinks": 34,
+   "views": 9647,
+   "lon": -99.14139,
+   "lat": 19.43528,
+   "architects": [
+    "Adamo Boari",
+    "Federico Ernesto Mariscal Piña"
+   ],
+   "year": 1934,
+   "country": "Mexico",
+   "locatedIn": "Cuauhtémoc",
+   "classes": [
+    "concert hall",
+    "arts center",
+    "opera house"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "palace-of-the-shirvanshahs",
+   "qid": "Q338889",
+   "name": "Palace of the Shirvanshahs",
+   "wiki": "Palace of the Shirvanshahs",
+   "tier": "hard",
+   "score": 0.7293,
+   "sitelinks": 50,
+   "views": 4895,
+   "lon": 49.83333,
+   "lat": 40.36611,
+   "architects": [],
+   "year": 1500,
+   "country": "Azerbaijan",
+   "locatedIn": "Sabail raion",
+   "classes": [
+    "palace"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "hohenschwangau-castle",
+   "qid": "Q161988",
+   "name": "Hohenschwangau Castle",
+   "wiki": "Hohenschwangau Castle",
+   "tier": "hard",
+   "score": 0.7291,
+   "sitelinks": 39,
+   "views": 6927,
+   "lon": 10.73639,
+   "lat": 47.55583,
+   "architects": [
+    "Domenico Quaglio the Younger"
+   ],
+   "year": 1837,
+   "country": "Germany",
+   "locatedIn": "Schwangau",
+   "classes": [
+    "château"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "bratislava-castle",
+   "qid": "Q593311",
+   "name": "Bratislava Castle",
+   "wiki": "Bratislava Castle",
+   "tier": "hard",
+   "score": 0.7286,
+   "sitelinks": 47,
+   "views": 5191,
+   "lon": 17.1,
+   "lat": 48.14222,
+   "architects": [],
+   "year": 1431,
+   "country": "Slovakia",
+   "locatedIn": "Bratislava",
+   "classes": [
+    "castle",
+    "building complex"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "dubai-mall",
+   "qid": "Q1133309",
+   "name": "Dubai Mall",
+   "wiki": "Dubai Mall",
+   "tier": "hard",
+   "score": 0.7279,
+   "sitelinks": 38,
+   "views": 7343,
+   "lon": 55.27917,
+   "lat": 25.1975,
+   "architects": [
+    "DP Architects"
+   ],
+   "year": 2008,
+   "country": "United Arab Emirates",
+   "locatedIn": "Dubai",
+   "classes": [
+    "shopping center"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "hohensalzburg-fortress",
+   "qid": "Q679292",
+   "name": "Hohensalzburg Fortress",
+   "wiki": "Hohensalzburg Fortress",
+   "tier": "hard",
+   "score": 0.726,
+   "sitelinks": 40,
+   "views": 6437,
+   "lon": 13.0473,
+   "lat": 47.795,
+   "architects": [],
+   "year": 1077,
+   "country": "Austria",
+   "locatedIn": "Salzburg",
+   "classes": [
+    "museum",
+    "fortress",
+    "castle"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "chapultepec-castle",
+   "qid": "Q1072510",
+   "name": "Chapultepec Castle",
+   "wiki": "Chapultepec Castle",
+   "tier": "hard",
+   "score": 0.7246,
+   "sitelinks": 26,
+   "views": 19963,
+   "lon": -99.18167,
+   "lat": 19.42056,
+   "architects": [
+    "Carl Gangolf Kayser"
+   ],
+   "year": 1863,
+   "country": "Mexico",
+   "locatedIn": "Mexico City",
+   "classes": [
+    "palace"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "mariinskyi-palace",
+   "qid": "Q732489",
+   "name": "Mariinskyi Palace",
+   "wiki": "Mariinskyi Palace",
+   "tier": "hard",
+   "score": 0.7206,
+   "sitelinks": 51,
+   "views": 4658,
+   "lon": 30.5375,
+   "lat": 50.44833,
+   "architects": [
+    "Francesco Bartolomeo Rastrelli",
+    "Ivan Fyodorovich Michurin"
+   ],
+   "year": 1752,
+   "country": "Ukraine",
+   "locatedIn": "Pecherskyi District",
+   "classes": [
+    "palace",
+    "architectural heritage monument"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "walhalla-memorial",
+   "qid": "Q321240",
+   "name": "Walhalla memorial",
+   "wiki": "Walhalla (memorial)",
+   "tier": "hard",
+   "score": 0.7195,
+   "sitelinks": 39,
+   "views": 6523,
+   "lon": 12.22409,
+   "lat": 49.03149,
+   "architects": [
+    "Leo von Klenze"
+   ],
+   "year": 1842,
+   "country": "Germany",
+   "locatedIn": "Donaustauf",
+   "classes": [
+    "hall of fame",
+    "memorial"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "st-john-s-co-cathedral",
+   "qid": "Q613619",
+   "name": "St. John's Co-Cathedral",
+   "wiki": "St John's Co-Cathedral",
+   "tier": "hard",
+   "score": 0.7195,
+   "sitelinks": 35,
+   "views": 8509,
+   "lon": 14.51278,
+   "lat": 35.89778,
+   "architects": [
+    "Girolamo Cassar"
+   ],
+   "year": 1577,
+   "country": "Malta",
+   "locatedIn": "Valletta",
+   "classes": [
+    "cathedral",
+    "church building"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "king-saud-university",
+   "qid": "Q1752043",
+   "name": "King Saud University",
+   "wiki": "King Saud University",
+   "tier": "hard",
+   "score": 0.7194,
+   "sitelinks": 36,
+   "views": 7924,
+   "lon": 46.627,
+   "lat": 24.722,
+   "architects": [],
+   "year": 1957,
+   "country": "Saudi Arabia",
+   "locatedIn": "Riyadh",
+   "classes": [
+    "university",
+    "building",
+    "research institute",
+    "research institute",
+    "research institute",
+    "research institute",
+    "research institute",
+    "research institute",
+    "research institute",
+    "research institute",
+    "research institute",
+    "research institute",
+    "research institute"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "istiqlal-mosque",
+   "qid": "Q475379",
+   "name": "Istiqlal Mosque",
+   "wiki": "Istiqlal Mosque, Jakarta",
+   "tier": "hard",
+   "score": 0.7184,
+   "sitelinks": 42,
+   "views": 5540,
+   "lon": 106.83083,
+   "lat": -6.16972,
+   "architects": [
+    "Friedrich Silaban"
+   ],
+   "year": 1978,
+   "country": "Indonesia",
+   "locatedIn": "Pasar Baru",
+   "classes": [
+    "mosque"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "dambulla-cave-temple",
+   "qid": "Q45690",
+   "name": "Dambulla cave temple",
+   "wiki": "Dambulla cave temple",
+   "tier": "hard",
+   "score": 0.717,
+   "sitelinks": 40,
+   "views": 5922,
+   "lon": 80.64834,
+   "lat": 7.85656,
+   "architects": [],
+   "year": null,
+   "country": "Sri Lanka",
+   "locatedIn": "Matale District",
+   "classes": [
+    "Buddhist temple"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "wurzburg-residence",
+   "qid": "Q156316",
+   "name": "Würzburg Residence",
+   "wiki": "Würzburg Residence",
+   "tier": "hard",
+   "score": 0.7169,
+   "sitelinks": 46,
+   "views": 4909,
+   "lon": 9.93889,
+   "lat": 49.7928,
+   "architects": [
+    "Johann Balthasar Neumann",
+    "Maximilian von Welsch",
+    "Philipp Christoph von und zu Erthal",
+    "Robert de Cotte",
+    "Anselm Franz von Ritter zu Groenesteyn",
+    "Germain Boffrand",
+    "Johann Lukas von Hildebrandt"
+   ],
+   "year": 1719,
+   "country": "Germany",
+   "locatedIn": "Würzburg",
+   "classes": [
+    "Schloss",
+    "museum",
+    "palace"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "chiang-kai-shek-memorial-hall",
+   "qid": "Q540794",
+   "name": "Chiang Kai-shek Memorial Hall",
+   "wiki": "Chiang Kai-shek Memorial Hall",
+   "tier": "hard",
+   "score": 0.716,
+   "sitelinks": 33,
+   "views": 9137,
+   "lon": 121.52167,
+   "lat": 25.03444,
+   "architects": [
+    "Yang Cho-cheng"
+   ],
+   "year": 1980,
+   "country": "Taiwan",
+   "locatedIn": "Taipei",
+   "classes": [
+    "monument",
+    "memorial"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "al-azhar-mosque",
+   "qid": "Q312342",
+   "name": "al-Azhar Mosque",
+   "wiki": "Al-Azhar Mosque",
+   "tier": "hard",
+   "score": 0.7125,
+   "sitelinks": 41,
+   "views": 5538,
+   "lon": 31.2627,
+   "lat": 30.04573,
+   "architects": [],
+   "year": 971,
+   "country": "Egypt",
+   "locatedIn": "Cairo Governorate",
+   "classes": [
+    "mosque",
+    "educational institution"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "taras-shevchenko-national-university-of-kyiv",
+   "qid": "Q84151",
+   "name": "Taras Shevchenko National University of Kyiv",
+   "wiki": "Taras Shevchenko National University of Kyiv",
+   "tier": "hard",
+   "score": 0.7121,
+   "sitelinks": 61,
+   "views": 4109,
+   "lon": 30.51131,
+   "lat": 50.4419,
+   "architects": [
+    "Vincent Beretti"
+   ],
+   "year": 1834,
+   "country": "Russian Empire",
+   "locatedIn": "Kyiv",
+   "classes": [
+    "public university",
+    "research university",
+    "open-access publisher",
+    "architectural heritage monument"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "herrenchiemsee",
+   "qid": "Q118618",
+   "name": "Herrenchiemsee",
+   "wiki": "Herrenchiemsee",
+   "tier": "hard",
+   "score": 0.7121,
+   "sitelinks": 35,
+   "views": 8024,
+   "lon": 12.4022,
+   "lat": 47.86043,
+   "architects": [
+    "Georg von Dollmann"
+   ],
+   "year": 1878,
+   "country": "Germany",
+   "locatedIn": "Chiemsee",
+   "classes": [
+    "palace",
+    "château"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "beauvais-cathedral",
+   "qid": "Q513300",
+   "name": "Beauvais Cathedral",
+   "wiki": "Beauvais Cathedral",
+   "tier": "hard",
+   "score": 0.712,
+   "sitelinks": 37,
+   "views": 6707,
+   "lon": 2.08139,
+   "lat": 49.4325,
+   "architects": [
+    "Martin Chambiges"
+   ],
+   "year": 1225,
+   "country": "France",
+   "locatedIn": "Beauvais",
+   "classes": [
+    "Catholic cathedral"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "byodo-in-temple",
+   "qid": "Q61094",
+   "name": "Byōdō-in Temple",
+   "wiki": "Byōdō-in",
+   "tier": "hard",
+   "score": 0.7101,
+   "sitelinks": 37,
+   "views": 6630,
+   "lon": 135.80778,
+   "lat": 34.88944,
+   "architects": [],
+   "year": 1052,
+   "country": "Japan",
+   "locatedIn": "Uji",
+   "classes": [
+    "Buddhist temple"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "khor-virap",
+   "qid": "Q1144626",
+   "name": "Khor Virap",
+   "wiki": "Khor Virap",
+   "tier": "hard",
+   "score": 0.7082,
+   "sitelinks": 42,
+   "views": 5203,
+   "lon": 44.57611,
+   "lat": 39.87833,
+   "architects": [
+    "Nerses III the Builder"
+   ],
+   "year": 601,
+   "country": "Armenia",
+   "locatedIn": "Lusarat",
+   "classes": [
+    "monastery"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "palacio-do-planalto",
+   "qid": "Q496950",
+   "name": "Palácio do Planalto",
+   "wiki": "Palácio do Planalto",
+   "tier": "hard",
+   "score": 0.7082,
+   "sitelinks": 34,
+   "views": 8053,
+   "lon": -47.86083,
+   "lat": -15.799,
+   "architects": [
+    "Oscar Niemeyer"
+   ],
+   "year": 1960,
+   "country": "Brazil",
+   "locatedIn": "Brasília",
+   "classes": [
+    "palace",
+    "official residence"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "beaumaris-castle",
+   "qid": "Q756815",
+   "name": "Beaumaris Castle",
+   "wiki": "Beaumaris Castle",
+   "tier": "hard",
+   "score": 0.708,
+   "sitelinks": 37,
+   "views": 6560,
+   "lon": -4.08957,
+   "lat": 53.26491,
+   "architects": [
+    "James of Saint George"
+   ],
+   "year": 1295,
+   "country": "United Kingdom",
+   "locatedIn": "Beaumaris",
+   "classes": [
+    "castle"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "onze-lieve-vrouwekathedraal",
+   "qid": "Q5901",
+   "name": "Onze-Lieve-Vrouwekathedraal",
+   "wiki": "Cathedral of Our Lady (Antwerp)",
+   "tier": "hard",
+   "score": 0.7075,
+   "sitelinks": 39,
+   "views": 5878,
+   "lon": 4.40025,
+   "lat": 51.22027,
+   "architects": [
+    "Rombout II Keldermans",
+    "Jacob van Thienen",
+    "Jan Appelmans",
+    "Pieter Appelmans",
+    "Jules Bilmeyer",
+    "Everaert Spoorwater",
+    "Jozef-Louis Stynen",
+    "Guido Derks",
+    "Jan Pieter van Baurscheit the Younger",
+    "Jean-Baptiste Bethune"
+   ],
+   "year": 1352,
+   "country": "Belgium",
+   "locatedIn": "Antwerp",
+   "classes": [
+    "Catholic cathedral",
+    "museum",
+    "church building"
+   ],
+   "hasClue": false
+  },
+  {
+   "id": "villa-savoye",
+   "qid": "Q940746",
+   "name": "Villa Savoye",
+   "wiki": "Villa Savoye",
+   "tier": "hard",
+   "score": 0.7066,
+   "sitelinks": 29,
+   "views": 11002,
+   "lon": 2.02833,
+   "lat": 48.92444,
+   "architects": [
+    "Le Corbusier"
+   ],
+   "year": 1931,
+   "country": "France",
+   "locatedIn": "Poissy",
+   "classes": [
+    "villa",
+    "single-family detached home",
+    "building"
+   ],
+   "hasClue": true
+  },
+  {
+   "id": "heydar-aliyev-center",
+   "qid": "Q43928",
+   "name": "Heydar Aliyev Center",
+   "wiki": "Heydar Aliyev Center",
+   "tier": "hard",
+   "score": 0.7029,
+   "sitelinks": 34,
+   "views": 7697,
+   "lon": 49.86694,
+   "lat": 40.39528,
+   "architects": [
+    "Zaha Hadid Architects",
+    "Zaha Hadid"
+   ],
+   "year": 2012,
+   "country": "Azerbaijan",
+   "locatedIn": "Baku",
+   "classes": [
+    "performing arts center"
+   ],
+   "hasClue": true
+  },
+  {
+   "id": "jatiya-sangsad",
+   "qid": "Q497536",
+   "name": "National Parliament House (Jatiya Sangsad Bhaban)",
+   "wiki": "Jatiya Sangsad Bhaban",
+   "tier": "hard",
+   "score": 0.6793,
+   "sitelinks": 35,
+   "views": 6079,
+   "lon": 90.37861,
+   "lat": 23.76222,
+   "architects": [
+    "Louis Kahn"
+   ],
+   "year": 1982,
+   "country": "Bangladesh",
+   "locatedIn": "Dhaka",
+   "classes": [
+    "parliament building"
+   ],
+   "hasClue": true
+  },
+  {
+   "id": "oslo-opera-house",
+   "qid": "Q43280",
+   "name": "Oslo Opera House",
+   "wiki": "Oslo Opera House",
+   "tier": "hard",
+   "score": 0.6577,
+   "sitelinks": 44,
+   "views": 3834,
+   "lon": 10.75361,
+   "lat": 59.90694,
+   "architects": [
+    "Snøhetta"
+   ],
+   "year": 2008,
+   "country": "Norway",
+   "locatedIn": "Oslo Municipality",
+   "classes": [
+    "opera house",
+    "concert hall"
+   ],
+   "hasClue": true
+  },
+  {
+   "id": "brasilia-cathedral",
+   "qid": "Q201720",
+   "name": "Cathedral of Brasília",
+   "wiki": "Cathedral of Brasília",
+   "tier": "hard",
+   "score": 0.6502,
+   "sitelinks": 33,
+   "views": 5501,
+   "lon": -47.87556,
+   "lat": -15.79833,
+   "architects": [
+    "Oscar Niemeyer"
+   ],
+   "year": 1970,
+   "country": "Brazil",
+   "locatedIn": "Brasília",
+   "classes": [
+    "Catholic cathedral"
+   ],
+   "hasClue": true
+  },
+  {
+   "id": "bosco-verticale",
+   "qid": "Q2501413",
+   "name": "Bosco Verticale",
+   "wiki": "Bosco Verticale",
+   "tier": "hard",
+   "score": 0.6251,
+   "sitelinks": 25,
+   "views": 9094,
+   "lon": 9.19028,
+   "lat": 45.48583,
+   "architects": [
+    "Stefano Boeri"
+   ],
+   "year": 2014,
+   "country": "Italy",
+   "locatedIn": "Milan",
+   "classes": [
+    "building complex"
+   ],
+   "hasClue": true
+  },
+  {
+   "id": "jewish-museum-berlin",
+   "qid": "Q157003",
+   "name": "Jewish Museum Berlin",
+   "wiki": "Jewish Museum Berlin",
+   "tier": "hard",
+   "score": 0.5783,
+   "sitelinks": 39,
+   "views": 2936,
+   "lon": 13.39545,
+   "lat": 52.50231,
+   "architects": [
+    "Daniel Libeskind"
+   ],
+   "year": 2001,
+   "country": "Germany",
+   "locatedIn": "Friedrichshain-Kreuzberg",
+   "classes": [
+    "Jewish museum",
+    "architectural ensemble"
+   ],
+   "hasClue": true
+  },
+  {
+   "id": "niteroi-mac",
+   "qid": "Q1573239",
+   "name": "Niterói Contemporary Art Museum",
+   "wiki": "Niterói Contemporary Art Museum",
+   "tier": "hard",
+   "score": 0.2785,
+   "sitelinks": 22,
+   "views": 1745,
+   "lon": -43.12611,
+   "lat": -22.90778,
+   "architects": [
+    "Oscar Niemeyer"
+   ],
+   "year": 1996,
+   "country": "Brazil",
+   "locatedIn": "Niterói",
+   "classes": [
+    "contemporary art museum"
+   ],
+   "hasClue": true
+  },
+  {
+   "id": "kunsthaus-graz",
+   "qid": "Q597137",
+   "name": "Kunsthaus Graz",
+   "wiki": "Kunsthaus Graz",
+   "tier": "hard",
+   "score": 0.2568,
+   "sitelinks": 21,
+   "views": 1805,
+   "lon": 15.434,
+   "lat": 47.0714,
+   "architects": [
+    "Peter Cook",
+    "Colin Fournier"
+   ],
+   "year": 2003,
+   "country": "Austria",
+   "locatedIn": "Graz",
+   "classes": [
+    "art museum"
+   ],
+   "hasClue": true
+  }
+ ]
+}

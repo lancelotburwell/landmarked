@@ -4,8 +4,8 @@
 //                                                     + data/.cache/extracts.json
 //
 // - Drops non-buildings (bridges, statues, parks, …) and demolished buildings.
-// - Fame score = average of percentile ranks of (number of Wikipedias) and
-//   (English Wikipedia page views over 12 months).
+// - Fame score = 35% percentile rank of (number of Wikipedias) + 65% of
+//   (English Wikipedia page views over 60 days): views say who's recognised today.
 // - Greedy by fame, with spread caps: at most CITY_CAP buildings within
 //   CITY_KM of each other, and at most COUNTRY_CAP per country.
 // - The current src/data/buildings.json entries are always kept (matched by
@@ -29,6 +29,8 @@ const EXCLUDE = new RegExp(
     'ship', 'railway line', '\\broad\\b', 'highway', 'tunnel', 'island', 'mountain', 'zoo', 'amusement park',
     'theme park', 'landscape', 'lighthouse', 'aqueduct', 'wall\\b', 'quarter', 'campus', 'ruins', 'cave',
     'shipwreck', 'human settlement', 'urban area', 'town', 'village', 'quay', 'harbour', 'port',
+    // Sports venues rank high on Wikipedia counts but few people know them as architecture.
+    'stadium', 'arena', 'sports venue', 'racecourse', 'velodrome', 'ballpark', 'football',
   ].join('|'),
   'i',
 );
@@ -66,7 +68,7 @@ const pct = (arr, key) => {
 };
 const pLinks = pct(pool, 'sitelinks');
 const pViews = pct(pool, 'views');
-for (const x of pool) x.score = +((pLinks(x.sitelinks) + pViews(x.views)) / 2).toFixed(4);
+for (const x of pool) x.score = +(0.35 * pLinks(x.sitelinks) + 0.65 * pViews(x.views)).toFixed(4);
 pool.sort((a, b) => b.score - a.score);
 
 // ---------- choose ----------
@@ -138,7 +140,15 @@ const need = out.filter((o) => !o.hasClue && !cache[o.wiki]).map((o) => o.wiki);
 for (let i = 0; i < need.length; i += 20) {
   const u = new URL('https://en.wikipedia.org/w/api.php');
   u.search = new URLSearchParams({ action: 'query', prop: 'extracts', exintro: '1', explaintext: '1', exlimit: '20', titles: need.slice(i, i + 20).join('|'), redirects: '1', format: 'json', formatversion: '2' });
-  const j = await (await fetch(u, { headers: UA })).json();
+  let j = null;
+  for (let a = 0; a < 8 && !j; a++) {
+    try {
+      const t = await (await fetch(u, { headers: UA })).text();
+      if (t.startsWith('{')) j = JSON.parse(t);
+    } catch { /* retry */ }
+    if (!j) await new Promise((r) => setTimeout(r, 5000 * (a + 1)));
+  }
+  if (!j) { console.warn('extracts: rate-limited, stopping (rerun later)'); break; }
   const back = new Map();
   for (const r of [...(j.query.normalized ?? []), ...(j.query.redirects ?? [])]) back.set(r.to, r.from);
   for (const p of j.query.pages) {

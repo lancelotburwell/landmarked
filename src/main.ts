@@ -6,12 +6,10 @@ import {
   byId,
   distanceKm,
   formatKm,
-  getPref,
   load,
   msToMidnight,
   points,
   save,
-  setPref,
   shareText,
   todayKey,
   type Building,
@@ -42,8 +40,6 @@ const el = {
   rYear: $('r-year'),
   rCity: $('r-city'),
   next: $<HTMLButtonElement>('next-btn'),
-  confirm: $<HTMLInputElement>('confirm-toggle'),
-  lock: $<HTMLButtonElement>('lock-btn'),
   resultsBtn: $<HTMLButtonElement>('results-btn'),
   intro: $('intro'),
   play: $<HTMLButtonElement>('play-btn'),
@@ -68,7 +64,6 @@ save(state); // pin today's ids right away
 const day: Building[] = state.ids.map((id) => byId(id)!);
 let globe: Globe | null = null;
 let awaiting = false; // waiting for a guess on the current round
-let pending: { lon: number; lat: number } | null = null;
 let shownScore = 0;
 
 const total = () => state.guesses.reduce((t, g) => t + g.pts, 0);
@@ -77,11 +72,6 @@ const shareUrl = () => location.origin + import.meta.env.BASE_URL;
 
 // ---------- static UI ----------
 el.date.textContent = new Date().toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
-el.confirm.checked = getPref('confirm');
-el.confirm.addEventListener('change', () => {
-  setPref('confirm', el.confirm.checked);
-  if (!el.confirm.checked) clearPending();
-});
 setScore(total(), false);
 renderDots();
 
@@ -99,6 +89,8 @@ const globeReady = import('./globe')
     const imagery = new URLSearchParams(location.search).get('imagery') === 'eox' ? 'eox' : 'nasa';
     performance.mark('cesium-loaded');
     const g = new Globe(el.globe, el.credits, imagery);
+    // NASA imagery is public domain (credited in How it works); EOX needs its on-screen credit.
+    if (imagery === 'eox') el.credits.classList.add('show');
     globe = g;
     g.onClick(onGlobeClick);
     void g.tilesLoaded.then(() => {
@@ -142,25 +134,8 @@ function showQuestion() {
 }
 
 function onGlobeClick(lon: number, lat: number) {
-  if (!awaiting) return;
-  if (el.confirm.checked) {
-    pending = { lon, lat };
-    globe?.setPending(lon, lat);
-    el.lock.hidden = false;
-  } else {
-    lockIn(lon, lat);
-  }
+  if (awaiting) lockIn(lon, lat);
 }
-
-function clearPending() {
-  pending = null;
-  globe?.clearPending();
-  el.lock.hidden = true;
-}
-
-el.lock.addEventListener('click', () => {
-  if (pending) lockIn(pending.lon, pending.lat);
-});
 
 function lockIn(lon: number, lat: number) {
   const i = round();
@@ -168,7 +143,6 @@ function lockIn(lon: number, lat: number) {
   const km = distanceKm(lon, lat, b.lon, b.lat);
   const pts = points(km);
   awaiting = false;
-  clearPending();
   state.guesses.push({ lon: +lon.toFixed(4), lat: +lat.toFixed(4), km: +km.toFixed(2), pts });
   save(state);
   renderDots();

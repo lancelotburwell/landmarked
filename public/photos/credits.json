@@ -1,0 +1,378 @@
+{
+ "sydney-opera-house": {
+  "w": 640,
+  "h": 423,
+  "artist": "No machine-readable author provided. Roybb95~commonswiki assumed (based on copyright claims).",
+  "license": "CC BY-SA 3.0",
+  "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+  "page": "https://commons.wikimedia.org/wiki/File:Sydney_Opera_House_Sails.jpg"
+ },
+ "eiffel-tower": {
+  "w": 640,
+  "h": 1185,
+  "artist": "Benh LIEU SONG",
+  "license": "Public domain",
+  "licenseUrl": null,
+  "page": "https://commons.wikimedia.org/wiki/File:Tour_Eiffel_Wikimedia_Commons.jpg"
+ },
+ "burj-khalifa": {
+  "w": 640,
+  "h": 484,
+  "artist": "Tim.Reckmann",
+  "license": "CC BY-SA 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Dubai_skyline_2015_(crop).jpg"
+ },
+ "colosseum": {
+  "w": 640,
+  "h": 449,
+  "artist": "FeaturedPics",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Colosseo_2020.jpg"
+ },
+ "taj-mahal": {
+  "w": 640,
+  "h": 443,
+  "artist": "Taj_Mahal,_Agra,_India_edit2.jpg: Yann; edited by King of Hearts derivative work: Jbarta (talk)",
+  "license": "CC BY-SA 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Taj_Mahal,_Agra,_India_edit3.jpg"
+ },
+ "empire-state-building": {
+  "w": 640,
+  "h": 961,
+  "artist": "Sam Valadi",
+  "license": "Public domain",
+  "licenseUrl": null,
+  "page": "https://commons.wikimedia.org/wiki/File:Empire_State_Building_(aerial_view).jpg"
+ },
+ "sagrada-familia": {
+  "w": 640,
+  "h": 442,
+  "artist": "Canaan",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:SF_maig_2026.jpg"
+ },
+ "st-basils": {
+  "w": 640,
+  "h": 960,
+  "artist": "W. Bulach",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:00_0568_Saint_Basil%27s_Cathedral_-_Moscow.jpg"
+ },
+ "petronas-towers": {
+  "w": 640,
+  "h": 960,
+  "artist": "AwOiSoAk KaOsIoWa",
+  "license": "CC BY-SA 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Kuala_Lumpur_-_panoramio_(18).jpg"
+ },
+ "leaning-tower-pisa": {
+  "w": 640,
+  "h": 1419,
+  "artist": "Chabe01",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Campanile_D%C3%B4me_-_Pise_(IT52)_-_2022-08-31_-_20.jpg"
+ },
+ "parthenon": {
+  "w": 640,
+  "h": 450,
+  "artist": "Steve Swayne",
+  "license": "CC BY 2.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+  "page": "https://commons.wikimedia.org/wiki/File:The_Parthenon_in_Athens.jpg"
+ },
+ "big-ben": {
+  "w": 640,
+  "h": 1138,
+  "artist": "Christian David",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Elizabeth_Tower_and_the_north_front_of_the_Palace_of_Westminster,_London.jpg"
+ },
+ "forbidden-city": {
+  "w": 640,
+  "h": 427,
+  "artist": "N509FZ",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Hall_of_Supreme_Harmony_(20241127120000).jpg"
+ },
+ "notre-dame": {
+  "w": 640,
+  "h": 864,
+  "artist": "P e z i",
+  "license": "CC BY-SA 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Notre-Dame_de_Paris_2013-07-24.jpg"
+ },
+ "pantheon": {
+  "w": 640,
+  "h": 515,
+  "artist": "NikonZ7II",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Pantheon_(Rome)_-_Right_side_and_front.jpg"
+ },
+ "cn-tower": {
+  "w": 640,
+  "h": 1631,
+  "artist": "Chris Woodrich",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:CN_Tower_from_Puente_de_Luz,_Toronto,_Ontario,_2025-08-25_01.jpg"
+ },
+ "hagia-sophia": {
+  "w": 640,
+  "h": 427,
+  "artist": "Arild Vågen",
+  "license": "CC BY-SA 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Hagia_Sophia_Mars_2013.jpg"
+ },
+ "marina-bay-sands": {
+  "w": 640,
+  "h": 397,
+  "artist": "Tony Hisgett from Birmingham, UK",
+  "license": "CC BY 2.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Marina_Bay_Sands_Hotel_3_(31345110894).jpg"
+ },
+ "guggenheim-bilbao": {
+  "w": 640,
+  "h": 427,
+  "artist": "Naotake Murayama",
+  "license": "CC BY 2.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Museo_Guggenheim,_Bilbao_(31273245344).jpg"
+ },
+ "neuschwanstein": {
+  "w": 640,
+  "h": 436,
+  "artist": "Wilfredor",
+  "license": "CC0",
+  "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+  "page": "https://commons.wikimedia.org/wiki/File:Neuschwanstein_Castle_2024-02.jpg"
+ },
+ "fallingwater": {
+  "w": 640,
+  "h": 420,
+  "artist": "Carol M. Highsmith",
+  "license": "Public domain",
+  "licenseUrl": null,
+  "page": "https://commons.wikimedia.org/wiki/File:Fallingwater_2007.jpg"
+ },
+ "chrysler-building": {
+  "w": 640,
+  "h": 1887,
+  "artist": "w:User:Overand derivative work: Overand (talk)",
+  "license": "Public domain",
+  "licenseUrl": null,
+  "page": "https://commons.wikimedia.org/wiki/File:Chrysler_Building_by_David_Shankbone_Retouched.jpg"
+ },
+ "sheikh-zayed-mosque": {
+  "w": 640,
+  "h": 360,
+  "artist": "PotatoWitch",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Sheikh_Zayed_Mosque_Silhouette.jpg"
+ },
+ "atomium": {
+  "w": 640,
+  "h": 618,
+  "artist": "Zairon",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Laeken_Atomium_06.jpg"
+ },
+ "alhambra": {
+  "w": 640,
+  "h": 434,
+  "artist": "Jebulon",
+  "license": "CC0",
+  "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+  "page": "https://commons.wikimedia.org/wiki/File:Alhambra_detail.jpg"
+ },
+ "potala-palace": {
+  "w": 640,
+  "h": 427,
+  "artist": "Ondřej Žváček",
+  "license": "CC BY 2.5",
+  "licenseUrl": "https://creativecommons.org/licenses/by/2.5",
+  "page": "https://commons.wikimedia.org/wiki/File:Potala.jpg"
+ },
+ "angkor-wat": {
+  "w": 448,
+  "h": 336,
+  "artist": "The original uploader was Fuzheado at English Wikipedia.",
+  "license": "CC BY-SA 2.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Angkor_wat_temple.jpg"
+ },
+ "cctv-hq": {
+  "w": 640,
+  "h": 534,
+  "artist": "HoweyYuan",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Guanghua_Road_Office_Area_of_CMG_(20240907141412).jpg"
+ },
+ "oslo-opera-house": {
+  "w": 640,
+  "h": 200,
+  "artist": "Rafał Konieczny",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Full_Opera_by_night.jpg"
+ },
+ "elbphilharmonie": {
+  "w": 640,
+  "h": 360,
+  "artist": "Burkhard Mücke",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:2019-05-10_Elbphilharmonie_Hamburg.jpg"
+ },
+ "brasilia-cathedral": {
+  "w": 640,
+  "h": 427,
+  "artist": "Mariordo (Mario Roberto Durán Ortiz)",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Brasilia_Catedral_08_2005_03.jpg"
+ },
+ "taipei-101": {
+  "w": 640,
+  "h": 1137,
+  "artist": "User:Sinsyuan",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Taipei_101_from_Xiangshan_20250731.jpg"
+ },
+ "habitat-67": {
+  "w": 640,
+  "h": 430,
+  "artist": "Parcours riverain - Ville de Montréal from Canada",
+  "license": "CC BY 2.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Habitat_67,_2600,_avenue_Pierre-Dupuy_(Ville-Marie)_(35399872943).jpg"
+ },
+ "kunsthaus-graz": {
+  "w": 640,
+  "h": 427,
+  "artist": "Marion Schneider &amp; Christoph Aistleitner",
+  "license": "CC BY-SA 2.5",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.5",
+  "page": "https://commons.wikimedia.org/wiki/File:Graz_Kunsthaus_vom_Schlossberg_20061126.jpg"
+ },
+ "heydar-aliyev-center": {
+  "w": 640,
+  "h": 480,
+  "artist": "Robot8A",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Baku_15_06_14_216000.jpeg"
+ },
+ "jatiya-sangsad": {
+  "w": 640,
+  "h": 424,
+  "artist": "MD SAIFUL AMIN",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:%E0%A6%AC%E0%A6%BE%E0%A6%82%E0%A6%B2%E0%A6%BE%E0%A6%A6%E0%A7%87%E0%A6%B6%E0%A7%87%E0%A6%B0_%E0%A6%9C%E0%A6%BE%E0%A6%A4%E0%A7%80%E0%A6%AF%E0%A6%BC_%E0%A6%B8%E0%A6%82%E0%A6%B8%E0%A6%A6_%E0%A6%AD%E0%A6%AC%E0%A6%A8_16.jpg"
+ },
+ "great-mosque-djenne": {
+  "w": 640,
+  "h": 480,
+  "artist": "Andy Gilham",
+  "license": "CC BY-SA 3.0",
+  "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+  "page": "https://commons.wikimedia.org/wiki/File:Great_Mosque_of_Djenn%C3%A9_1.jpg"
+ },
+ "hallgrimskirkja": {
+  "w": 640,
+  "h": 562,
+  "artist": "Steinninn",
+  "license": "CC BY 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Hallgrimskirkja_mai_2026.jpg"
+ },
+ "niteroi-mac": {
+  "w": 640,
+  "h": 480,
+  "artist": "No machine-readable author provided. Phx de assumed (based on copyright claims).",
+  "license": "CC BY-SA 2.5",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.5",
+  "page": "https://commons.wikimedia.org/wiki/File:Museu_de_Arte_Contempor%C3%A2nea.jpg"
+ },
+ "lalibela-st-george": {
+  "w": 640,
+  "h": 555,
+  "artist": "Sailko",
+  "license": "CC BY 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Lalibela,_san_giorgio,_esterno_24.jpg"
+ },
+ "jewish-museum-berlin": {
+  "w": 640,
+  "h": 295,
+  "artist": "Marek Śliwecki",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Berlin_J%C3%BCdisches_Museum_und_der_Libeskind-Bau_(cropped).jpg"
+ },
+ "turning-torso": {
+  "w": 640,
+  "h": 853,
+  "artist": "Knuckles at Swedish Wikipedia",
+  "license": "CC BY 2.5",
+  "licenseUrl": "https://creativecommons.org/licenses/by/2.5",
+  "page": "https://commons.wikimedia.org/wiki/File:The_Turning_Torso,_Malmo.JPG"
+ },
+ "shwedagon-pagoda": {
+  "w": 640,
+  "h": 415,
+  "artist": "Stefan Fussan",
+  "license": "CC BY-SA 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Yangon_-_Shwedagon_Pagoda_03.jpg"
+ },
+ "hassan-ii-mosque": {
+  "w": 640,
+  "h": 425,
+  "artist": "Milamber's portfolio",
+  "license": "CC BY 2.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Sunshine_on_mosque_Hassan_II_in_Casablanca,_Morocco_-_Flickr_-_Milamber%27s_portfolio.jpg"
+ },
+ "zeitz-mocaa": {
+  "w": 640,
+  "h": 800,
+  "artist": "Matti Blume",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Zeitz_Museum_of_Contemporary_Art_Africa,_Cape_Town_(_1050775).jpg"
+ },
+ "cardboard-cathedral": {
+  "w": 640,
+  "h": 427,
+  "artist": "Schwede66",
+  "license": "CC BY-SA 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Cardboard_Cathedral_03.JPG"
+ },
+ "yoyogi-gymnasium": {
+  "w": 640,
+  "h": 427,
+  "artist": "Rs1421",
+  "license": "CC BY-SA 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Yoyogi-National-Gymnasium-01.jpg"
+ }
+}
