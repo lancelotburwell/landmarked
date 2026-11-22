@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Landmarked stats</title>
+<style>
+  :root { --bg: #0e1012; --panel: #16191c; --panel-2: #1d2125; --line: #2b3036; --text: #ece6da; --muted: #99938a; --accent: #e3b261; color-scheme: dark; }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 14px/1.5 ui-monospace, "IBM Plex Mono", Consolas, monospace; }
+  main { max-width: 1000px; margin: 0 auto; padding: 24px 16px 60px; display: grid; gap: 22px; }
+  h1 { margin: 0; font-size: 18px; letter-spacing: 0.12em; } h1 span { color: var(--accent); }
+  h2 { margin: 0 0 8px; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+  .note { color: var(--muted); font-size: 12px; margin: 4px 0 0; }
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
+  .tile { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; }
+  .tile b { display: block; font-size: 24px; font-variant-numeric: tabular-nums; }
+  .tile span { font-size: 11px; color: var(--muted); }
+  .scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  th, td { padding: 6px 8px; border-bottom: 1px solid var(--line); text-align: right; white-space: nowrap; }
+  th { font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+  th:first-child, td:first-child { text-align: left; }
+  .two { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 22px; }
+  .bar { display: grid; grid-template-columns: 1fr 3fr 48px; gap: 8px; align-items: center; font-size: 12px; padding: 2px 0; }
+  .bar i { display: block; height: 8px; border-radius: 3px; background: var(--accent); }
+  .bar em { font-style: normal; text-align: right; color: var(--muted); }
+  form { display: flex; gap: 8px; flex-wrap: wrap; }
+  input, button { font: inherit; padding: 8px 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--panel); color: var(--text); }
+  button { background: var(--accent); color: #1a1408; font-weight: 600; border: 0; cursor: pointer; }
+  .err { color: #e2775c; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>LANDMARKED <span>STATS</span></h1>
+    <p class="note">Anonymous daily totals (UTC days). No player ids, cookies or IP addresses are stored.</p>
+  </header>
+  <form id="login" hidden>
+    <input id="key" type="password" placeholder="Stats key" autocomplete="current-password" aria-label="Stats key" />
+    <button>Show stats</button>
+  </form>
+  <p id="msg" class="note"></p>
+  <section id="out" hidden>
+    <div><h2>Last 7 days</h2><div id="tiles" class="tiles"></div></div>
+    <div><h2>By day</h2><div class="scroll"><table id="days"></table></div>
+      <p class="note">Players = games started (one per device per day). Returning = had played an earlier day. Came back = also finished the day before (next-day retention). Average score is estimated from 10-point bands.</p></div>
+    <div class="two">
+      <div><h2>Countries, 7 days</h2><div id="countries"></div></div>
+      <div><h2>Came from, 7 days</h2><div id="refs"></div></div>
+    </div>
+  </section>
+</main>
+<script>
+const $ = (id) => document.getElementById(id);
+const pct = (a, b) => (b ? Math.round((100 * a) / b) + '%' : '–');
+const fmt = (n) => Number(n || 0).toLocaleString('en-US');
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+function store(get, v) { try { return get ? localStorage.getItem('landmarked:statskey') : localStorage.setItem('landmarked:statskey', v); } catch { return null; } }
+
+async function load(key) {
+  $('msg').textContent = 'Loading…';
+  let res;
+  try { res = await fetch('/api/stats?days=30&key=' + encodeURIComponent(key), { cache: 'no-store' }); } catch { res = null; }
+  if (!res || !res.ok) {
+    $('msg').innerHTML = '<span class="err">' + (res && res.status === 403 ? 'Wrong key.' : 'Stats unavailable (is Upstash connected?).') + '</span>';
+    $('login').hidden = false;
+    return;
+  }
+  store(false, key);
+  $('login').hidden = true;
+  $('msg').textContent = '';
+  render((await res.json()).days);
+}
+
+function avg(hist) {
+  let n = 0, sum = 0;
+  for (const [b, c] of Object.entries(hist)) { n += c; sum += c * Math.min(1000, Number(b) * 10 + 5); }
+  return n ? Math.round(sum / n) : null;
+}
+
+function bars(el, counts) {
+  const rows = Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 12);
+  const max = Math.max(1, ...rows.map((r) => r[1]));
+  el.innerHTML = rows.length
+    ? rows.map(([k, v]) => `<div class="bar"><span>${esc(k)}</span><i style="width:${(100 * v) / max}%"></i><em>${fmt(v)}</em></div>`).join('')
+    : '<p class="note">Nothing yet.</p>';
+}
+
+function render(days) {
+  const week = days.slice(0, 7);
+  const sum = (f) => week.reduce((t, d) => t + (d.totals[f] || 0), 0);
+  const mergeHist = {};
+  for (const d of week) for (const [b, c] of Object.entries(d.hist)) mergeHist[b] = (mergeHist[b] || 0) + c;
+  const tiles = [
+    [fmt(sum('visit')), 'visits'],
+    [fmt(sum('start')), 'players (games started)'],
+    [pct(sum('finish'), sum('start')), 'finished the five'],
+    [pct(sum('returning'), sum('start')), 'returning players'],
+    [pct(sum('yesterday'), sum('start')), 'came back from the day before'],
+    [fmt(sum('share')), 'shares'],
+    [avg(mergeHist) ?? '–', 'average score'],
+    [fmt(sum('practice')), 'practice rounds'],
+  ];
+  $('tiles').innerHTML = tiles.map(([v, l]) => `<div class="tile"><b>${v}</b><span>${l}</span></div>`).join('');
+
+  const head = ['Day', 'Visits', 'Players', 'Finished', 'Returning', 'Came back', 'Shares', 'Avg score'];
+  $('days').innerHTML = '<tr>' + head.map((h) => `<th>${h}</th>`).join('') + '</tr>' + days.map((d) => {
+    const t = d.totals;
+    return `<tr><td>${d.day}</td><td>${fmt(t.visit)}</td><td>${fmt(t.start)}</td><td>${fmt(t.finish)} <span class="note">${pct(t.finish, t.start)}</span></td>` +
+      `<td>${pct(t.returning, t.start)}</td><td>${pct(t.yesterday, t.start)}</td><td>${fmt(t.share)}</td><td>${avg(d.hist) ?? '–'}</td></tr>`;
+  }).join('');
+
+  const merge = (f) => { const m = {}; for (const d of week) for (const [k, v] of Object.entries(d[f])) m[k] = (m[k] || 0) + v; return m; };
+  bars($('countries'), merge('country'));
+  bars($('refs'), merge('ref'));
+  $('out').hidden = false;
+}
+
+$('login').addEventListener('submit', (e) => { e.preventDefault(); load($('key').value.trim()); });
+const fromHash = decodeURIComponent(location.hash.slice(1));
+if (fromHash) history.replaceState(null, '', location.pathname);
+const key = fromHash || store(true);
+if (key) load(key); else $('login').hidden = false;
+</script>
+</body>
+</html>

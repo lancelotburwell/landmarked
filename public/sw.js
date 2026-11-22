@@ -31,6 +31,9 @@ self.addEventListener('fetch', (e) => {
     return;
   }
 
+  // The counters API and the stats page: always live, never cached.
+  if (url.origin === self.location.origin && (url.pathname.includes('/api/') || url.pathname.endsWith('/stats.html'))) return;
+
   // The day's puzzle and the pool: network first, so a new schedule shows up at once.
   if (url.origin === self.location.origin && (url.pathname.includes('/days/') || url.pathname.endsWith('/pool.json'))) {
     e.respondWith(

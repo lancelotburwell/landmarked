@@ -21,6 +21,7 @@ import {
   type DayState,
 } from './game';
 import type { Globe } from './globe';
+import { finishAndRank, track, trackOnce } from './track';
 
 // Cesium reads this global to find Workers/Assets; must be set before the engine loads.
 (window as unknown as { CESIUM_BASE_URL: string }).CESIUM_BASE_URL = `${import.meta.env.BASE_URL}cesium/`;
@@ -64,6 +65,7 @@ const el = {
   lede: document.querySelector('.lede') as HTMLElement,
   introStreak: $('intro-streak'),
   endStats: $('end-stats'),
+  endRank: $('end-rank'),
   toast: $('toast'),
 };
 
@@ -103,6 +105,13 @@ setScore(total(), false);
 renderDots();
 
 renderIntroStreak();
+// Anonymous counters: a visit (with the referring site), or a practice round.
+if (practice) {
+  if (params.get('practice') === 'new') track('practice', today);
+} else {
+  const ref = (() => { try { return document.referrer ? new URL(document.referrer).hostname : ''; } catch { return ''; } })();
+  track('visit', date, ref && ref !== location.hostname ? { ref } : {});
+}
 if (state.guesses.length >= ROUNDS) {
   el.play.textContent = 'See results';
 } else if (state.guesses.length > 0) {
@@ -140,6 +149,11 @@ const globeReady = globeModule
 // ---------- flow ----------
 el.play.addEventListener('click', () => {
   el.intro.hidden = true;
+  if (!practice && round() === 0) {
+    // Returning player, and back after finishing yesterday: the numbers that show whether people come back.
+    const before = stats(today);
+    trackOnce('start', date, { returning: before.played > 0, yesterday: before.streak > 0 });
+  }
   if (round() >= ROUNDS) {
     showEnd();
     el.resultsBtn.hidden = false;
@@ -263,6 +277,14 @@ function renderIntroStreak() {
   el.introStreak.textContent = `🔥 ${s.streak}-day streak${done ? '' : '. Play today to keep it going.'}`;
   el.introStreak.hidden = false;
 }
+/** "You beat 72% of today's players", once enough people have finished. */
+async function renderRank() {
+  if (practice) return;
+  const r = await finishAndRank(date, total());
+  if (!r || r.players < 20) return;
+  el.endRank.textContent = r.beat >= 1 ? `You beat ${r.beat}% of today's players` : `${r.players.toLocaleString('en-US')} players so far today`;
+  el.endRank.hidden = false;
+}
 function renderStats() {
   if (practice) return;
   const s = stats(today);
@@ -309,6 +331,7 @@ function showEnd() {
   el.endScore.textContent = String(total());
   el.endVerdict.textContent = verdict(total());
   renderStats();
+  void renderRank();
 
   // Results breakdown: one row per round.
   el.endRounds.replaceChildren();
@@ -408,6 +431,7 @@ async function openPin(id: string) {
 }
 
 el.shareBtn.addEventListener('click', async () => {
+  if (!practice) track('share', date);
   const text = shareText(state, shareUrl());
   try {
     if (navigator.share && matchMedia('(pointer: coarse)').matches) {

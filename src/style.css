@@ -281,3 +281,4 @@ button { font: inherit; color: inherit; }
 .band-track > i { display: block; height: 100%; border-radius: 3px; background: var(--line); }
 .band.mine { color: var(--text); }
 .band.mine .band-track > i { background: var(--accent); }
+.end-rank { margin: 0 0 6px; font-size: 13px; font-weight: 600; color: var(--accent); }
