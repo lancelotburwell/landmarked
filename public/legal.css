@@ -1,0 +1,13 @@
+/* Shared style for privacy.html and impressum.html: the game's dark theme, readable text column. */
+:root { --bg: #0e1012; --panel: #16191c; --line: #2b3036; --text: #ece6da; --muted: #99938a; --accent: #e3b261; color-scheme: dark; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.65 "IBM Plex Mono", ui-monospace, Consolas, monospace; }
+main { max-width: 680px; margin: 0 auto; padding: 28px max(16px, env(safe-area-inset-right)) 60px max(16px, env(safe-area-inset-left)); }
+h1 { margin: 18px 0 2px; font-size: 24px; letter-spacing: 0.02em; }
+h2 { margin: 28px 0 6px; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); }
+p { margin: 0 0 12px; }
+.meta { color: var(--muted); font-size: 13px; }
+.lead { margin-top: 18px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 10px; background: var(--panel); }
+a { color: var(--accent); }
+.back { font-size: 13px; text-decoration: none; }
+.foot { margin-top: 36px; padding-top: 14px; border-top: 1px solid var(--line); font-size: 13px; }

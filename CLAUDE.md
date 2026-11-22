@@ -6,7 +6,7 @@ A daily architecture geography game: a static Vite + TypeScript site with a Cesi
 - **Live at https://landmarked.land** on Vercel (team `burwellprojects-4986`, Hobby plan). Every push to `main` auto-deploys.
 - **Commits must use this repo's git identity, "Burwell Projects"** (set in the repo's `git config`, same as the Spura repo). Vercel Hobby silently skips builds from any other commit author. Don't override it with `-c user.email=…`.
 - The Vercel CLI is not logged in on this machine; deploy by `git push`.
-- Domain is registered at Namecheap: apex A record `216.198.79.1`, `www` CNAME to Vercel. **Open:** `www.landmarked.land` still has to be added in Vercel → Settings → Domains (redirect to the apex); until then it fails over HTTPS.
+- Domain is registered at Namecheap: apex A record `216.198.79.1`, `www` CNAME to Vercel; `www.landmarked.land` 308-redirects to the apex (set up in Vercel on 2026-11-22).
 - Vite `base` defaults to `/`; `vercel.json` sets cache headers.
 
 ## Layout
@@ -90,5 +90,7 @@ A scheduled Claude routine follows these steps every week. Do them in order and 
 - On Windows, the Bash tool sometimes mangles heredocs containing quotes. Write edit scripts with the Write tool, then run them with node.
 
 ## Open items
-- `www.landmarked.land` in Vercel (see above).
-- Before ads: cookie-consent banner, privacy policy and impressum; fact-check the clues and blurbs.
+- **Legal:** `public/privacy.html` is live (styled by `public/legal.css`, linked from How it works) and names "Burwell Projects" with burwell.projects@gmail.com, no postal address. It describes localStorage, the anonymous Upstash totals (Frankfurt), Vercel hosting and NASA tiles; update it whenever data handling changes. The impressum is a draft in `legal-drafts/impressum.html` (placeholders {{NAME}}, {{ADDRESS}}, {{EMAIL}}), deliberately not served: the user doesn't want their home address public. Before ads they will get a business (Domizil) or c/o address; then fill it in, move it to `public/` and link it next to the privacy policy.
+- Before ads: a Google-certified consent banner, update the privacy policy, publish the impressum.
+- Fact-check the original 50 clues and blurbs.
+- Upstash: the user must create the database in Vercel (Storage → Upstash, Frankfurt), add `STATS_KEY` and redeploy; until then the API answers 503.
