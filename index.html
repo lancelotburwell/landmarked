@@ -6,6 +6,18 @@
     <meta name="theme-color" content="#0e1012" />
     <meta name="description" content="Landmarked — a daily architecture geography game. Five buildings a day, one clue each: find them on the globe." />
     <title>Landmarked</title>
+    <link rel="canonical" href="https://landmarked.land/" />
+    <!-- Link previews (WhatsApp, iMessage, X, Slack…). Image: scripts/make-og.mjs -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Landmarked" />
+    <meta property="og:title" content="Landmarked: a daily architecture game" />
+    <meta property="og:description" content="Five famous buildings a day. One clue each. Find them on the globe." />
+    <meta property="og:url" content="https://landmarked.land/" />
+    <meta property="og:image" content="https://landmarked.land/og.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Landmarked: five famous buildings a day, find them on the globe" />
+    <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230e1012'/%3E%3Cpath d='M16 5c-4.4 0-8 3.4-8 7.8C8 19 16 27 16 27s8-8 8-14.2C24 8.4 20.4 5 16 5z' fill='%23e3b261'/%3E%3Ccircle cx='16' cy='12.6' r='3' fill='%230e1012'/%3E%3C/svg%3E" />
   </head>
   <body>
@@ -68,6 +80,7 @@
           </div>
           <h1>Landmarked</h1>
           <p class="lede">Five buildings a day. One clue each.<br />Find them on the globe.</p>
+          <p id="intro-streak" class="intro-streak" hidden></p>
           <button id="play-btn" class="btn primary big">Play</button>
         </div>
       </div>
@@ -99,6 +112,8 @@
           <div class="end-label" id="end-title">TODAY'S SCORE</div>
           <div class="end-total"><span id="end-score">0</span><span class="of">/ 1000</span></div>
           <p id="end-verdict" class="verdict"></p>
+
+          <div id="end-stats" class="stats" hidden></div>
 
           <h3 class="end-h">Results breakdown</h3>
           <ol id="end-rounds" class="rounds"></ol>

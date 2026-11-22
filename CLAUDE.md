@@ -25,6 +25,9 @@ A daily architecture geography game: a static Vite + TypeScript site with a Cesi
 - Intro: whole globe visible, "Five buildings a day…", a single **Play** button (Resume / See results when relevant).
 - Tapping the globe is the guess (the confirm/lock-in option was removed at the user's request). Neither a bottom bar nor an on-screen imagery credit is shown; the NASA credit is in How it works.
 - End screen: score and verdict, results breakdown, share, countdown + "Practice round" link, then a card per building (photo, details, description, credit). Behind it, the buildings stay pinned to the globe.
+- **Share text** (user's choice): `Landmarked #22` / squares + `674/1000` / `landmarked.land`. Bare domain on purpose; no per-round points. Puzzle #1 = 2026-11-01 (`puzzleNumber`).
+- **Streaks and stats** (`stats()` in game.ts, from the finished days in localStorage; practice doesn't count): the intro shows the streak ("Play today to keep it going"), and the end screen shows played, streak, best streak, average, and a 200-point score-band chart with today's band highlighted.
+- **Link preview:** og/twitter meta tags in index.html and `public/og.jpg` (1200×630, the game's NASA globe + tagline, no photos). Regenerate with `node scripts/make-og.mjs http://localhost:4173/` against a running preview.
 - **Practice:** `?practice` resumes the last practice round and `?practice=new` deals a fresh random five. Today's puzzle is never affected. The user asked for this for testing and dropped a "past days" list.
 
 ## Rules and decisions

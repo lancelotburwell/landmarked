@@ -14,6 +14,7 @@ import {
   formatDay,
   peek,
   pickPractice,
+  stats,
   loadDay,
   loadPool,
   type Building,
@@ -61,6 +62,8 @@ const el = {
   countdownRow: $('countdown-row'),
   pinSheet: $('pin-sheet'),
   lede: document.querySelector('.lede') as HTMLElement,
+  introStreak: $('intro-streak'),
+  endStats: $('end-stats'),
   toast: $('toast'),
 };
 
@@ -88,9 +91,10 @@ let shownScore = 0;
 
 const total = () => state.guesses.reduce((t, g) => t + g.pts, 0);
 const round = () => state.guesses.length; // index of the round being played
-// Shared results always point to the real site, wherever the game was played.
-const SITE_URL = 'https://landmarked.land/';
-const shareUrl = () => SITE_URL;
+// Shared results always name the real site, wherever the game was played.
+// A bare domain (no https://) still becomes a link in chat apps.
+const SITE = 'landmarked.land';
+const shareUrl = () => SITE;
 
 // ---------- static UI ----------
 el.date.textContent = practice ? 'Practice round' : formatDay(date);
@@ -98,6 +102,7 @@ if (practice) el.lede.textContent = "A random five, just for practice. Today's p
 setScore(total(), false);
 renderDots();
 
+renderIntroStreak();
 if (state.guesses.length >= ROUNDS) {
   el.play.textContent = 'See results';
 } else if (state.guesses.length > 0) {
@@ -249,6 +254,42 @@ function verdict(score: number): string {
   return 'Lost in the lobby. Tomorrow is a new blueprint.';
 }
 
+// ---------- streaks and stats (this device only; practice doesn't count) ----------
+function renderIntroStreak() {
+  if (practice) return;
+  const s = stats(today);
+  if (!s.streak) return;
+  const done = state.guesses.length >= ROUNDS;
+  el.introStreak.textContent = `🔥 ${s.streak}-day streak${done ? '' : '. Play today to keep it going.'}`;
+  el.introStreak.hidden = false;
+}
+function renderStats() {
+  if (practice) return;
+  const s = stats(today);
+  const cell = (value: string | number, label: string) => {
+    const c = h('div', 'stat');
+    c.append(h('b', '', String(value)), h('span', '', label));
+    return c;
+  };
+  const row = h('div', 'stat-row');
+  row.append(cell(s.played, 'Played'), cell(s.streak ? `🔥 ${s.streak}` : 0, 'Streak'), cell(s.bestStreak, 'Best streak'), cell(s.average, 'Average'));
+  // Score spread, best band on top; today's band highlighted.
+  const bands = h('div', 'bands');
+  const max = Math.max(1, ...s.bands);
+  const mine = Math.min(4, Math.floor(total() / 200));
+  for (let i = 4; i >= 0; i--) {
+    const line = h('div', `band${i === mine ? ' mine' : ''}`);
+    const track = h('span', 'band-track');
+    const fill = h('i');
+    fill.style.width = `${Math.max(s.bands[i] ? 6 : 0, (s.bands[i] / max) * 100)}%`;
+    track.append(fill);
+    line.append(h('span', 'band-label', i === 4 ? '800+' : `${i * 200}–${i * 200 + 199}`), track, h('span', 'band-n', String(s.bands[i])));
+    bands.append(line);
+  }
+  el.endStats.replaceChildren(row, bands);
+  el.endStats.hidden = false;
+}
+
 /** Small DOM helper: element with class and text (never innerHTML). */
 function h<K extends keyof HTMLElementTagNameMap>(tag: K, cls = '', text = ''): HTMLElementTagNameMap[K] {
   const e = document.createElement(tag);
@@ -267,6 +308,7 @@ function showEnd() {
   renderDots();
   el.endScore.textContent = String(total());
   el.endVerdict.textContent = verdict(total());
+  renderStats();
 
   // Results breakdown: one row per round.
   el.endRounds.replaceChildren();

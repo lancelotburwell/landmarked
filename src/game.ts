@@ -158,9 +158,63 @@ export function square(pts: number): string {
   if (pts >= 50) return '🟧';
   return '🟥';
 }
-export function shareText(s: DayState, url: string): string {
+/** Puzzle number: #1 was 2026-11-01, the first day. */
+export function puzzleNumber(date: string): number {
+  const [y, m, d] = date.split('-').map(Number);
+  return Math.round((Date.UTC(y, m - 1, d) - Date.UTC(2026, 10, 1)) / 86_400_000) + 1;
+}
+/**
+ * Landmarked #22
+ * 🟩🟨🟩🟧🟥 674/1000
+ * landmarked.land
+ * The bare domain still becomes a link in chat apps, and reads cleaner than https://.
+ */
+export function shareText(s: DayState, site: string): string {
   const total = s.guesses.reduce((t, g) => t + g.pts, 0);
   const squares = s.guesses.map((g) => square(g.pts)).join('');
-  const pts = s.guesses.map((g) => g.pts).join(' · ');
-  return `Landmarked ${s.date}\n${squares} ${total}/1000\n${pts}\n${url}`;
+  const title = s.date === 'practice' ? 'Landmarked practice' : `Landmarked #${puzzleNumber(s.date)}`;
+  return `${title}\n${squares} ${total}/1000\n${site}`;
+}
+
+// ---------- stats ----------
+export interface Stats {
+  played: number;
+  streak: number;
+  bestStreak: number;
+  average: number;
+  best: number;
+  /** Finished days per 200-point band: 0–199, 200–399, …, 800–1000. */
+  bands: number[];
+}
+/** Stats from the finished days saved on this device (practice rounds don't count). */
+export function stats(today: string): Stats {
+  const totals = new Map<string, number>();
+  try {
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i) ?? '';
+      if (k !== LEGACY_KEY && !/^landmarked:day:\d{4}-\d{2}-\d{2}$/.test(k)) continue;
+      const s = JSON.parse(localStorage.getItem(k) ?? 'null') as DayState | null;
+      if (!s || !/^\d{4}-\d{2}-\d{2}$/.test(s.date) || s.guesses?.length !== ROUNDS || s.date > today) continue;
+      totals.set(s.date, s.guesses.reduce((t, g) => t + g.pts, 0));
+    }
+  } catch { /* storage unavailable */ }
+  const dates = [...totals.keys()].sort();
+  const n = (d: string) => puzzleNumber(d);
+  // Best run of consecutive days.
+  let bestStreak = 0, run = 0;
+  dates.forEach((d, i) => { run = i && n(d) === n(dates[i - 1]) + 1 ? run + 1 : 1; bestStreak = Math.max(bestStreak, run); });
+  // Current streak: ends today, or yesterday if today isn't finished yet.
+  let streak = 0;
+  for (let day = totals.has(today) ? n(today) : n(today) - 1; dates.some((d) => n(d) === day); day--) streak++;
+  const scores = [...totals.values()];
+  const bands = [0, 0, 0, 0, 0];
+  for (const t of scores) bands[Math.min(4, Math.floor(t / 200))]++;
+  return {
+    played: scores.length,
+    streak,
+    bestStreak,
+    average: scores.length ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0,
+    best: scores.length ? Math.max(...scores) : 0,
+    bands,
+  };
 }
