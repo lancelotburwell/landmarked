@@ -47,7 +47,6 @@ const el = {
   resultsBtn: $<HTMLButtonElement>('results-btn'),
   intro: $('intro'),
   play: $<HTMLButtonElement>('play-btn'),
-  introNote: $('intro-note'),
   help: $('help'),
   menu: $<HTMLButtonElement>('menu-btn'),
   end: $('end'),
@@ -87,10 +86,9 @@ setScore(total(), false);
 renderDots();
 
 if (state.guesses.length >= ROUNDS) {
-  el.play.textContent = "See today's results";
-  el.introNote.textContent = 'You played today. New buildings at midnight.';
+  el.play.textContent = 'See results';
 } else if (state.guesses.length > 0) {
-  el.play.textContent = `Resume · question ${state.guesses.length + 1} of ${ROUNDS}`;
+  el.play.textContent = 'Resume';
 }
 
 // ---------- globe (loaded in the background) ----------
