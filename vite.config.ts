@@ -3,8 +3,8 @@ import { viteStaticCopy } from 'vite-plugin-static-copy';
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 
-// GitHub Pages serves the site from /landmarked/. Override with BASE=/ for other hosts.
-const base = process.env.BASE ?? '/landmarked/';
+// Served from the domain root (Vercel). The GitHub Pages workflow builds with BASE=/landmarked/.
+const base = process.env.BASE ?? '/';
 const cesium = 'node_modules/cesium/Build/Cesium';
 
 // Stamps a build id into dist/sw.js so each deploy gets a fresh cache.

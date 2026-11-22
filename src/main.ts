@@ -52,8 +52,9 @@ const el = {
   menu: $<HTMLButtonElement>('menu-btn'),
   end: $('end'),
   endScore: $('end-score'),
-  endBars: $('end-bars'),
-  endList: $('end-list'),
+  endVerdict: $('end-verdict'),
+  endRounds: $('end-rounds'),
+  endCards: $('end-cards'),
   shareText: $('share-text'),
   shareBtn: $<HTMLButtonElement>('share-btn'),
   showAll: $<HTMLButtonElement>('showall-btn'),
@@ -238,6 +239,29 @@ function renderDots() {
 }
 
 // ---------- end screen ----------
+interface PhotoCredit { w: number; h: number; artist: string; license: string; licenseUrl: string | null; page: string }
+let credits: Promise<Record<string, PhotoCredit>> | null = null;
+const loadCredits = () =>
+  (credits ??= fetch(`${import.meta.env.BASE_URL}photos/credits.json`)
+    .then((r): Promise<Record<string, PhotoCredit>> => (r.ok ? r.json() : Promise.resolve({})))
+    .catch((): Record<string, PhotoCredit> => ({})));
+
+function verdict(score: number): string {
+  if (score >= 900) return 'Master builder. You could find these blindfolded.';
+  if (score >= 750) return 'Seasoned traveller. Nearly a perfect itinerary.';
+  if (score >= 550) return 'Good eye. A few wrong turns, but you got around.';
+  if (score >= 350) return 'Getting your bearings. The map is starting to fill in.';
+  return 'Lost in the lobby. Tomorrow is a new blueprint.';
+}
+
+/** Small DOM helper: element with class and text (never innerHTML). */
+function h<K extends keyof HTMLElementTagNameMap>(tag: K, cls = '', text = ''): HTMLElementTagNameMap[K] {
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (text) e.textContent = text;
+  return e;
+}
+
 function showEnd() {
   awaiting = false;
   el.qnum.textContent = 'DONE FOR TODAY';
@@ -245,28 +269,61 @@ function showEnd() {
   el.clue.textContent = `You scored ${total()} of 1000. Come back tomorrow for five new buildings.`;
   renderDots();
   el.endScore.textContent = String(total());
-  el.endBars.innerHTML = '';
-  el.endList.innerHTML = '';
+  el.endVerdict.textContent = verdict(total());
+
+  // Results breakdown: one row per round.
+  el.endRounds.replaceChildren();
   state.guesses.forEach((g, i) => {
     const b = day[i];
-    const bar = document.createElement('div');
-    bar.className = 'bar';
-    bar.innerHTML = `<i style="height:0;background:${TIER_COLOR[b.tier]}"></i><span>${g.pts}</span>`;
-    el.endBars.append(bar);
-    requestAnimationFrame(() =>
-      requestAnimationFrame(() => ((bar.firstElementChild as HTMLElement).style.height = `${Math.max(4, (g.pts / 200) * 100)}%`)),
-    );
-    const li = document.createElement('li');
-    li.innerHTML = `<span class="sw" style="background:${TIER_COLOR[b.tier]}"></span><span class="nm"></span><span class="pt">${g.pts}</span>`;
-    const nm = li.querySelector('.nm')!;
-    nm.textContent = b.name;
-    const small = document.createElement('small');
-    small.textContent = `${b.city}, ${b.country} · ${formatKm(g.km)}`;
-    nm.append(small);
-    el.endList.append(li);
+    const li = h('li', 'round');
+    const pts = h('span', 'r-pts', String(g.pts));
+    pts.style.color = TIER_COLOR[b.tier];
+    const track = h('span', 'r-track');
+    const fill = h('i');
+    fill.style.background = TIER_COLOR[b.tier];
+    track.append(fill);
+    li.append(h('span', 'r-num', String(i + 1)), h('span', `tier ${b.tier}`, b.tier.toUpperCase()), h('span', 'r-name', b.name), pts, track, h('span', 'r-dist', formatKm(g.km)));
+    el.endRounds.append(li);
+    requestAnimationFrame(() => requestAnimationFrame(() => (fill.style.width = `${Math.max(2, (g.pts / 200) * 100)}%`)));
   });
+
+  // One card per building, with a photo and a fun description.
+  void loadCredits().then((cr) => {
+    el.endCards.replaceChildren(
+      ...state.guesses.map((g, i) => {
+        const b = day[i];
+        const card = h('article', 'bcard');
+        const c = cr[b.id];
+        if (c) {
+          const fig = h('figure', 'bphoto');
+          const img = h('img');
+          img.src = `${import.meta.env.BASE_URL}photos/${b.id}.jpg`;
+          img.alt = b.name;
+          img.loading = 'lazy';
+          img.width = c.w;
+          img.height = c.h;
+          const cap = h('figcaption');
+          const link = h('a', '', `Photo: ${c.artist}, ${c.license}`);
+          link.href = c.page;
+          link.target = '_blank';
+          link.rel = 'noopener';
+          cap.append(link);
+          fig.append(img, cap);
+          card.append(fig);
+        }
+        const body = h('div', 'bbody');
+        const top = h('div', 'btop');
+        top.append(h('span', `tier ${b.tier}`, b.tier.toUpperCase()), h('span', 'bres', `${g.pts} pts · ${formatKm(g.km)}`));
+        body.append(top, h('h4', '', b.name), h('p', 'bmeta', `${b.architect} · ${b.year} · ${b.city}, ${b.country}`), h('p', 'bblurb', b.blurb ?? ''));
+        card.append(body);
+        return card;
+      }),
+    );
+  });
+
   el.shareText.textContent = shareText(state, shareUrl());
   el.end.hidden = false;
+  el.end.scrollTop = 0;
   tickCountdown();
 }
 

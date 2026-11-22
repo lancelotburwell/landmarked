@@ -49,7 +49,6 @@ const NASA_CREDIT = 'Imagery: NASA Blue Marble &amp; Landsat WELD (USGS/NASA), v
 /** 'eox': Sentinel-2 cloudless (sharp, non-commercial server). 'nasa': public-domain NASA imagery. */
 export type Imagery = 'eox' | 'nasa';
 
-const HOME_ALT = 1.6e7; // m, whole globe in view
 const MARK_H = 40; // m above the ellipsoid, keeps markers out of z-fighting
 const LINE_H = 300;
 const BORDER_H = 300;
@@ -169,7 +168,7 @@ export class Globe {
 
     // Start over the player's own longitude (from their time zone), mid-latitudes.
     const lon = Math.max(-170, Math.min(170, (-new Date().getTimezoneOffset() / 60) * 15));
-    scene.camera.setView({ destination: Cartesian3.fromDegrees(lon, 22, HOME_ALT) });
+    scene.camera.setView({ destination: Cartesian3.fromDegrees(lon, 22, this.homeAlt()) });
 
     this.points = scene.primitives.add(new PointPrimitiveCollection());
     this.flags = scene.primitives.add(new BillboardCollection({ scene }));
@@ -391,10 +390,23 @@ export class Globe {
     this.flyHome();
   }
 
+  /** Camera height at which the whole globe fits the canvas's shorter side, with a margin. */
+  homeAlt(): number {
+    const scene = this.widget.scene;
+    const canvas = scene.canvas;
+    const aspect = canvas.clientWidth / Math.max(1, canvas.clientHeight);
+    const fov = (scene.camera.frustum as unknown as { fov?: number }).fov ?? CesiumMath.PI_OVER_THREE;
+    // Cesium's fov spans the longer side; get the half-angle of the shorter one.
+    const tanBig = Math.tan(fov / 2);
+    const half = Math.atan(aspect >= 1 ? tanBig / aspect : tanBig * aspect);
+    const R = scene.globe.ellipsoid.maximumRadius;
+    return R / Math.sin(half * 0.86) - R;
+  }
+
   flyHome(duration = 1.6) {
     const c = this.scene.camera.positionCartographic;
     this.scene.camera.flyTo({
-      destination: Cartesian3.fromDegrees(CesiumMath.toDegrees(c.longitude), 22, HOME_ALT),
+      destination: Cartesian3.fromDegrees(CesiumMath.toDegrees(c.longitude), 22, this.homeAlt()),
       orientation: { heading: 0, pitch: -CesiumMath.PI_OVER_TWO, roll: 0 },
       duration,
     });

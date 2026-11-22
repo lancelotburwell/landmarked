@@ -3,3 +3,4 @@ dist
 playtest-shots
 *.log
 .DS_Store
+data/.cache

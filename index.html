@@ -74,11 +74,6 @@
           </div>
           <h1>Landmarked</h1>
           <p class="lede">Five famous buildings a day. One clue each.<br />Find them on the globe.</p>
-          <ul class="tiers">
-            <li><b class="t-easy">2 easy</b></li>
-            <li><b class="t-medium">1 medium</b></li>
-            <li><b class="t-hard">2 hard</b></li>
-          </ul>
           <button id="play-btn" class="btn primary big">Play today's five</button>
           <p id="intro-note" class="note">Same buildings for everyone. New ones at midnight.</p>
         </div>
@@ -111,14 +106,22 @@
           <button class="icon-btn close" data-close aria-label="Close">✕</button>
           <div class="end-label" id="end-title">TODAY'S SCORE</div>
           <div class="end-total"><span id="end-score">0</span><span class="of">/ 1000</span></div>
-          <div id="end-bars" class="bars"></div>
-          <ol id="end-list" class="end-list"></ol>
+          <p id="end-verdict" class="verdict"></p>
+
+          <h3 class="end-h">Results breakdown</h3>
+          <ol id="end-rounds" class="rounds"></ol>
+
           <div class="share">
             <pre id="share-text"></pre>
-            <button id="share-btn" class="btn primary">Copy result</button>
+            <div class="share-row">
+              <button id="share-btn" class="btn primary">Share result</button>
+              <button id="showall-btn" class="btn">See them on the globe</button>
+            </div>
           </div>
-          <button id="showall-btn" class="btn">See today's buildings on the globe</button>
           <div class="countdown">Next buildings in <span id="countdown">--:--:--</span></div>
+
+          <h3 class="end-h">Today's buildings</h3>
+          <div id="end-cards" class="cards"></div>
         </div>
       </div>
 

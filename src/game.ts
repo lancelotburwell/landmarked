@@ -13,6 +13,9 @@ export interface Building {
   lon: number;
   lat: number;
   clue: string;
+  /** Fun description shown on the end screen. */
+  blurb?: string;
+  qid?: string;
 }
 export interface Guess { lon: number; lat: number; km: number; pts: number }
 export interface DayState { date: string; ids: string[]; guesses: Guess[] }
