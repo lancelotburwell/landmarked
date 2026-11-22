@@ -9,3 +9,6 @@ public/pool.json
 
 .vercel
 .env*
+
+# Instagram working files (scripts/social-photos.mjs, make-social.mjs)
+/social/

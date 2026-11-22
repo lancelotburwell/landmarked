@@ -1,13 +1,14 @@
 // Plans the daily puzzles: which five buildings, and which of their clues, each date.
 //
-//   npm run schedule                 replan everything after tomorrow, up to BUFFER_DAYS ahead
+//   npm run schedule                 replan everything after the frozen week, up to BUFFER_DAYS ahead
 //   npm run schedule -- --days 42    plan further ahead
 //   npm run schedule -- --keep       keep already planned days (e.g. hand edits), only append
 //
 // data/schedule.json is the record of what ran when: one line per date,
 // { date, ids, clues } where clues[i] is the index into that building's clue list.
-// Days up to and including tomorrow are never changed (some time zones are
-// already a day ahead), so players never see a puzzle swap under them.
+// The next FROZEN_DAYS days are never changed: players never see a puzzle swap
+// under them (some time zones are already a day ahead), and the weekly
+// Instagram sneak peeks (data/social.json) are made a week ahead from them.
 //
 // Rules per day: 2 easy, 1 medium, 2 hard; least recently used first (never
 // used counts as oldest); not within MIN_GAP_DAYS of its last use; at least
@@ -17,6 +18,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 
 const DAY_TIERS = ['easy', 'easy', 'medium', 'hard', 'hard'];
 const BUFFER_DAYS = 28;
+const FROZEN_DAYS = 8; // today + 8: covers next week's sneak peeks, made the day before the week starts
 const MIN_GAP_DAYS = 45;
 const MIN_SPREAD_KM = 1500;
 
@@ -36,7 +38,7 @@ const key = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0
 const addDays = (k, n) => { const [y, m, d] = k.split('-').map(Number); return key(new Date(y, m - 1, d + n)); };
 const dayNum = (k) => { const [y, m, d] = k.split('-').map(Number); return Math.round(Date.UTC(y, m - 1, d) / 86_400_000); };
 const today = key(new Date());
-const frozenUntil = addDays(today, 1);
+const frozenUntil = addDays(today, FROZEN_DAYS);
 const planUntil = addDays(today, buffer);
 
 // ---------- helpers ----------

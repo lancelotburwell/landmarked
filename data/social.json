@@ -1,0 +1,9 @@
+[
+  {"date":"2026-11-23","id":"niteroi-mac","crop":[0.60,0.27,0.30]},
+  {"date":"2026-11-24","id":"forbidden-city","crop":[0.66,0.15,0.16]},
+  {"date":"2026-11-25","id":"sydney-opera-house","crop":[0.37,0.28,0.25]},
+  {"date":"2026-11-26","id":"alhambra","crop":[0.14,0.30,0.22]},
+  {"date":"2026-11-27","id":"habitat-67","crop":[0.30,0.25,0.30]},
+  {"date":"2026-11-28","id":"zeitz-mocaa","crop":[0.30,0.30,0.35]},
+  {"date":"2026-11-29","id":"cardboard-cathedral","crop":[0.44,0.14,0.26]}
+]
