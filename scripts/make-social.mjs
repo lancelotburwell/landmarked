@@ -3,16 +3,17 @@
 //   slide 1: that day's clue for it, IBM Plex Mono, centred on white;
 //   slide 2: a close-up crop of its photo that the website never shows.
 //
-// data/social.json is the record, one line per date: { date, id, crop }, where
+// data/social.json is the record, one line per date: { date, id, crop, line }, where
 // id must be in that day's puzzle and crop = [x, y, width] as fractions of the
 // large photo in social/src/<id>.jpg (get it with scripts/social-photos.mjs);
-// the height follows from the 4:5 frame.
+// the height follows from the 4:5 frame. line is the caption's teaser: one
+// surprising fact about the building that doesn't give it away or repeat the clue.
 //
 //   node scripts/make-social.mjs [date ...]     (default: every date from today on)
 //
 // Writes public/social/<date>-1.jpg and -2.jpg (served from landmarked.land so
 // Metricool can fetch them) and social/out/captions.json (gitignored) with each
-// post's caption: the date, the hook, and the photo credit that CC BY and
+// post's caption: the teaser line, the hook, hashtags, and the photo credit that CC BY and
 // CC BY-SA require (creator, licence, "cropped").
 import puppeteer from 'puppeteer-core';
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
@@ -34,7 +35,6 @@ const now = new Date();
 const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
 const dates = process.argv.slice(2);
 const todo = posts.filter((p) => (dates.length ? dates.includes(p.date) : p.date >= today));
-const longDate = (date) => new Date(date + 'T12:00:00Z').toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' });
 const esc = (s) => s.replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' })[c]);
 const out = (p) => fileURLToPath(new URL(p, root));
 
@@ -56,6 +56,7 @@ for (const p of todo) {
   const round = day?.ids.indexOf(p.id) ?? -1;
   if (round < 0) throw new Error(`${p.date}: ${p.id} isn't in that day's puzzle`);
   const b = buildings[p.id];
+  if (!p.line) throw new Error(`${p.date}: add a teaser "line" in data/social.json`);
   const clue = b.clues[day.clues[round] % b.clues.length];
 
   await page.setContent(`<style>${css}</style><div class="clue"><p>${esc(clue)}</p></div>`);
@@ -79,7 +80,14 @@ for (const p of todo) {
     .replace(/^The original uploader was (.*?) at .*$/, '$1')
     .replace(/^No machine-readable author provided\. (.*?) assumed.*$/, '$1');
   const credit = /public domain|cc0/i.test(c.license) ? '📷 Wikimedia Commons' : `📷 ${artist} · ${c.license} · cropped · Wikimedia Commons`;
-  const text = `${longDate(p.date)}\n\nA sneak peek at one of today's five. Do you know where it is?\nPlay at landmarked.land\n\n${credit}`;
+  const text = `${p.line}
+
+One of today's five. Can you place it on the globe? 🌍
+Play at landmarked.land (link in bio)
+
+#architecture #geography #dailypuzzle #guessthebuilding
+
+${credit}`;
   captions.push({ date: p.date, id: p.id, name: b.name, round: round + 1, sourcePx: Math.round(w * iw), images: [1, 2].map((n) => `https://landmarked.land/social/${p.date}-${n}.jpg`), text });
   console.log(p.date, p.id, `round ${round + 1}`, `crop is ${Math.round(w * iw)} px of source${w * iw < 500 ? ' (soft)' : ''}`);
 }
