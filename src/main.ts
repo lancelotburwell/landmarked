@@ -49,6 +49,7 @@ const el = {
   rPhotoBox: $('r-photo-box'),
   rImg: $<HTMLImageElement>('r-img'),
   rCredit: $<HTMLAnchorElement>('r-credit'),
+  rInfo: $<HTMLButtonElement>('r-info'),
   next: $<HTMLButtonElement>('next-btn'),
   resultsBtn: $<HTMLButtonElement>('results-btn'),
   intro: $('intro'),
@@ -223,10 +224,18 @@ function showResultCard(b: Building, km: number, pts: number, i: number) {
     el.rCredit.textContent = `Photo: ${c.artist}, ${c.license}`;
     el.rCredit.href = c.page;
   }
+  setCreditShown(false);
   el.next.textContent = i + 1 >= ROUNDS ? 'See results' : 'Next';
   el.result.hidden = false;
   el.next.focus({ preventScroll: true });
 }
+
+// The photo credit (required by the licences) stays out of the way behind a small "i".
+function setCreditShown(on: boolean) {
+  el.rPhoto.classList.toggle('credit-on', on);
+  el.rInfo.setAttribute('aria-expanded', String(on));
+}
+el.rInfo.addEventListener('click', () => setCreditShown(!el.rPhoto.classList.contains('credit-on')));
 
 el.next.addEventListener('click', () => {
   el.result.hidden = true;

@@ -23,7 +23,7 @@ A daily architecture geography game: a static Vite + TypeScript site with a Cesi
 
 ## Features (as of 2026-11-22)
 - Intro: whole globe visible, "Five buildings a day…", a single **Play** button (Resume / See results when relevant).
-- **Result card** (after each guess): the building photo at the top in a fixed-height box (`min(24vh, 210px)`, so the card never scrolls), whole and uncropped (`object-fit: contain`) on a blurred copy of itself, with a one-line credit; then points, distance, name, architect, year, place. Photos preload while the clue is read. Buildings without a photo just show the text.
+- **Result card** (after each guess): the building photo at the top in a fixed-height box (`min(24vh, 210px)`, so the card never scrolls), whole and uncropped (`object-fit: contain`) on a blurred copy of itself, with the credit behind a faint "i" in the photo's corner (the user found a visible credit line distracting; CC BY/BY-SA still need it reachable); then points, distance, name, architect, year, place. Photos preload while the clue is read. Buildings without a photo just show the text.
 - Tapping the globe is the guess (the confirm/lock-in option was removed at the user's request). Neither a bottom bar nor an on-screen imagery credit is shown; the NASA credit is in How it works.
 - End screen: score and verdict, results breakdown, share, countdown + "Practice round" link, then a card per building (photo, details, description, credit). Behind it, the buildings stay pinned to the globe.
 - **Share text** (user's choice): `Landmarked #22` / squares + `674/1000` / `landmarked.land`. Bare domain on purpose; no per-round points. Puzzle #1 = 2026-11-01 (`puzzleNumber`).
