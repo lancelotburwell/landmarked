@@ -42,6 +42,8 @@
         <div id="globe-placeholder" class="placeholder"><div class="orb"></div><span id="globe-status">Loading globe…</span></div>
         <div id="credits" class="credits"></div>
 
+        <div id="pin-sheet" class="card pin-sheet" hidden></div>
+
         <div id="result" class="card result" hidden>
           <div class="result-top">
             <div><span id="r-points" class="points">0</span><span class="pts">PTS</span></div>
@@ -108,7 +110,7 @@
               <button id="showall-btn" class="btn">See them on the globe</button>
             </div>
           </div>
-          <div class="countdown">Next buildings in <span id="countdown">--:--:--</span></div>
+          <div id="countdown-row" class="countdown">Next buildings in <span id="countdown">--:--:--</span> · <a href="?practice=new">Practice round</a></div>
 
           <h3 class="end-h">Today's buildings</h3>
           <div id="end-cards" class="cards"></div>

@@ -60,6 +60,11 @@ export interface Marker {
   color: string;
   guess?: { lon: number; lat: number };
 }
+/** A building pinned to the globe after the day is played: a chip with photo and name above its flag. */
+export interface PinMarker extends Marker {
+  id: string;
+  photo?: string;
+}
 
 export class Globe {
   readonly widget: CesiumWidget;
@@ -70,6 +75,11 @@ export class Globe {
   private pending?: ReturnType<PointPrimitiveCollection['add']>;
   private clickCb?: (lon: number, lat: number) => void;
   private flagImages = new Map<string, HTMLCanvasElement>();
+  private pinLayer: HTMLDivElement;
+  private pins: { el: HTMLElement; pos: Cartesian3 }[] = [];
+  private pinCb?: (id: string) => void;
+  private scratch3 = new Cartesian3();
+  private scratch2 = new Cartesian2();
   /** Resolves when the first full set of tiles has been drawn. */
   readonly tilesLoaded: Promise<void>;
 
@@ -173,6 +183,12 @@ export class Globe {
     this.points = scene.primitives.add(new PointPrimitiveCollection());
     this.flags = scene.primitives.add(new BillboardCollection({ scene }));
     this.labels = scene.primitives.add(new LabelCollection({ scene }));
+
+    // HTML chips that follow their flags as the globe turns.
+    this.pinLayer = document.createElement('div');
+    this.pinLayer.className = 'pins';
+    el.append(this.pinLayer);
+    scene.postRender.addEventListener(() => this.placePins());
 
     // Cesium only fires LEFT_CLICK when the pointer didn't drag.
     const handler = new ScreenSpaceEventHandler(scene.canvas);
@@ -288,7 +304,7 @@ export class Globe {
     return c;
   }
 
-  private addFlag(lon: number, lat: number, name: string, color: string) {
+  private addFlag(lon: number, lat: number, name: string, color: string, label = true) {
     const position = Cartesian3.fromDegrees(lon, lat, MARK_H);
     this.flags.add({
       position,
@@ -299,7 +315,7 @@ export class Globe {
       horizontalOrigin: HorizontalOrigin.LEFT,
       pixelOffset: new Cartesian2(-4, 2),
     });
-    this.labels.add({
+    if (label) this.labels.add({
       position,
       text: name,
       font: '600 13px "IBM Plex Mono", monospace',
@@ -363,6 +379,8 @@ export class Globe {
     this.points.removeAll();
     this.flags.removeAll();
     this.labels.removeAll();
+    this.pinLayer.replaceChildren();
+    this.pins = [];
     for (const l of this.lines) this.scene.primitives.remove(l);
     this.lines = [];
     this.render();
@@ -378,16 +396,61 @@ export class Globe {
   }
 
   /** All of today's buildings, with the player's guesses. */
-  showAll(markers: Marker[]) {
+  showAll(markers: PinMarker[]) {
     this.clear();
     for (const m of markers) {
       if (m.guess) {
         this.addDashedLine(m.guess, m);
         this.addGuessDot(m.guess.lon, m.guess.lat);
       }
-      this.addFlag(m.lon, m.lat, m.name, m.color);
+      this.addFlag(m.lon, m.lat, m.name, m.color, false);
+      const chip = document.createElement('button');
+      chip.className = 'pin';
+      chip.style.setProperty('--c', m.color);
+      chip.setAttribute('aria-label', `About ${m.name}`);
+      if (m.photo) {
+        const img = document.createElement('img');
+        img.src = m.photo;
+        img.alt = '';
+        img.loading = 'lazy';
+        chip.append(img);
+      }
+      const name = document.createElement('span');
+      name.textContent = m.name;
+      chip.append(name);
+      chip.addEventListener('click', () => this.pinCb?.(m.id));
+      this.pinLayer.append(chip);
+      this.pins.push({ el: chip, pos: Cartesian3.fromDegrees(m.lon, m.lat, MARK_H) });
     }
+    this.render();
     this.flyHome();
+  }
+
+  onPinClick(cb: (id: string) => void) {
+    this.pinCb = cb;
+  }
+
+  /** Keeps each chip just above its flag; hides chips on the far side of the globe. */
+  private placePins() {
+    if (!this.pins.length) return;
+    const scene = this.scene;
+    const cam = scene.camera.positionWC;
+    for (const p of this.pins) {
+      const toCam = Cartesian3.subtract(cam, p.pos, this.scratch3);
+      const facing = Cartesian3.dot(p.pos, toCam) > 0;
+      const c = facing ? scene.cartesianToCanvasCoordinates(p.pos, this.scratch2) : undefined;
+      if (!c) {
+        p.el.style.visibility = 'hidden';
+        continue;
+      }
+      p.el.style.visibility = '';
+      p.el.style.transform = `translate(calc(${c.x}px - 50%), calc(${c.y}px - 100% - 50px))`;
+    }
+  }
+
+  /** Flies straight down over a building, keeping it above a card covering bottomInset (0..1) of the canvas. */
+  focus(lon: number, lat: number, bottomInset = 0) {
+    this.frame({ lon, lat }, { lon, lat }, bottomInset, 250_000);
   }
 
   /** Camera height at which the whole globe fits the canvas's shorter side, with a margin. */
@@ -416,7 +479,7 @@ export class Globe {
    * Flies straight down over the midpoint of a and b, high enough that both fit
    * in the part of the canvas not covered by the result card (bottomInset: 0..1).
    */
-  private frame(a: { lon: number; lat: number }, b: { lon: number; lat: number }, bottomInset: number) {
+  private frame(a: { lon: number; lat: number }, b: { lon: number; lat: number }, bottomInset: number, minAlt = 60_000) {
     const camera = this.scene.camera;
     const geod = new EllipsoidGeodesic(
       Cartographic.fromDegrees(a.lon, a.lat),
@@ -433,7 +496,7 @@ export class Globe {
     const tanH = aspect >= 1 ? tanBig : tanBig * aspect;
     const avail = Math.max(0.35, 1 - bottomInset);
     const span = Math.max(d, 1) * 1.45;
-    let alt = Math.max(span / (2 * tanV * avail), span / (2 * tanH), 60_000);
+    let alt = Math.max(span / (2 * tanV * avail), span / (2 * tanH), minAlt);
     let lat = CesiumMath.toDegrees(mid.latitude);
     if (alt < 5e6) {
       // Push the pair up into the free area above the card.

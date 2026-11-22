@@ -69,7 +69,10 @@ async function run(name) {
   await page.click('#play-btn');
   await sleep(300);
 
-  const ids = await page.evaluate(() => JSON.parse(localStorage.getItem('landmarked:day')).ids);
+  const ids = await page.evaluate(() => {
+    const day = new URLSearchParams(location.search).get('day');
+    return JSON.parse(localStorage.getItem(day ? `landmarked:day:${day}` : Object.keys(localStorage).filter((k) => k.startsWith('landmarked:day:')).sort().pop())).ids;
+  });
   const log = [];
   for (let i = 0; i < 5; i++) {
     const b = buildings.find((x) => x.id === ids[i]);
@@ -114,6 +117,15 @@ async function run(name) {
   await page.click('#showall-btn');
   await waitIdle(page, 1000);
   await page.screenshot({ path: join(out, `${name}-6-all.png`) });
+  // Tap the first visible building chip: its card opens over the globe.
+  const chip = await page.$$eval('.pin', (els) => els.findIndex((e) => e.style.visibility !== 'hidden'));
+  if (chip >= 0) {
+    await (await page.$$('.pin'))[chip].click();
+    await waitIdle(page, 1000);
+    await page.screenshot({ path: join(out, `${name}-6b-pin.png`) });
+    log.push(`   pin card: ${await page.$eval('#pin-sheet h4', (e) => e.textContent)}`);
+    await page.click('#pin-sheet .close');
+  } else log.push('   no visible pin chips');
   await page.click('#menu-btn');
   await sleep(300);
   await page.screenshot({ path: join(out, `${name}-7-help.png`) });

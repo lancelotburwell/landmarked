@@ -35,6 +35,7 @@ export function todayKey(d = new Date()): string {
 }
 /** Day 0 of the puzzle history. Never change it: every day depends on it. */
 const EPOCH = Date.UTC(2026, 10, 1);
+const EPOCH_KEY = '2026-11-01';
 function dayNumber(key: string): number {
   const [y, m, d] = key.split('-').map(Number);
   return Math.round((Date.UTC(y, m - 1, d) - EPOCH) / 86_400_000);
@@ -126,18 +127,46 @@ export function formatKm(km: number): string {
   return `${Math.round(km).toLocaleString('en-US')} km away`;
 }
 
+/** A random five (2 easy, 1 medium, 2 hard), spread out like a normal day. Not saved as today. */
+export function pickPractice(rnd = Math.random): Building[] {
+  const out: Building[] = [];
+  for (const tier of DAY_TIERS) {
+    const free = BUILDINGS.filter((b) => b.tier === tier && !out.includes(b));
+    const apart = free.filter((b) => out.every((o) => distanceKm(o.lon, o.lat, b.lon, b.lat) >= MIN_SPREAD_KM));
+    const pool = apart.length ? apart : free;
+    out.push(pool[Math.floor(rnd() * pool.length)]);
+  }
+  return out;
+}
+
+export function formatDay(key: string, opts: Intl.DateTimeFormatOptions = { weekday: 'short', day: 'numeric', month: 'short' }): string {
+  const [y, m, d] = key.split('-').map(Number);
+  return new Date(y, m - 1, d).toLocaleDateString('en-GB', opts);
+}
+
 // ---------- persistence ----------
-const KEY = 'landmarked:day';
-export function load(key: string): DayState {
+// One entry per day, so past days keep their own progress.
+const keyFor = (day: string) => `landmarked:day:${day}`;
+const LEGACY_KEY = 'landmarked:day'; // single-day storage used before past days existed
+function read(day: string): DayState | null {
   try {
-    const s = JSON.parse(localStorage.getItem(KEY) ?? 'null') as DayState | null;
-    // Keep the stored ids so a mid-day data change can't swap buildings under a player.
-    if (s && s.date === key && Array.isArray(s.ids) && s.ids.length === ROUNDS && s.ids.every((id) => byId(id))) return s;
+    for (const k of [keyFor(day), LEGACY_KEY]) {
+      const s = JSON.parse(localStorage.getItem(k) ?? 'null') as DayState | null;
+      // Keep the stored ids so a data change can't swap buildings under a player.
+      if (s && s.date === day && Array.isArray(s.ids) && s.ids.length === ROUNDS && s.ids.every((id) => byId(id))) return s;
+    }
   } catch { /* fresh start */ }
-  return { date: key, ids: pickDay(key).map((b) => b.id), guesses: [] };
+  return null;
+}
+export function load(day: string): DayState {
+  return read(day) ?? { date: day, ids: pickDay(day).map((b) => b.id), guesses: [] };
+}
+/** Saved progress for a day, without creating any. */
+export function peek(day: string): DayState | null {
+  return read(day);
 }
 export function save(s: DayState) {
-  try { localStorage.setItem(KEY, JSON.stringify(s)); } catch { /* private mode */ }
+  try { localStorage.setItem(keyFor(s.date), JSON.stringify(s)); } catch { /* private mode */ }
 }
 export function getPref(name: string): boolean {
   try { return localStorage.getItem(`landmarked:${name}`) === '1'; } catch { return false; }
