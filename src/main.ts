@@ -45,6 +45,10 @@ const el = {
   rArchitect: $('r-architect'),
   rYear: $('r-year'),
   rCity: $('r-city'),
+  rPhoto: $('r-photo'),
+  rPhotoBox: $('r-photo-box'),
+  rImg: $<HTMLImageElement>('r-img'),
+  rCredit: $<HTMLAnchorElement>('r-credit'),
   next: $<HTMLButtonElement>('next-btn'),
   resultsBtn: $<HTMLButtonElement>('results-btn'),
   intro: $('intro'),
@@ -169,6 +173,8 @@ function showQuestion() {
   el.qtier.textContent = DAY_TIERS[i].toUpperCase();
   el.qtier.className = `tier ${DAY_TIERS[i]}`;
   el.clue.textContent = b.clue;
+  // Preload the photo while the player reads the clue, so the result card shows it instantly.
+  if (creditMap[b.id]) new Image().src = photoUrl(b.id);
   renderDots();
   el.result.hidden = true;
   awaiting = true;
@@ -206,6 +212,17 @@ function showResultCard(b: Building, km: number, pts: number, i: number) {
   el.rArchitect.textContent = b.architect;
   el.rYear.textContent = b.year;
   el.rCity.textContent = `${b.city}, ${b.country}`;
+  // The building's photo, whole (never cropped), on a blurred copy of itself.
+  const c = creditMap[b.id];
+  el.rPhoto.hidden = !c;
+  if (c) {
+    const src = photoUrl(b.id);
+    el.rImg.src = src;
+    el.rImg.alt = b.name;
+    el.rPhotoBox.style.setProperty('--photo', `url("${src}")`);
+    el.rCredit.textContent = `Photo: ${c.artist}, ${c.license}`;
+    el.rCredit.href = c.page;
+  }
   el.next.textContent = i + 1 >= ROUNDS ? 'See results' : 'Next';
   el.result.hidden = false;
   el.next.focus({ preventScroll: true });
@@ -259,6 +276,10 @@ const loadCredits = () =>
   (credits ??= fetch(`${import.meta.env.BASE_URL}photos/credits.json`)
     .then((r): Promise<Record<string, PhotoCredit>> => (r.ok ? r.json() : Promise.resolve({})))
     .catch((): Record<string, PhotoCredit> => ({})));
+// Photo credits, loaded early so the result card can show the photo at once.
+let creditMap: Record<string, PhotoCredit> = {};
+void loadCredits().then((c) => (creditMap = c));
+const photoUrl = (id: string) => `${import.meta.env.BASE_URL}photos/${id}.jpg`;
 
 function verdict(score: number): string {
   if (score >= 900) return 'Master builder. You could find these blindfolded.';

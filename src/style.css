@@ -282,3 +282,17 @@ button { font: inherit; color: inherit; }
 .band.mine { color: var(--text); }
 .band.mine .band-track > i { background: var(--accent); }
 .end-rank { margin: 0 0 6px; font-size: 13px; font-weight: 600; color: var(--accent); }
+
+/* Result card photo: fixed height so the card never scrolls; the whole photo
+   (object-fit: contain), with a blurred, darkened copy of it filling the sides. */
+.rphoto { margin: -14px -16px 10px; border-radius: 14px 14px 0 0; overflow: hidden; }
+.rphoto-box { position: relative; height: min(24vh, 210px); background: var(--panel-2); overflow: hidden; }
+.rphoto-box::before { content: ""; position: absolute; inset: -24px; background: var(--photo) center / cover no-repeat; filter: blur(18px) brightness(0.5); }
+.rphoto-box img { position: relative; display: block; width: 100%; height: 100%; object-fit: contain; }
+.rphoto figcaption { padding: 4px 16px 0; font-size: 9.5px; line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rphoto figcaption a { color: var(--muted); text-decoration: none; }
+.rphoto figcaption a:hover { text-decoration: underline; }
+@media (max-height: 560px) and (orientation: landscape) {
+  .rphoto { margin: -10px -14px 8px; }
+  .rphoto-box { height: 30vh; }
+}
