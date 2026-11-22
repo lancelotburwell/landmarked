@@ -83,7 +83,9 @@ let shownScore = 0;
 
 const total = () => state.guesses.reduce((t, g) => t + g.pts, 0);
 const round = () => state.guesses.length; // index of the round being played
-const shareUrl = () => location.origin + import.meta.env.BASE_URL;
+// Shared results always point to the real site, wherever the game was played.
+const SITE_URL = 'https://landmarked.land/';
+const shareUrl = () => SITE_URL;
 
 // ---------- static UI ----------
 el.date.textContent = practice ? 'Practice round' : formatDay(date);
