@@ -2,9 +2,11 @@
 // user chose on 2026-11-23, plus its caption. Neither template shows the answer: the
 // question is for the comments. No music (the user adds it in Instagram).
 //
-//   where  "Where am I?": a close-up crop of the building for 2.5 s, then the globe just
-//          spins (no zoom, no pin) with the clue above it and a big gold "Where am I?"
-//          below. Loops back to the close-up.
+//   where  "Where am I?": the clue above and a big gold "Where am I?" below, on screen
+//          from the first frame. It opens on a close-up crop of the building, slowly
+//          pushing in; at 2.2 s the photo shrinks into a circle that lands exactly on the
+//          globe and blends into it (user, 2026-11-23: no hard cut); the globe just spins
+//          (no zoom, no pin); from 10 s the same in reverse, so the last frame is the first.
 //   who    "Who am I?": the title on top, the clue at the bottom, and one continuous swoop:
 //          the globe spins fast and, without pausing, slows while it zooms in, coming to
 //          rest at about 3,000 km as a gold pin lands at 6.6 s (line the song's beat drop
@@ -42,7 +44,10 @@ const read = (p) => JSON.parse(readFileSync(new URL(p, root), 'utf8'));
 
 // ---------- the two templates ----------
 const TEMPLATES = {
-  where: { title: 'Where am I?', question: 'Where am I? Guess in the comments 👇', closeup: 2.5, total: 11, spin: -12 },
+  where: { title: 'Where am I?', question: 'Where am I? Guess in the comments 👇', total: 11, spin: -12,
+    shrinkAt: 2.2,  // the close-up starts shrinking into the globe
+    globeAt: 3.4,   // ... and has become the globe
+    growAt: 10.0 }, // the globe starts turning back into the close-up (done at total = frame 0)
   who: { title: 'Who am I?', question: 'Who am I? Name the building in the comments 👇', total: 11.8, spin: -50,
     swoopIn: 210,    // degrees turned on the way in (the way out turns the rest of the circle)
     restAt: 6.0,     // comes to rest over the pin
@@ -105,14 +110,15 @@ await page.evaluate(async ({ clue, title, photo, crop, regular, semi, W, H }) =>
     #reel .title { position: absolute; left: 60px; right: 60px; text-align: center; color: #e3b261; font-size: 84px; font-weight: 600; z-index: 3; }
     #reel .pin { position: absolute; left: 0; top: 0; width: 84px; height: 112px; margin: -112px 0 0 -42px; opacity: 0; filter: drop-shadow(0 6px 10px rgb(0 0 0 / 0.6)); z-index: 2; }
     #reel .ring { position: absolute; left: 0; top: 0; width: 120px; height: 120px; margin: -60px 0 0 -60px; border: 5px solid #e3b261; border-radius: 50%; opacity: 0; z-index: 2; }
-    #reel .closeup { position: absolute; inset: 0; background-color: #0e1012; background-repeat: no-repeat; z-index: 5; display: none; }
+    #reel .closeup-wrap { position: absolute; inset: 0; z-index: 1; display: none; overflow: hidden; }
+    #reel .closeup { position: absolute; inset: 0; background-color: #0e1012; background-repeat: no-repeat; background-size: 100% 100%; transform-origin: 50% 50%; }
   `;
   document.head.append(css);
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
   const reel = document.createElement('div');
   reel.id = 'reel';
   reel.innerHTML = `
-    <div class="closeup"></div>
+    <div class="closeup-wrap"><div class="closeup"></div></div>
     <div class="title shadow">${esc(title)}</div>
     <div class="clue shadow">${esc(clue)}</div>
     <div class="ring"></div>
@@ -133,10 +139,8 @@ await page.evaluate(async ({ clue, title, photo, crop, regular, semi, W, H }) =>
     let rw = cw, rh = (cw * H) / W;
     if (rh > nh) { rh = nh; rw = (rh * W) / H; }
     const x0 = Math.max(0, Math.min(nw - rw, cx - rw / 2)), y0 = Math.max(0, Math.min(nh - rh, cy - rh / 2));
-    const s = W / rw;
-    Object.assign(reel.querySelector('.closeup').style, {
-      backgroundImage: `url(${src})`, backgroundSize: `${nw * s}px ${nh * s}px`, backgroundPosition: `${-x0 * s}px ${-y0 * s}px`,
-    });
+    // Drawn into a canvas once the title's place is known (see the layout below).
+    window.__closeup = { im, x0, y0, rw, rh };
   }
 
   const g = window.__landmarked.globe;
@@ -150,7 +154,7 @@ await page.evaluate(() => document.fonts.ready);
 // clues get a smaller font. The globe sits in the band between title and clue: its
 // canvas is made taller and moved so its centre is the band's centre (the camera always
 // looks at the canvas centre), and the camera height sets its size.
-const band = await page.evaluate(({ tName, H, SAFE_BOTTOM }) => {
+const band = await page.evaluate(({ tName, W, H, SAFE_BOTTOM }) => {
   const $ = (s) => document.querySelector('#reel ' + s);
   const clue = $('.clue'), title = $('.title');
   if (tName === 'who') {
@@ -163,8 +167,29 @@ const band = await page.evaluate(({ tName, H, SAFE_BOTTOM }) => {
   for (const fs of [50, 46, 42, 39]) { clue.style.fontSize = fs + 'px'; if (clue.getBoundingClientRect().bottom <= 620) break; }
   const bottom = H - SAFE_BOTTOM - title.offsetHeight - 40;
   title.style.top = bottom + 40 + 'px';
+  // The close-up, drawn into a canvas with the shading baked in (CSS gradients, blurs and
+  // shadows don't reliably show in headless Chrome on the graphics card): a dark fade
+  // behind the clue at the top and a soft dark glow behind the gold title, so both
+  // read on any photo.
+  const c = window.__closeup;
+  if (c) {
+    const cv = document.createElement('canvas');
+    cv.width = W; cv.height = H;
+    const g = cv.getContext('2d', { willReadFrequently: true }); // CPU canvas: the GPU one drops gradients here
+    g.drawImage(c.im, c.x0, c.y0, c.rw, c.rh, 0, 0, W, H);
+    const top = g.createLinearGradient(0, 0, 0, clue.getBoundingClientRect().bottom + 160);
+    top.addColorStop(0, 'rgba(0,0,0,0.6)'); top.addColorStop(0.7, 'rgba(0,0,0,0.35)'); top.addColorStop(1, 'rgba(0,0,0,0)');
+    g.fillStyle = top; g.fillRect(0, 0, W, H);
+    const ty = bottom + 40 + title.offsetHeight / 2;
+    g.save();
+    g.filter = 'blur(46px)';
+    g.fillStyle = 'rgba(0,0,0,0.78)';
+    g.beginPath(); g.ellipse(W / 2, ty, 430, 120, 0, 0, Math.PI * 2); g.fill();
+    g.restore();
+    $('.closeup').style.backgroundImage = `url(${cv.toDataURL('image/jpeg', 0.94)})`;
+  }
   return { top: clue.getBoundingClientRect().bottom + 50, bottom };
-}, { tName, H, SAFE_BOTTOM });
+}, { tName, W, H, SAFE_BOTTOM });
 const cy = (band.top + band.bottom) / 2;
 const radius = Math.min((band.bottom - band.top) / 2, 470);
 const Hc = Math.round(H + 2 * Math.abs(cy - H / 2));
@@ -197,8 +222,7 @@ function camera(t) {
   if (tName === 'where') {
     // Always the same neutral spin (starting over Europe and Africa), so the globe gives
     // nothing away; it just keeps turning.
-    const s = Math.max(0, t - TPL.closeup);
-    return { lon: 30 + TPL.spin * s, lat: START_LAT, alt: HOME };
+    return { lon: 30 + TPL.spin * t, lat: START_LAT, alt: HOME };
   }
   const lon0 = b.lon + TPL.swoopIn;
   let lon, lat, alt, k;
@@ -221,7 +245,23 @@ function camera(t) {
 }
 
 function overlay(t) {
-  if (tName === 'where') return { closeup: t < TPL.closeup, pin: 0, drop: 0, ring: 0 };
+  if (tName === 'where') {
+    // Full screen (a circle bigger than the screen's diagonal) → the globe's circle, and back.
+    const FULL = Math.hypot(W, H) / 2 + 40;
+    let u = 0, fade = 1, scale;
+    if (t < TPL.shrinkAt) { u = 0; scale = 1 + 0.05 * (t / TPL.shrinkAt); }   // slow push-in
+    else if (t < TPL.globeAt) {
+      const k = (t - TPL.shrinkAt) / (TPL.globeAt - TPL.shrinkAt);
+      u = easeInOut(k); scale = 1.05 - 0.15 * u;
+      fade = 1 - clamp((k - 0.72) / 0.28);                                      // blends into the globe at the end
+    } else if (t < TPL.growAt) { u = 1; fade = 0; scale = 0.9; }
+    else {
+      const k = (t - TPL.growAt) / (TPL.total - TPL.growAt);
+      u = 1 - easeInOut(k); scale = 0.9 + 0.1 * (1 - u);
+      fade = clamp(k / 0.28);                                                   // the globe blends back into the photo first
+    }
+    return { closeup: fade > 0, r: FULL + (radius - FULL) * u, cy: H / 2 + (cy - H / 2) * u, fade, scale, pin: 0, drop: 0, ring: 0 };
+  }
   const DROP = TPL.pinAt - TPL.restAt;
   const u = clamp((t - TPL.restAt) / DROP);
   // Drops from above with a small bounce, landing at pinAt; a ring pulses out; fades as it zooms out.
@@ -256,7 +296,13 @@ for (let i = 0; i < n; i++) {
     const p = scene.cartesianToCanvasCoordinates(C3.fromDegrees(lon, lat, 0));
     const x = p ? p.x : -999, y = p ? p.y + top : -999;
     const $ = (s) => document.querySelector('#reel ' + s);
-    $('.closeup').style.display = ov.closeup ? 'block' : 'none';
+    const wrap = $('.closeup-wrap');
+    wrap.style.display = ov.closeup ? 'block' : 'none';
+    if (ov.closeup) {
+      wrap.style.clipPath = `circle(${ov.r}px at 50% ${ov.cy}px)`;
+      wrap.style.opacity = ov.fade;
+      $('.closeup').style.transform = `scale(${ov.scale})`;
+    }
     $('.pin').style.opacity = ov.pin;
     $('.pin').style.transform = `translate(${x}px, ${y + ov.drop}px)`;
     $('.ring').style.transform = `translate(${x}px, ${y}px) scale(${0.3 + ov.ring * 1.6})`;
