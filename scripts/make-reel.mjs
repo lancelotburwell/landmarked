@@ -1,17 +1,22 @@
 // Renders an Instagram reel (1080×1920, 30 fps MP4) for one day's sneak-peek building,
 // posted the day after as its answer: the game's globe spins with the clue on screen,
-// turns and zooms down to the spot, a gold pin drops, and the photo card slides up
-// with the name and architect. No music (added in Instagram when posting).
+// turns to the region and hovers for a moment (time to guess), dives to the spot, a
+// gold pin lands at exactly PIN_AT seconds (so a beat drop can be lined up in
+// Instagram), the photo card slides up with the name and architect, and it all pulls
+// back out to the opening frame, so the reel loops seamlessly. No music (added in
+// Instagram when posting).
 //
 // Every frame is set up and captured one by one (camera placed, tiles loaded, then a
 // screenshot), so the video is smooth however slowly the globe draws.
 //
 //   npm run build && npx vite preview --port 4173, then
 //   node scripts/make-reel.mjs <date> [http://localhost:4173/]
+//   GPU=1 node scripts/make-reel.mjs <date>             draw with the graphics card (faster, if it works)
 //   AT=2,9.5,12,15 node scripts/make-reel.mjs <date>   only those moments (s), as PNGs, for a quick look
 //
 // <date> is a day in data/social.json; the reel shows that post's building with the
-// clue it had that day. Writes social/reels/<date>.mp4 (gitignored). Uses the large
+// clue it had that day. Writes social/reels/<post date>-<id>.mp4 (gitignored), named by
+// the day it should be posted: the day after the carousel. Uses the large
 // photo from social/src/<id>.jpg when present (scripts/social-photos.mjs), otherwise
 // the game's 640 px one.
 import puppeteer from 'puppeteer-core';
@@ -39,21 +44,26 @@ const photo = existsSync(new URL(photoFile, root)) ? readFileSync(new URL(photoF
 const font = (w) => readFileSync(new URL(`node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-${w}-normal.woff2`, root)).toString('base64');
 
 // ---------- timeline (seconds) ----------
+// Fixed, so every reel has the same rhythm and the pin always lands at PIN_AT.
 const FPS = 30;
 const words = clue.split(/\s+/).length;
-const T_SPIN = Math.max(5, Math.min(9, 1.5 + words * 0.25)); // time to read the clue while it spins
-const T_ZOOM = 3.2;   // turn and dive to the spot
-const T_PIN = 0.6;    // pin drops
-const T_CARD = 0.6;   // card slides up
-const T_HOLD = 3.2;   // hold on the card
-const TOTAL = T_SPIN + T_ZOOM + T_PIN + T_CARD + T_HOLD;
-const SPIN = -14;     // camera longitude per second: the globe turns eastward, like the Earth
+const SPIN_END = 4.0;   // globe spins, clue on screen (it stays on screen throughout)
+const TURN_END = 5.6;   // spin slows and turns to the region
+const HOVER_END = 6.3;  // hovers over the region: a moment to guess
+const DIVE_END = 7.4;   // dives to the spot
+const PIN_AT = 8.0;     // the pin lands
+const CARD_END = 8.5;   // card slides up
+const OUT_AT = 10.8;    // hold on the card, then pull back out to the opening frame
+const TOTAL = 11.8;     // = the first frame again, so it loops
+const SPIN = -14;       // camera longitude per second: the globe turns eastward, like the Earth
 const START_LAT = 18;
+const HOVER_ALT = 7_000_000;
 // Closest height: where one video pixel covers about 600 m (Blue Marble's own pixel
 // size at the equator) would be ~1,000 km; a little closer still reads as sharp on a phone.
 const CLOSE_ALT = 800_000;
 const PIN_Y = 690; // where the pin lands, from the top
 
+const next = new Date(Date.parse(date + 'T12:00:00Z') + 86_400_000).toISOString().slice(0, 10);
 const W = 1080, H = 1920;
 const frames = path(`social/reels/.frames-${date}/`);
 rmSync(frames, { recursive: true, force: true });
@@ -61,7 +71,9 @@ mkdirSync(frames, { recursive: true });
 
 const browser = await puppeteer.launch({
   executablePath: findChrome(), headless: true,
-  args: ['--ignore-gpu-blocklist', '--enable-webgl', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'],
+  args: process.env.GPU
+    ? ['--ignore-gpu-blocklist', '--enable-webgl', '--enable-gpu', '--use-angle=default']
+    : ['--ignore-gpu-blocklist', '--enable-webgl', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'],
 });
 const page = await browser.newPage();
 await page.setViewport({ width: W, height: H, deviceScaleFactor: 1 });
@@ -124,43 +136,61 @@ const HOME = await page.evaluate(() => window.__landmarked.globe.homeAlt()) * 1.
 const ease = (u) => u * u * (3 - 2 * u);
 const easeInOut = (u) => (u < 0.5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2);
 const easeOut = (u) => 1 - Math.pow(1 - u, 3);
-// Where the spin starts, so that it flows straight into the zoom without stopping:
-// the zoom covers about SPIN·T_ZOOM/2 degrees more while it slows down.
-const lon0 = b.lon - SPIN * (T_SPIN + T_ZOOM / 2);
+const clamp = (u) => Math.max(0, Math.min(1, u));
+const logLerp = (a, b, u) => Math.exp(Math.log(a) + (Math.log(b) - Math.log(a)) * u);
+// Hermite curve from p0 (speed m0) to p1 (speed m1), u in 0..1, speeds per whole segment.
+const hermite = (p0, p1, m0, m1, u) =>
+  (2 * u ** 3 - 3 * u ** 2 + 1) * p0 + (u ** 3 - 2 * u ** 2 + u) * m0 + (-2 * u ** 3 + 3 * u ** 2) * p1 + (u ** 3 - u ** 2) * m1;
+// Where the spin starts, so that it flows into the turn without stopping (the turn
+// covers about SPIN·duration/2 more degrees while it slows down).
+const lon0 = b.lon - SPIN * (SPIN_END + (TURN_END - SPIN_END) / 2);
+// Look a little south of the building near the ground, so its pin sits at PIN_Y,
+// between the clue and the card (the camera looks straight down, 60° across the height).
+const shiftAt = (alt) => (((H / 2 - PIN_Y) / H) * 2 * Math.tan(Math.PI / 6) * alt) / 111_320;
+const END = { lon: b.lon, lat: b.lat - shiftAt(CLOSE_ALT), alt: CLOSE_ALT };
 
 function camera(t) {
-  if (t <= T_SPIN) return { lon: lon0 + SPIN * t, lat: START_LAT, alt: HOME };
-  const u = Math.min(1, (t - T_SPIN) / T_ZOOM);
-  // Longitude: Hermite curve that starts at the spin's speed and comes to rest on the building.
-  const p0 = lon0 + SPIN * T_SPIN, p1 = b.lon, m0 = SPIN * T_ZOOM;
-  const h00 = 2 * u ** 3 - 3 * u ** 2 + 1, h10 = u ** 3 - 2 * u ** 2 + u, h01 = -2 * u ** 3 + 3 * u ** 2;
-  const lon = h00 * p0 + h10 * m0 + h01 * p1;
-  const lat = START_LAT + (b.lat - START_LAT) * ease(u);
-  // Height: start the dive a little after the turn, in log space so it feels even.
-  const a = easeInOut(Math.max(0, (u - 0.15) / 0.85));
-  const alt = Math.exp(Math.log(HOME) + (Math.log(CLOSE_ALT) - Math.log(HOME)) * a);
-  // Look a little south of the building as we arrive, so its pin ends up at PIN_Y,
-  // between the clue and the card (the camera looks straight down, 60° across the height).
-  const shift = (((H / 2 - PIN_Y) / H) * 2 * Math.tan(Math.PI / 6) * alt) / 111_320;
-  return { lon, lat: lat - shift * a, alt };
+  if (t <= SPIN_END) return { lon: lon0 + SPIN * t, lat: START_LAT, alt: HOME };
+  if (t <= TURN_END) {
+    const d = TURN_END - SPIN_END, u = (t - SPIN_END) / d;
+    return { lon: hermite(lon0 + SPIN * SPIN_END, b.lon, SPIN * d, 0, u), lat: START_LAT + (b.lat - START_LAT) * ease(u), alt: logLerp(HOME, HOVER_ALT, easeOut(u)) };
+  }
+  if (t <= HOVER_END) {
+    // Nearly still, drifting in a touch so it doesn't look frozen.
+    const u = (t - TURN_END) / (HOVER_END - TURN_END);
+    return { lon: b.lon, lat: b.lat, alt: logLerp(HOVER_ALT, HOVER_ALT * 0.9, u) };
+  }
+  if (t <= DIVE_END) {
+    const a = easeInOut((t - HOVER_END) / (DIVE_END - HOVER_END));
+    const alt = logLerp(HOVER_ALT * 0.9, CLOSE_ALT, a);
+    return { lon: b.lon, lat: b.lat - shiftAt(alt) * a, alt };
+  }
+  if (t <= OUT_AT) return END;
+  // Pull back out to the opening frame, arriving at the spin's speed so the loop is seamless.
+  const d = TOTAL - OUT_AT, u = (t - OUT_AT) / d;
+  return {
+    lon: hermite(END.lon, lon0, 0, SPIN * d, u),
+    lat: END.lat + (START_LAT - END.lat) * easeInOut(u),
+    alt: logLerp(CLOSE_ALT, HOME, easeInOut(u)),
+  };
 }
 
 function overlay(t) {
-  const tp = t - T_SPIN - T_ZOOM;                 // since the zoom ended
-  const pinU = Math.max(0, Math.min(1, tp / T_PIN));
-  const cardU = Math.max(0, Math.min(1, (tp - T_PIN) / T_CARD));
-  // Pin: drops from above with a small bounce; a ring pulses out when it lands.
-  const bounce = pinU < 0.7 ? easeOut(pinU / 0.7) : 1 - Math.sin(((pinU - 0.7) / 0.3) * Math.PI) * 0.06;
+  const DROP = PIN_AT - DIVE_END;
+  const pinU = clamp((t - DIVE_END) / DROP);
+  // Pin: drops from above with a small bounce, landing at PIN_AT; a ring pulses out.
+  const bounce = pinU < 0.75 ? easeOut(pinU / 0.75) : 1 - Math.sin(((pinU - 0.75) / 0.25) * Math.PI) * 0.06;
+  const out = clamp((t - OUT_AT) / 0.45);
   return {
-    pinOpacity: tp > 0 ? 1 : 0,
+    pinOpacity: t > DIVE_END ? 1 - clamp((t - OUT_AT) / 0.25) : 0,
     pinDrop: (1 - bounce) * -420,
-    ringU: Math.max(0, Math.min(1, (tp - T_PIN * 0.7) / 0.8)),
-    cardY: (1 - easeOut(cardU)) * 1400,
+    ringU: clamp((t - (DIVE_END + DROP * 0.75)) / 0.8),
+    cardY: t < OUT_AT ? (1 - easeOut(clamp((t - PIN_AT) / (CARD_END - PIN_AT)))) * 1400 : out ** 2 * 1400,
   };
 }
 
 const n = Math.round(TOTAL * FPS);
-console.log(`${b.name}: ${words}-word clue, ${TOTAL.toFixed(1)} s, ${n} frames`);
+console.log(`${b.name} (post on ${next}): ${words}-word clue, ${TOTAL.toFixed(1)} s, ${n} frames`);
 const t0 = Date.now();
 const only = process.env.AT ? process.env.AT.split(',').map((x) => Math.min(n - 1, Math.round(Number(x) * FPS))) : null;
 for (let i = 0; i < n; i++) {
@@ -197,8 +227,8 @@ for (let i = 0; i < n; i++) {
 await browser.close();
 if (only) { console.log(`frames in social/reels/.frames-${date}/`); process.exit(0); }
 
-const out = path(`social/reels/${date}.mp4`);
+const out = path(`social/reels/${next}-${b.id}.mp4`);
 execFileSync('ffmpeg', ['-loglevel', 'error', '-y', '-framerate', String(FPS), '-i', `${frames}%04d.png`,
   '-c:v', 'libx264', '-preset', 'slow', '-crf', '18', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', out]);
 rmSync(frames, { recursive: true, force: true });
-console.log(`wrote social/reels/${date}.mp4`);
+console.log(`wrote social/reels/${next}-${b.id}.mp4`);
