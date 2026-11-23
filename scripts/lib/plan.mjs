@@ -28,12 +28,14 @@ export function distanceKm(a, b) {
 }
 
 // data/pins.json: manual decisions the scheduler always respects. One entry per line:
-//   { "date": "2026-12-03", "ids": ["reichstag"], "note": "why" }   these buildings run that day
+//   { "date": "2026-12-03", "ids": ["reichstag"], "out": ["x"], "note": "why" }   these buildings run
+//        that day (`out`, optional: and these don't; on a locked day an `ids` building takes an `out` one's place)
 //   { "id": "white-house", "notBefore": "2027-01-21", "note": "why" }  not scheduled before that date
 // An Instagram post (data/social.json) pins its building to its date the same way.
 export function readPins(pool) {
   const byId = new Map(pool.map((b) => [b.id, b]));
   const dayPins = new Map(); // date → Set(ids)
+  const dayOut = new Map(); // date → Set(ids) kept off that day
   const notBefore = new Map(); // id → date
   const problems = [];
   const add = (date, id, src) => {
@@ -46,6 +48,7 @@ export function readPins(pool) {
     if (p.date) {
       if (!isDate(p.date) || !Array.isArray(p.ids)) { problems.push(`pins.json: bad entry ${JSON.stringify(p)}`); continue; }
       for (const id of p.ids) add(p.date, id, `pins.json ${p.date}`);
+      if (p.out) dayOut.set(p.date, new Set(p.out));
     } else if (p.id && isDate(p.notBefore)) {
       if (!byId.has(p.id)) problems.push(`pins.json: unknown building "${p.id}"`);
       else notBefore.set(p.id, p.notBefore);
@@ -57,7 +60,7 @@ export function readPins(pool) {
     const tiers = [...ids].map((id) => byId.get(id).tier);
     for (const t of new Set(tiers)) if (tiers.filter((x) => x === t).length > DAY_TIERS.filter((x) => x === t).length) problems.push(`${date}: too many ${t} buildings pinned (a day has ${DAY_TIERS.filter((x) => x === t).length})`);
   }
-  return { dayPins, notBefore, problems };
+  return { dayPins, dayOut, notBefore, problems };
 }
 
 // Buildings never used on any day up to `until`.

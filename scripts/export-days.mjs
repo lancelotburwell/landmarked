@@ -36,6 +36,7 @@ writeFileSync(new URL('public/pool.json', root), JSON.stringify(pool.filter((b) 
   const todayK = todayKey();
   const social = new Map(readOrP('data/social.json', []).map((s) => [s.date, s]));
   const pins = readOrP('data/pins.json', []);
+  const credits = readOrP('public/photos/credits.json', {});
   const health = checkPlan({ pool, schedule });
   const lastSeen = new Map(), shown = new Map();
   const days = [];
@@ -64,6 +65,13 @@ writeFileSync(new URL('public/pool.json', root), JSON.stringify(pool.filter((b) 
     firstRepeat: health.firstRepeat, summary: health.summary, errors: health.errors, warns: health.warns,
     pins, pool: { active: pool.filter((b) => !b.retired).length, retired: pool.filter((b) => b.retired).length },
     days,
+    // Every building in full, for the editor: its texts, photo credit and the dates it runs.
+    buildings: Object.fromEntries(pool.map((b) => [b.id, {
+      id: b.id, name: b.name, architect: b.architect, year: b.year, city: b.city, country: b.country, tier: b.tier,
+      wiki: b.wiki, qid: b.qid ?? null, lat: b.lat, lon: b.lon, clues: b.clues, blurb: b.blurb,
+      checked: b.checked ?? null, retired: b.retired ?? null, credit: credits[b.id] ?? null,
+      dates: schedule.filter((d) => d.ids.includes(b.id)).map((d) => d.date),
+    }])),
   }));
 }
 

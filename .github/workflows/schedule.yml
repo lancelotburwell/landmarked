@@ -39,6 +39,8 @@ jobs:
           git config user.email "burwell.projects@gmail.com"
           git add data/schedule.json
           git commit -m "Refresh daily schedule"
+          # The planner may have committed meanwhile (a photo, a clue): rebase onto it.
+          git pull --rebase
           git push
       # Fails the run (GitHub then emails the owner) when something needs a human:
       # a day without a puzzle, no Instagram post for today or tomorrow, or under

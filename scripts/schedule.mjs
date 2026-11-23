@@ -42,7 +42,7 @@ const from = opt('--from');
 const pool = read('data/buildings.json');
 const byId = new Map(pool.map((b) => [b.id, b]));
 const schedule = read('data/schedule.json');
-const { dayPins, notBefore, problems } = readPins(pool);
+const { dayPins, dayOut, notBefore, problems } = readPins(pool);
 
 const today = todayKey();
 const frozenUntil = addDays(today, FROZEN_DAYS);
@@ -61,17 +61,23 @@ for (const d of kept) {
   const want = dayPins.get(d.date);
   if (!want || d.date <= today) continue;
   const protectedIds = new Set(want);
+  const out = dayOut.get(d.date) ?? new Set();
   for (const id of want) {
     if (d.ids.includes(id)) continue;
     const tier = byId.get(id).tier;
     const swappable = (i) => !protectedIds.has(d.ids[i]);
-    let i = d.ids.findIndex((x, k) => swappable(k) && byId.get(x).tier === tier);
+    // The building it was meant to replace first, then one of the same tier, then any.
+    let i = d.ids.findIndex((x, k) => swappable(k) && out.has(x));
+    if (i < 0) i = d.ids.findIndex((x, k) => swappable(k) && byId.get(x).tier === tier);
     if (i < 0) i = d.ids.findIndex((_, k) => swappable(k));
     if (i < 0) { report.push(`${d.date}: could not fit pinned ${id}`); continue; }
     report.push(`${d.date} (locked): ${d.ids[i]} → ${id} (pinned)`);
     d.ids[i] = id;
     d.clues[i] = -1; // chosen below, once uses are known
   }
+  // Keep the rounds running easy → hard after a swap.
+  const order = d.ids.map((x, k) => [x, d.clues[k]]).sort((a, c) => DAY_TIERS.indexOf(byId.get(a[0]).tier) - DAY_TIERS.indexOf(byId.get(c[0]).tier));
+  d.ids = order.map((o) => o[0]); d.clues = order.map((o) => o[1]);
   d.ids.forEach((x, k) => { if (!want.has(x) && byId.get(x).retired) report.push(`${d.date} (locked): ${x} is retired but still scheduled; pin a replacement`); });
 }
 for (const [date] of dayPins) if (date <= today && !kept.some((d) => d.date === date && [...dayPins.get(date)].every((id) => d.ids.includes(id)))) {
@@ -117,7 +123,7 @@ for (; date <= planUntil; date = addDays(date, 1)) {
   const day = [];
   const rested = (c) => n - c.last >= MIN_GAP_DAYS;
   const apart = (c) => day.every((o) => distanceKm(o, c.b) >= MIN_SPREAD_KM);
-  const allowed = (b) => !b.retired && !day.includes(b) && !(reservedUntil.get(b.id) >= date) && !(notBefore.get(b.id) > date);
+  const allowed = (b) => !b.retired && !day.includes(b) && !(reservedUntil.get(b.id) >= date) && !(notBefore.get(b.id) > date) && !dayOut.get(date)?.has(b.id);
   const bestFor = (tier) => {
     // Oldest use first; ties (e.g. never used) in a stable per-date shuffle.
     let cands = pool
