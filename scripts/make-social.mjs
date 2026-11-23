@@ -14,11 +14,11 @@
 //   node scripts/make-social.mjs [date ...]     (default: every date from today on)
 //
 // Writes public/social/<date>-1.jpg and -2.jpg (served from landmarked.land so
-// Metricool can fetch them) and social/out/captions.json (gitignored) with each
+// Metricool can fetch them) and data/social-captions.json (committed, merged by date) with each
 // post's caption: the teaser line, the catchphrase with the difficulty square, the link, hashtags, and the photo credit that CC BY and
 // CC BY-SA require (creator, licence, "cropped").
 import puppeteer from 'puppeteer-core';
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { findChrome } from './chrome.mjs';
 
@@ -38,7 +38,6 @@ const W = 1080, H = 1350;
 // easy #8cc5a0, medium #e3b261, hard #e2775c) as the nearest emoji squares.
 const TIER_SQUARE = { easy: '🟩', medium: '🟨', hard: '🟥' };
 mkdirSync(new URL('public/social/', root), { recursive: true });
-mkdirSync(new URL('social/out/', root), { recursive: true });
 
 const now = new Date();
 const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
@@ -100,5 +99,9 @@ ${credit}`;
   captions.push({ date: p.date, id: p.id, name: b.name, tier: b.tier, round: round + 1, sourcePx: Math.round(w * iw), first: p.first, images: (p.first === 'photo' ? [2, 1] : [1, 2]).map((n) => `https://landmarked.land/social/${p.date}-${n}.jpg`), clue, text });
   console.log(p.date, p.id, `round ${round + 1}`, `${p.first} first`, `crop is ${Math.round(w * iw)} px of source${w * iw < 500 ? ' (soft)' : ''}`);
 }
-writeFileSync(new URL('social/out/captions.json', root), JSON.stringify(captions, null, 2));
+// Merge into the committed captions file, one entry per date (the weekly routine reads it for Metricool).
+const capFile = new URL('data/social-captions.json', root);
+const merged = new Map((existsSync(capFile) ? JSON.parse(readFileSync(capFile, 'utf8')) : []).map((c) => [c.date, c]));
+for (const c of captions) merged.set(c.date, c);
+writeFileSync(capFile, JSON.stringify([...merged.values()].sort((a, b) => a.date.localeCompare(b.date)), null, 1) + '\n');
 await browser.close();

@@ -126,7 +126,7 @@
       ['Fresh stock', `${p.stockDays} days`, p.stockDays < 7 ? 'bad' : p.stockDays < 21 ? 'warn' : '', 'never-used buildings beyond the locked days (target 21)'],
       ['Locked through', fmt(p.locked), '', 'puzzles and Instagram posts are final'],
       ['Planned through', fmt(p.days[p.days.length - 1].date), '', 'redrawn every night'],
-      ['Instagram gaps', igMissing, igMissing ? 'warn' : '', 'locked days without a post (Sunday task fills the week)'],
+      ['Instagram gaps', igMissing, igMissing ? 'warn' : '', 'locked days without a post (the Saturday routine fills next week)'],
       ['Repeats, locked', repeatsLocked, repeatsLocked ? 'warn' : '', `first repeat ahead: ${p.firstRepeat ? fmt(p.firstRepeat) : 'none'}`],
     ];
     $('tiles').innerHTML = tiles.map(([k, v, cls, sub]) => `<div class="tile ${cls}"><span>${k}</span><b>${esc(v)}</b><span>${esc(sub)}</span></div>`).join('');

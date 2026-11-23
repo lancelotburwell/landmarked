@@ -1,0 +1,55 @@
+# Renders the Instagram sneak-peek images whenever data/social.json changes:
+# for every post from today on that has no images (or no caption) yet, it
+# downloads the large photo, renders public/social/<date>-1.jpg and -2.jpg with
+# the runner's Chrome, writes the captions to data/social-captions.json, and
+# commits as Burwell Projects (Vercel Hobby skips builds from other authors).
+# The weekly cloud routine then waits for the images on landmarked.land and
+# creates the Metricool drafts. To re-render a post, delete its two images.
+name: Render Instagram posts
+
+on:
+  push:
+    branches: [main]
+    paths: ['data/social.json']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: social
+  cancel-in-progress: false
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Render missing posts
+        env:
+          CHROME_PATH: /usr/bin/google-chrome
+        run: |
+          mapfile -t pending < <(node scripts/social-pending.mjs)
+          ids="${pending[0]}"; dates="${pending[1]}"
+          if [ -z "$dates" ]; then echo "Nothing to render."; exit 0; fi
+          echo "Rendering: $dates"
+          # Wikimedia rate-limits now and then: retry the downloads.
+          for i in 1 2 3; do node scripts/social-photos.mjs $ids && break; sleep 30; done
+          node scripts/make-social.mjs $dates
+      - name: Commit and push
+        run: |
+          if git diff --quiet && [ -z "$(git ls-files --others --exclude-standard public/social data/social-captions.json)" ]; then
+            echo "Nothing new."
+            exit 0
+          fi
+          git config user.name "Burwell Projects"
+          git config user.email "burwell.projects@gmail.com"
+          git add public/social data/social.json data/social-captions.json
+          git commit -m "Render Instagram posts"
+          git pull --rebase
+          git push

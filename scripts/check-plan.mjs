@@ -10,7 +10,7 @@
 //        that day; fewer than 7 days of fresh buildings beyond the locked days;
 //        a pin problem.
 // WARN:  fresh stock under STOCK_DAYS; a locked day without an Instagram post
-//        (the Sunday routine adds the next week); a repeat on a locked day that
+//        (the Saturday routine adds the next week); a repeat on a locked day that
 //        comes back too soon or with a clue it has shown; locked-day buildings
 //        closer than 500 km; a building in the next two weeks without a photo.
 import { appendFileSync } from 'node:fs';
