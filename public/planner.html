@@ -183,7 +183,20 @@
 
   // ---------- editing ----------
   function setKeyUI() { $('unlock').hidden = !!key; $('unlocked').hidden = !key; }
-  $('unlock').addEventListener('submit', (e) => { e.preventDefault(); key = $('keyIn').value.trim() || null; store.set('key', key); $('keyIn').value = ''; setKeyUI(); toast(key ? 'Editing on. The key is checked on your first save.' : ''); });
+  $('unlock').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    // Accept the bare key or the whole stats link (…/stats.html#KEY).
+    const raw = $('keyIn').value.trim();
+    const k = decodeURIComponent(raw.includes('#') ? raw.slice(raw.lastIndexOf('#') + 1) : raw).trim();
+    if (!k) return;
+    try {
+      const res = await fetch('/api/admin', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ key: k, action: 'ping' }) });
+      const j = await res.json().catch(() => ({}));
+      if (!res.ok) { toast(j.error || `Could not check the key (${res.status})`, true); return; }
+      key = k; store.set('key', key); $('keyIn').value = ''; setKeyUI();
+      toast(j.canSave ? 'Key accepted. Editing is on.' : 'Key accepted, but saving is off: GITHUB_TOKEN is missing in Vercel.', !j.canSave);
+    } catch { toast('Could not reach the server to check the key.', true); }
+  });
   $('lockBtn').addEventListener('click', () => { key = null; store.set('key', null); setKeyUI(); });
 
   let toastTimer;

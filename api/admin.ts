@@ -29,7 +29,8 @@ export async function POST(request: Request): Promise<Response> {
   const key = process.env.STATS_KEY;
   let body: Json;
   try { body = await request.json(); } catch { return Response.json({ error: 'bad json' }, { status: 400 }); }
-  if (!key || body?.key !== key) return Response.json({ error: 'not allowed' }, { status: 403 });
+  if (!key || body?.key !== key) return Response.json({ error: 'Wrong key. Use the part after # in your stats link.' }, { status: 403 });
+  if (body.action === 'ping') return Response.json({ ok: true, canSave: !!process.env.GITHUB_TOKEN }); // key check on unlock
   if (!process.env.GITHUB_TOKEN) return Response.json({ error: 'GITHUB_TOKEN is not set in Vercel' }, { status: 503 });
   try {
     const result = await handle(body);
