@@ -286,16 +286,22 @@ button { font: inherit; color: inherit; }
 .band.mine { color: var(--text); }
 .band.mine .band-track > i { background: var(--accent); }
 .end-rank { margin: 0 0 6px; font-size: 13px; font-weight: 600; color: var(--accent); }
-/* Everyone's scores today, in 100-point bands; yours in the accent colour. */
-.everyone { margin: 4px 0 10px; }
-.everyone-head, .everyone-axis { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
-.everyone-head { margin-bottom: 18px; } /* room for the "you" label above a full bar */
-.everyone-axis { margin-top: 4px; }
-.everyone-bars { display: grid; grid-template-columns: repeat(10, 1fr); gap: 3px; height: 64px; align-items: end; }
-.everyone-bar { position: relative; height: 100%; display: flex; align-items: flex-end; background: var(--panel-2); border-radius: 3px; }
-.everyone-bar > i { display: block; width: 100%; border-radius: 3px; background: var(--line); }
-.everyone-bar.mine > i { background: var(--accent); }
-.everyone-you { position: absolute; left: 50%; top: -16px; transform: translateX(-50%); font-size: 10px; font-weight: 600; color: var(--accent); }
+/* "Where you stand": everyone's scores today in 200-point ranges; yours in the accent colour. */
+.everyone { margin: 6px 0 14px; padding: 14px 16px 16px; background: var(--panel-2); border: 1px solid var(--line); border-radius: var(--radius); }
+.stand-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 12px; }
+.stand-head h3 { margin: 0; font-size: 14px; font-weight: 600; color: var(--text); }
+.stand-head span { font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.stand-rows { display: grid; gap: 7px; }
+.stand-row { display: grid; grid-template-columns: 76px 1fr 38px; align-items: center; gap: 10px; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.stand-label { text-align: right; }
+.stand-pct { text-align: right; }
+.stand-track { position: relative; height: 22px; border-radius: 6px; background: var(--bg); overflow: hidden; }
+.stand-track > i { display: block; height: 100%; border-radius: 6px; background: #3a4048; }
+.stand-row.mine { color: var(--text); }
+.stand-row.mine .stand-track > i { background: var(--accent); }
+.stand-row.mine .stand-track { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 55%, transparent); }
+.stand-you { position: absolute; top: 50%; transform: translateY(-50%); font-size: 10px; font-weight: 700; letter-spacing: 0.08em; color: var(--accent); }
+.stand-you.inside { color: var(--accent-ink); }
 
 /* Result card photo: fixed height so the card never scrolls; the whole photo
    (object-fit: contain), with a blurred, darkened copy of it filling the sides. */

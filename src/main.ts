@@ -310,23 +310,34 @@ async function renderRank() {
   el.endRank.hidden = false;
   if (!r.bands || r.bands.length !== 10) return;
 
-  const head = h('div', 'everyone-head');
-  head.append(h('span', '', 'Everyone today'), h('span', '', `${players} players`));
-  const bars = h('div', 'everyone-bars');
-  const max = Math.max(1, ...r.bands);
-  const mine = Math.min(9, Math.floor(score / 100));
-  r.bands.forEach((n, i) => {
-    const bar = h('div', `everyone-bar${i === mine ? ' mine' : ''}`);
-    bar.title = `${i * 100}–${i === 9 ? 1000 : i * 100 + 99}: ${n.toLocaleString('en-US')}`;
+  // "Where you stand": today's players in five 200-point ranges, best on top, each bar
+  // as a share of the busiest range, the share of players on the right, yours in gold.
+  const groups = [0, 1, 2, 3, 4].map((g) => r.bands![g * 2] + r.bands![g * 2 + 1]);
+  const sum = Math.max(1, groups.reduce((a, n) => a + n, 0));
+  const max = Math.max(1, ...groups);
+  const mine = Math.min(4, Math.floor(score / 200));
+  const pct = (n: number) => (!n ? '0%' : (100 * n) / sum < 1 ? '<1%' : `${Math.round((100 * n) / sum)}%`);
+  const head = h('div', 'stand-head');
+  head.append(h('h3', '', 'Where you stand'), h('span', '', `${players} players today`));
+  const rows = h('div', 'stand-rows');
+  for (let g = 4; g >= 0; g--) {
+    const row = h('div', `stand-row${g === mine ? ' mine' : ''}`);
+    const track = h('span', 'stand-track');
     const fill = h('i');
-    fill.style.height = `${n ? Math.max(4, (n / max) * 100) : 0}%`;
-    bar.append(fill);
-    if (i === mine) bar.append(h('span', 'everyone-you', 'you'));
-    bars.append(bar);
-  });
-  const axis = h('div', 'everyone-axis');
-  axis.append(h('span', '', '0'), h('span', '', '500'), h('span', '', '1000'));
-  el.endEveryone.replaceChildren(head, bars, axis);
+    const w = groups[g] ? Math.max(3, (groups[g] / max) * 100) : 0;
+    fill.style.width = `${w}%`;
+    track.append(fill);
+    if (g === mine) {
+      // "YOU" just past the end of the bar, or inside its end (dark on gold) when the bar is long.
+      const you = h('b', `stand-you${w > 75 ? ' inside' : ''}`, 'YOU');
+      if (w > 75) you.style.right = `calc(${100 - w}% + 8px)`;
+      else you.style.left = `calc(${w}% + 8px)`;
+      track.append(you);
+    }
+    row.append(h('span', 'stand-label', `${g * 200}–${g * 200 + 200}`), track, h('span', 'stand-pct', pct(groups[g])));
+    rows.append(row);
+  }
+  el.endEveryone.replaceChildren(head, rows);
   el.endEveryone.hidden = false;
 }
 function renderStats() {
