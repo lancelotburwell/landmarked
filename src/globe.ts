@@ -82,6 +82,7 @@ export class Globe {
   private scratch2 = new Cartesian2();
   /** Resolves when the first full set of tiles has been drawn. */
   readonly tilesLoaded: Promise<void>;
+  private imagery: Imagery = 'nasa';
 
   constructor(el: HTMLElement, creditEl: HTMLElement, imagery: Imagery = 'nasa') {
     const dpr = window.devicePixelRatio || 1;
@@ -177,8 +178,10 @@ export class Globe {
     const ctrl = scene.screenSpaceCameraController;
     ctrl.enableTilt = false;
     ctrl.enableLook = false;
-    // Closest zoom before the imagery is just blur: Sentinel-2 ~10 m/px, Blue Marble ~500 m/px (closer is just blur).
-    ctrl.minimumZoomDistance = imagery === 'eox' ? 15_000 : 250_000;
+    // Closest zoom: stop where the imagery would start to look blurry (see closestAlt).
+    this.imagery = imagery;
+    ctrl.minimumZoomDistance = this.closestAlt();
+    scene.preUpdate.addEventListener(() => { ctrl.minimumZoomDistance = this.closestAlt(); });
     ctrl.maximumZoomDistance = 4.0e7;
 
     // Start over the player's own longitude (from their time zone), mid-latitudes.
@@ -455,7 +458,24 @@ export class Globe {
 
   /** Flies straight down over a building, keeping it above a card covering bottomInset (0..1) of the canvas. */
   focus(lon: number, lat: number, bottomInset = 0) {
-    this.frame({ lon, lat }, { lon, lat }, bottomInset, 250_000);
+    this.frame({ lon, lat }, { lon, lat }, bottomInset, this.closestAlt());
+  }
+
+  /**
+   * The closest camera height before the imagery looks blurry. Blue Marble has about
+   * 600 m per pixel at the equator, so we stop where one rendered pixel covers about
+   * that much ground: roughly 530 km on a phone and higher on a big screen (measured
+   * 2026-11-23: 250 km was blurry, 400 km soft, 600 km sharp). Sentinel-2 (EOX) is
+   * ~10 m/px, so it can go down to 15 km.
+   */
+  closestAlt(): number {
+    if (this.imagery === 'eox') return 15_000;
+    const scene = this.widget.scene;
+    const canvas = scene.canvas;
+    const fov = (scene.camera.frustum as unknown as { fov?: number }).fov ?? CesiumMath.PI_OVER_THREE;
+    // Cesium's fov spans the longer side; drawing-buffer pixels include resolutionScale.
+    const px = Math.max(canvas.width, canvas.height, 1);
+    return Math.max(250_000, (600 * px) / (2 * Math.tan(fov / 2)));
   }
 
   /** Camera height at which the whole globe fits the canvas's shorter side, with a margin. */
@@ -501,7 +521,7 @@ export class Globe {
     const tanH = aspect >= 1 ? tanBig : tanBig * aspect;
     const avail = Math.max(0.35, 1 - bottomInset);
     const span = Math.max(d, 1) * 1.45;
-    let alt = Math.max(span / (2 * tanV * avail), span / (2 * tanH), minAlt);
+    let alt = Math.max(span / (2 * tanV * avail), span / (2 * tanH), minAlt, this.closestAlt());
     let lat = CesiumMath.toDegrees(mid.latitude);
     if (alt < 5e6) {
       // Push the pair up into the free area above the card.
