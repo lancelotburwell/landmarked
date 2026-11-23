@@ -1,5 +1,6 @@
 # Keeps the daily puzzles planned 28 days ahead, so the game never runs out.
-# Runs every night: npm run schedule (it never changes days up to tomorrow),
+# Runs every night: npm run schedule (it never changes the locked days, except
+# for a building pinned in data/pins.json),
 # and if the plan changed, commits data/schedule.json and pushes, which
 # makes Vercel redeploy. Commits use the repo's identity "Burwell Projects",
 # because Vercel Hobby skips builds from any other commit author.
@@ -39,3 +40,8 @@ jobs:
           git add data/schedule.json
           git commit -m "Refresh daily schedule"
           git push
+      # Fails the run (GitHub then emails the owner) when something needs a human:
+      # a day without a puzzle, no Instagram post for today or tomorrow, or under
+      # a week of fresh buildings. Warnings go to the run's summary page.
+      - name: Check the plan
+        run: node scripts/check-plan.mjs

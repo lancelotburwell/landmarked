@@ -21,6 +21,9 @@ self.addEventListener('fetch', (e) => {
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
 
+  // The counters API, the stats page and the planner: always live, never cached.
+  if (url.origin === self.location.origin && (url.pathname.includes('/api/') || /\/(stats|planner)\.html$|\/plan\.json$/.test(url.pathname))) return;
+
   // Page: network first so new deploys show up, cache as offline fallback.
   if (req.mode === 'navigate') {
     e.respondWith(
@@ -30,9 +33,6 @@ self.addEventListener('fetch', (e) => {
     );
     return;
   }
-
-  // The counters API and the stats page: always live, never cached.
-  if (url.origin === self.location.origin && (url.pathname.includes('/api/') || url.pathname.endsWith('/stats.html'))) return;
 
   // The day's puzzle and the pool: network first, so a new schedule shows up at once.
   if (url.origin === self.location.origin && (url.pathname.includes('/days/') || url.pathname.endsWith('/pool.json'))) {

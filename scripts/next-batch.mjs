@@ -2,22 +2,28 @@
 // data/selection.json that aren't in the pool yet, aren't dropped and have no
 // clue file entry. For each it fetches the English Wikipedia intro.
 //
-//   node scripts/next-batch.mjs [count=35]
+//   node scripts/next-batch.mjs [count]
 //     → data/.cache/next-batch.json  [{ id, name, wiki, tier, architects, year, country, locatedIn, classes, lon, lat, intro }]
 //     and prints a short summary.
+// Without a count it sizes the batch from the stock: enough that, after a week's
+// use, STOCK_DAYS of never-used buildings remain beyond the locked days (plus
+// about 15% for drops), at least 10 and at most 60 per run.
 //
 // Used by the weekly batch routine (see CLAUDE.md); the clues themselves are
 // written by hand into data/clues/NNN-batch-<date>.json.
-import { readFileSync, writeFileSync, readdirSync, mkdirSync } from 'node:fs';
+import { writeFileSync, readdirSync, mkdirSync } from 'node:fs';
+import { FROZEN_DAYS, STOCK_DAYS, root, read, addDays, today, freshAfter } from './lib/plan.mjs';
 
-const COUNT = Number(process.argv[2] ?? 35);
+const buildings = read('data/buildings.json');
+const fresh = freshAfter(buildings, read('data/schedule.json'), addDays(today(), FROZEN_DAYS)).length;
+const want = (STOCK_DAYS + 7) * 5;
+const COUNT = process.argv[2] ? Number(process.argv[2]) : Math.min(60, Math.max(10, Math.ceil((want - fresh) * 1.15)));
+if (!process.argv[2]) console.log(`stock: ${fresh} fresh buildings beyond the locked days, target ${want} → batch of ${COUNT}`);
 const UA = { 'User-Agent': 'landmarked-data/1.0 (static game data import)' };
-const root = new URL('../', import.meta.url);
-const read = (p) => JSON.parse(readFileSync(new URL(p, root), 'utf8'));
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 const sel = read('data/selection.json').items;
-const pool = new Set(read('data/buildings.json').map((b) => b.id));
+const pool = new Set(buildings.map((b) => b.id));
 const written = {};
 for (const f of readdirSync(new URL('data/clues/', root)).filter((f) => f.endsWith('.json'))) Object.assign(written, read(`data/clues/${f}`));
 

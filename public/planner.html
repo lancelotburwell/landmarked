@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Landmarked planner</title>
+<style>
+  :root { --bg: #0e1012; --panel: #16191c; --panel-2: #1d2125; --line: #2b3036; --text: #ece6da; --muted: #99938a; --accent: #e3b261; --bad: #e2775c; --warn: #d9b54a; --ok: #7fb685; color-scheme: dark; }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 14px/1.5 ui-monospace, "IBM Plex Mono", Consolas, monospace; }
+  main { max-width: 1100px; margin: 0 auto; padding: 24px 16px 60px; display: grid; gap: 20px; }
+  h1 { margin: 0; font-size: 18px; letter-spacing: 0.12em; } h1 span { color: var(--accent); }
+  h2 { margin: 0 0 8px; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+  .note { color: var(--muted); font-size: 12px; margin: 4px 0 0; }
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+  .tile { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; }
+  .tile b { display: block; font-size: 22px; font-variant-numeric: tabular-nums; }
+  .tile span { font-size: 11px; color: var(--muted); }
+  .tile.bad b { color: var(--bad); } .tile.warn b { color: var(--warn); }
+  .alerts { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; }
+  .alerts ul { margin: 0; padding-left: 18px; font-size: 12.5px; }
+  .alerts li.err { color: var(--bad); } .alerts li.wrn { color: var(--warn); }
+  .alerts details summary { cursor: pointer; color: var(--muted); font-size: 12px; }
+  .bar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; font-size: 12px; color: var(--muted); }
+  .bar label { display: inline-flex; gap: 6px; align-items: center; cursor: pointer; }
+  .days { display: grid; gap: 10px; }
+  .day { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 12px; }
+  .day.past { opacity: 0.55; }
+  .day.today { border-color: var(--accent); }
+  .head { display: flex; gap: 8px; flex-wrap: wrap; align-items: baseline; margin-bottom: 10px; }
+  .head b { font-size: 15px; }
+  .chip { font-size: 10.5px; letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 7px; border-radius: 99px; border: 1px solid var(--line); color: var(--muted); white-space: nowrap; }
+  .chip.lock { color: var(--text); }
+  .chip.now { color: #1a1408; background: var(--accent); border-color: var(--accent); }
+  .chip.bad { color: var(--bad); border-color: color-mix(in srgb, var(--bad) 50%, transparent); }
+  .chip.warn { color: var(--warn); border-color: color-mix(in srgb, var(--warn) 50%, transparent); }
+  .chip.ig { color: #d58bd0; border-color: color-mix(in srgb, #d58bd0 45%, transparent); }
+  .chip.pin { color: var(--ok); border-color: color-mix(in srgb, var(--ok) 45%, transparent); }
+  .five { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+  .b { background: var(--panel-2); border: 1px solid var(--line); border-radius: 9px; overflow: hidden; display: flex; flex-direction: column; min-width: 0; }
+  .b.ig { border-color: #d58bd0; }
+  .b .ph { aspect-ratio: 4 / 3; background: #23272b center / cover no-repeat; display: grid; place-items: center; color: var(--muted); font-size: 11px; }
+  .b .tx { padding: 6px 8px 8px; display: grid; gap: 3px; min-width: 0; }
+  .b .nm { font-weight: 600; font-size: 12.5px; line-height: 1.3; }
+  .b .pl { font-size: 11px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .b .chips { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 2px; }
+  .b .clue { font-size: 11.5px; color: var(--text); margin-top: 4px; border-top: 1px dashed var(--line); padding-top: 5px; }
+  .teaser { font-size: 12px; color: var(--muted); margin-top: 8px; }
+  .tier { font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  .how { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; font-size: 12.5px; }
+  .how code { color: var(--accent); }
+  .err-msg { color: var(--bad); }
+  @media (max-width: 760px) {
+    .five { grid-template-columns: 1fr; }
+    .b { flex-direction: row; }
+    .b .ph { width: 92px; aspect-ratio: auto; min-height: 76px; flex: none; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>LANDMARKED <span>planner</span></h1>
+    <p class="note" id="gen">Loading…</p>
+  </header>
+
+  <section class="tiles" id="tiles"></section>
+  <section class="alerts" id="alerts" hidden></section>
+
+  <div class="bar">
+    <label><input type="checkbox" id="showPast"> show the last few days</label>
+    <label><input type="checkbox" id="showClues"> show clues</label>
+  </div>
+
+  <section class="days" id="days"></section>
+
+  <section class="how">
+    <h2>Changing the plan</h2>
+    <p style="margin:0">Ask Claude in a session on this project, for example “put the Reichstag on 3 Dec”, “keep the White House out until 21 January”, “retire X” or “rewrite tomorrow’s clue for Y”. It edits <code>data/pins.json</code> or the clue files, runs the checks and pushes. Locked days change only for a pinned building; everything after them is redrawn every night.</p>
+  </section>
+</main>
+<script>
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const fmt = (d) => new Date(d + 'T12:00:00').toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
+  const pref = (k, v) => { try { if (v === undefined) return localStorage.getItem('planner:' + k) === '1'; localStorage.setItem('planner:' + k, v ? '1' : '0'); } catch { return false; } };
+  let plan = null;
+
+  function render() {
+    const showPast = $('showPast').checked, showClues = $('showClues').checked;
+    $('days').innerHTML = plan.days.filter((d) => showPast || !d.past).map((d) => {
+      const isToday = d.date === plan.today;
+      const chips = [
+        isToday ? '<span class="chip now">today</span>' : '',
+        d.past ? '<span class="chip">played</span>' : d.locked ? '<span class="chip lock">locked</span>' : '<span class="chip">planned</span>',
+        d.social ? `<span class="chip ig">instagram · ${esc(d.buildings.find((b) => b.id === d.social.id)?.name ?? d.social.id)}</span>` : (d.locked && !d.past ? '<span class="chip warn">no instagram post</span>' : ''),
+        d.minKm < 1500 ? `<span class="chip ${d.minKm < 500 ? 'bad' : 'warn'}">closest ${d.minKm.toLocaleString('en-GB')} km</span>` : '',
+      ].join(' ');
+      const five = d.buildings.map((b) => {
+        const bc = [
+          d.pinned.includes(b.id) ? '<span class="chip pin">pinned</span>' : '',
+          b.repeat ? `<span class="chip ${b.repeat.gap < 180 ? 'warn' : ''}">repeat · ${b.repeat.gap} d</span>` : '<span class="chip">new</span>',
+          b.repeat && b.repeat.sameClue ? '<span class="chip bad">same clue</span>' : '',
+          b.clues > 1 ? `<span class="chip">clue ${b.clueNo}/${b.clues}</span>` : '',
+          b.photo ? '' : '<span class="chip warn">no photo</span>',
+        ].join(' ');
+        return `<div class="b${d.social?.id === b.id ? ' ig' : ''}">
+          <div class="ph" ${b.photo ? `style="background-image:url('photos/${esc(b.id)}.jpg')"` : ''}>${b.photo ? '' : 'no photo'}</div>
+          <div class="tx"><span class="tier">${esc(b.tier)}</span><span class="nm">${esc(b.name)}</span><span class="pl">${esc(b.city)}, ${esc(b.country)}</span><span class="chips">${bc}</span>
+          ${showClues ? `<span class="clue">${esc(b.clue)}</span>` : ''}</div></div>`;
+      }).join('');
+      const teaser = showClues && d.social ? `<p class="teaser">Instagram teaser: ${esc(d.social.line)}</p>` : '';
+      return `<article class="day${d.past ? ' past' : ''}${isToday ? ' today' : ''}" id="d-${d.date}"><div class="head"><b>${fmt(d.date)}</b><span class="note" style="margin:0">${d.date}</span> ${chips}</div><div class="five">${five}</div>${teaser}</article>`;
+    }).join('');
+  }
+
+  fetch('plan.json', { cache: 'no-store' }).then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); }).then((p) => {
+    plan = p;
+    $('gen').textContent = `Built ${new Date(p.generated).toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' })} · redrawn every night · ${p.pool.active} buildings in the pool`;
+    const upcoming = p.days.filter((d) => !d.past);
+    const igMissing = upcoming.filter((d) => d.locked && !d.social).length;
+    const repeatsLocked = upcoming.filter((d) => d.locked).flatMap((d) => d.buildings).filter((b) => b.repeat).length;
+    const tiles = [
+      ['Fresh stock', `${p.stockDays} days`, p.stockDays < 7 ? 'bad' : p.stockDays < 21 ? 'warn' : '', 'never-used buildings beyond the locked days (target 21)'],
+      ['Locked through', fmt(p.locked), '', 'puzzles and Instagram posts are final'],
+      ['Planned through', fmt(p.days[p.days.length - 1].date), '', 'redrawn every night'],
+      ['Instagram gaps', igMissing, igMissing ? 'warn' : '', 'locked days without a post (Sunday task fills the week)'],
+      ['Repeats, locked', repeatsLocked, repeatsLocked ? 'warn' : '', `first repeat ahead: ${p.firstRepeat ? fmt(p.firstRepeat) : 'none'}`],
+    ];
+    $('tiles').innerHTML = tiles.map(([k, v, cls, sub]) => `<div class="tile ${cls}"><span>${k}</span><b>${esc(v)}</b><span>${esc(sub)}</span></div>`).join('');
+    if (p.errors.length || p.warns.length) {
+      const li = (cls) => (m) => `<li class="${cls}">${esc(m)}</li>`;
+      $('alerts').innerHTML = `<h2>Health check</h2><ul>${p.errors.map(li('err')).join('')}${p.warns.slice(0, 6).map(li('wrn')).join('')}</ul>` +
+        (p.warns.length > 6 ? `<details><summary>${p.warns.length - 6} more warnings</summary><ul>${p.warns.slice(6).map(li('wrn')).join('')}</ul></details>` : '');
+      $('alerts').hidden = false;
+    }
+    $('showPast').checked = pref('past'); $('showClues').checked = pref('clues');
+    render();
+  }).catch((e) => { $('gen').innerHTML = `<span class="err-msg">Could not load plan.json (${esc(e.message)}).</span>`; });
+
+  $('showPast').addEventListener('change', (e) => { pref('past', e.target.checked); render(); });
+  $('showClues').addEventListener('change', (e) => { pref('clues', e.target.checked); render(); });
+</script>
+</body>
+</html>
