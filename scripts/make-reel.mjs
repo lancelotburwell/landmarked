@@ -62,7 +62,12 @@ const FORMATS = {
   where: { layout: 'where', title: 'Where am I?', reveal: 'none', detail: true, start: 2.5, spinEnd: 11, total: 11, spin: -12,
     turnEnd: 99, hoverEnd: 99, diveEnd: 99, pinAt: 100, cardEnd: 100, outAt: 101 },
   // who stops at ~3,000 km: closer, the map is just forest or desert with no landmarks to place the pin by.
-  who: { layout: 'who', title: 'Who am I?', reveal: 'none', closeAlt: 3_000_000, spinEnd: 4.5, turnEnd: 6.0, hoverEnd: 6.0, diveEnd: 7.4, pinAt: 8.0, cardEnd: 8.0, outAt: 10.5, total: 11.5 },
+  // One continuous swoop (user, 2026-11-23: "a smooth zoom that zooms in while it's still
+  // rotating"): the globe spins fast and, without a pause, slows while it zooms in, coming
+  // to rest over the pin at diveEnd; the pin lands at pinAt; from outAt it zooms back out
+  // while speeding up the same way. Exactly one full turn, so the last frame is the first.
+  who: { layout: 'who', title: 'Who am I?', reveal: 'none', closeAlt: 3_000_000, path: 'swoop', spin: -50, swoopIn: 210,
+    spinEnd: 0, turnEnd: 0, hoverEnd: 0, diveEnd: 6.0, pinAt: 6.6, cardEnd: 6.6, outAt: 7.8, total: 11.8 },
 };
 
 // <date> (a day in data/social.json) or a building id; for an id, CLUE=<n> picks its clue
@@ -323,13 +328,24 @@ const hermite = (p0, p1, m0, m1, u) =>
 const DEG_M = 111_320;
 // Where the spin starts, so that it flows into the turn without stopping (the turn
 // covers about spin·duration/2 more degrees while it slows down).
-const lon0 = T.lon - F.spin * (F.spinEnd - F.start + (F.turnEnd - F.spinEnd) / 2);
+const lon0 = F.path === 'swoop' ? T.lon + F.swoopIn : T.lon - F.spin * (F.spinEnd - F.start + (F.turnEnd - F.spinEnd) / 2);
 // Top-down: look a little south of the building near the ground so its pin sits at
 // PIN_Y (the camera looks straight down, 60° across the height).
 const shiftAt = (alt) => (((Hc / 2 - (PIN_Y - canvasTop)) / Hc) * 2 * Math.tan(Math.PI / 6) * alt) / DEG_M;
 
 // The camera's look-at point (lon, lat), height and tilt amount k (0..1).
 function view(t) {
+  if (F.path === 'swoop') {
+    // In: from the opening spin speed to rest over the target while zooming in.
+    if (t <= F.diveEnd) {
+      const d = F.diveEnd, u = t / d, k = easeInOut(u);
+      return { lon: hermite(lon0, T.lon, F.spin * d, 0, u), lat: START_LAT + (T.lat - START_LAT) * ease(u), alt: logLerp(HOME, closeAlt, k), k };
+    }
+    if (t <= F.outAt) return { lon: T.lon, lat: T.lat, alt: closeAlt, k: 1 };
+    // Out: from rest back up to the opening speed, ending one full turn on, at the opening frame.
+    const d = F.total - F.outAt, u = (t - F.outAt) / d, k = 1 - easeInOut(u);
+    return { lon: hermite(T.lon, lon0 - 360, 0, F.spin * d, u), lat: T.lat + (START_LAT - T.lat) * ease(u), alt: logLerp(closeAlt, HOME, easeInOut(u)), k };
+  }
   const s = Math.max(t, F.start);
   if (s <= F.spinEnd) return { lon: lon0 + F.spin * (s - F.start), lat: START_LAT, alt: HOME, k: 0 };
   if (s <= F.turnEnd) {
