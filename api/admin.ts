@@ -27,10 +27,12 @@ class Fail extends Error { status: number; constructor(msg: string, status = 400
 
 // GET /api/admin?diag → can this server reach Wikimedia? (No secrets involved.)
 export async function GET(): Promise<Response> {
-  const probe = async (url: string) => { try { const r = await fetch(url, { headers: UA }); return r.status; } catch (e) { return String((e as Error).message).slice(0, 80); } };
-  const api = await probe('https://commons.wikimedia.org/w/api.php?action=query&titles=File:White_House_north_and_south_sides.jpg&prop=imageinfo&iiprop=url&iiurlwidth=640&format=json');
-  const thumb = await probe('https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/White_House_north_and_south_sides.jpg/640px-White_House_north_and_south_sides.jpg');
-  return Response.json({ commonsApi: api, commonsThumb: thumb, ua: UA['User-Agent'] }, { headers: { 'Cache-Control': 'no-store' } });
+  try {
+    const r = await fetch('https://commons.wikimedia.org/w/api.php?action=query&titles=File:Sydney_Opera_House_Sails.jpg&prop=imageinfo&iiprop=url&iiurlwidth=640&format=json&formatversion=2', { headers: UA });
+    const info = (await r.json())?.query?.pages?.[0]?.imageinfo?.[0];
+    const t = info ? await fetch(info.thumburl, { headers: UA }) : null;
+    return Response.json({ commonsApi: r.status, thumbUrl: info?.thumburl ?? null, thumb: t?.status ?? null, thumbBody: t && !t.ok ? (await t.text()).slice(0, 200) : null, ua: UA['User-Agent'] }, { headers: { 'Cache-Control': 'no-store' } });
+  } catch (e) { return Response.json({ error: String((e as Error).message) }); }
 }
 
 export async function POST(request: Request): Promise<Response> {
