@@ -248,7 +248,8 @@
       <div class="photo">${b.credit ? `<img src="photos/${esc(id)}.jpg?v=${Date.now()}" alt="">` : '<div class="note" style="padding:30px;text-align:center">No photo</div>'}</div>
       <p class="note" style="margin-top:-6px">${b.credit ? `Photo: ${esc(b.credit.artist)} · ${esc(b.credit.license)} · <a href="${esc(b.credit.page)}" target="_blank" rel="noopener">Commons</a>` : ''} <button type="button" id="photoBtn" style="margin-left:6px">Change photo</button></p>
       <div id="picker" hidden class="box"><h2>Photos from the Wikipedia article</h2><div class="picks" id="picks"><span class="note">Loading…</span></div>
-        <div class="row" style="margin-top:8px"><input id="fileIn" placeholder="or paste a Commons file name, e.g. File:Big_Ben.jpg" style="flex:1;min-width:200px"><button type="button" id="fileBtn">Use this file</button></div></div>
+        <div class="row" style="margin-top:8px"><input id="fileIn" placeholder="or paste a Commons file name, e.g. File:Big_Ben.jpg" style="flex:1;min-width:200px"><button type="button" id="fileBtn">Choose this file</button></div>
+        <div id="choice" hidden class="row" style="margin-top:10px;padding-top:10px;border-top:1px dashed var(--line)"><span>Selected: <b id="choiceName"></b></span><button type="button" class="primary" id="useBtn">Use this photo</button></div></div>
 
       <div class="box"><h2>Clues ${b.clues.length > 1 ? `(${b.clues.length})` : ''}</h2>
         <div id="clueList" style="display:grid;gap:10px">${b.clues.map((c, i) => `<div><textarea data-clue="${i}">${esc(c)}</textarea><div class="row" style="justify-content:space-between"><span data-hint="${i}">${clueHints(c, b)}</span><span class="note" style="margin:0">${usedOn(i).length ? 'on ' + esc(usedOn(i).join(', ')) : 'not shown in this window'}</span></div></div>`).join('')}</div>
@@ -279,7 +280,7 @@
           <button type="button" id="swapBtn">Swap</button></div>
           <p class="note">This pins the new building to that day${day.locked ? ' (a locked day: only this building changes)' : ''}.</p>` : ''}
         <div class="row" style="margin-top:8px"><span>Keep it out until</span><input type="date" id="holdDate" value="${esc(plan.pins.find((p) => p.id === id)?.notBefore ?? '')}"><button type="button" id="holdBtn">Set</button></div>
-        <div class="row" style="margin-top:8px"><button type="button" class="danger" id="retireBtn">Retire this building…</button></div></div>`;
+        <div class="row" style="margin-top:8px"><input id="retireReason" placeholder="reason to retire it" style="flex:1;min-width:180px"><button type="button" class="danger" id="retireBtn">Retire</button></div></div>`;
     dr.hidden = false; $('shade').hidden = false; dr.scrollTop = 0;
 
     $('x').onclick = close;
@@ -314,11 +315,19 @@
       } catch { $('saveNote').textContent = ''; $('save').disabled = false; }
     };
 
+    // No browser pop-ups (Firefox can block them): a second click on the same button confirms.
+    const twoStep = (btn, ask) => {
+      if (btn.dataset.armed) { clearTimeout(+btn.dataset.armed); delete btn.dataset.armed; btn.textContent = btn.dataset.label; btn.classList.remove('primary'); return true; }
+      btn.dataset.label = btn.textContent; btn.textContent = ask; btn.classList.add('primary');
+      btn.dataset.armed = setTimeout(() => { delete btn.dataset.armed; btn.textContent = btn.dataset.label; btn.classList.remove('primary'); }, 6000);
+      return false;
+    };
+
     // Schedule actions.
     $('swapBtn') && ($('swapBtn').onclick = async () => {
       const to = $('swapSel').value;
       const keep = day.pinned.filter((x) => x !== id);
-      if (!confirm(`Put ${plan.buildings[to].name} on ${fmt(date)} instead of ${b.name}?`)) return;
+      if (!twoStep($('swapBtn'), `Click again: ${plan.buildings[to].name} on ${fmt(date)}`)) return;
       const prevOut = plan.pins.find((p) => p.date === date)?.out ?? [];
       await send('pin', { date, ids: [...keep, to], out: [...new Set([...prevOut, id])], note: 'from the planner' });
       toast('Done. The schedule is being redrawn; reload in about two minutes.');
@@ -330,8 +339,9 @@
       toast(v ? `Kept out until ${fmt(v)}. The schedule is being redrawn.` : 'Hold removed.');
     };
     $('retireBtn').onclick = async () => {
-      const reason = prompt(`Why retire ${b.name}? It will never be scheduled again.`);
-      if (!reason) return;
+      const reason = $('retireReason').value.trim();
+      if (!reason) { $('retireReason').focus(); toast('Write a short reason first.', true); return; }
+      if (!twoStep($('retireBtn'), 'Click again to retire it for good')) return;
       await send('retire', { id, reason });
       b.retired = reason;
       toast('Retired. Days it was planned on get a replacement; check locked days in the health check.');
@@ -344,22 +354,33 @@
       if (!$('picker').hidden) { $('picker').hidden = true; return; }
       $('picker').hidden = false;
       try {
-        const q = new URLSearchParams({ action: 'query', generator: 'images', titles: b.wiki, gimlimit: '40', prop: 'imageinfo', iiprop: 'url|extmetadata|mime', iiurlwidth: '300', format: 'json', formatversion: '2', origin: '*' });
+        const q = new URLSearchParams({ action: 'query', generator: 'images', titles: b.wiki, gimlimit: '40', prop: 'imageinfo', iiprop: 'url|size|extmetadata|mime', iiurlwidth: '300', format: 'json', formatversion: '2', origin: '*' });
         const j = await (await fetch('https://en.wikipedia.org/w/api.php?' + q)).json();
         const files = (j.query?.pages ?? []).map((p) => ({ title: p.title, i: p.imageinfo?.[0] })).filter((f) => f.i && /jpe?g/.test(f.i.mime));
+        const nice = (t) => t.replace(/^File:/, '').replace(/\.jpe?g$/i, '').replace(/_/g, ' ');
         $('picks').innerHTML = files.length ? files.map((f) => {
           const lic = (f.i.extmetadata?.LicenseShortName?.value ?? '').replace(/<[^>]*>/g, '');
           const ok = OK.test(lic);
-          return `<button type="button" class="pick${ok ? '' : ' no'}" data-file="${esc(f.title)}" ${ok ? '' : 'disabled'} title="${esc(f.title)}"><img src="${esc(f.i.thumburl)}" alt="" loading="lazy"><span>${esc(lic || 'no licence')} · ${f.i.width}px</span></button>`;
+          return `<button type="button" class="pick${ok ? '' : ' no'}" data-file="${esc(f.title)}" data-lic="${esc(lic)}" ${ok ? '' : 'disabled'} title="${esc(f.title)}"><img src="${esc(f.i.thumburl)}" alt="" loading="lazy"><span><b style="color:var(--text);font-weight:500">${esc(nice(f.title))}</b><br>${esc(lic || 'no licence')}${f.i.width ? ` · ${f.i.width}px wide` : ''}${ok ? '' : ' · not allowed'}</span></button>`;
         }).join('') : '<span class="note">No JPEG photos in the article. Paste a Commons file name below.</span>';
-        $('picks').querySelectorAll('.pick:not(.no)').forEach((el) => el.onclick = () => usePhoto(el.dataset.file));
+        $('picks').querySelectorAll('.pick:not(.no)').forEach((el) => el.onclick = () => choose(el.dataset.file, el));
       } catch { $('picks').innerHTML = '<span class="note">Could not reach Wikipedia.</span>'; }
     };
-    $('fileBtn').onclick = () => $('fileIn').value.trim() && usePhoto($('fileIn').value.trim());
+    $('fileBtn').onclick = () => { const f = $('fileIn').value.trim(); if (f) choose(/^File:/i.test(f) ? f : 'File:' + f, null); };
+    // Selecting a photo shows it with a "Use this photo" button; nothing is saved until that is clicked.
+    function choose(file, el) {
+      $('picks').querySelectorAll('.pick').forEach((p) => p.style.outline = '');
+      if (el) el.style.outline = '2px solid var(--accent)';
+      $('choice').hidden = false;
+      $('choiceName').textContent = file.replace(/^File:/, '');
+      $('useBtn').onclick = () => usePhoto(file);
+      $('choice').scrollIntoView({ block: 'nearest' });
+    }
     async function usePhoto(file) {
-      if (!confirm(`Use ${file} as the photo for ${b.name}?`)) return;
+      $('useBtn').disabled = true;
       toast('Saving the photo…');
-      const r = await send('photo', { id, file });
+      let r;
+      try { r = await send('photo', { id, file }); } catch { $('useBtn').disabled = false; return; }
       b.credit = r.credit;
       toast('New photo saved. Live in about a minute (browsers may show the old one for a while).');
       open(id, date);
