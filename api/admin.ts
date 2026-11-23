@@ -25,6 +25,14 @@ const UA = { 'User-Agent': 'landmarked-admin/1.0 (game data editor)' };
 type Json = Record<string, any>;
 class Fail extends Error { status: number; constructor(msg: string, status = 400) { super(msg); this.status = status; } }
 
+// GET /api/admin?diag → can this server reach Wikimedia? (No secrets involved.)
+export async function GET(): Promise<Response> {
+  const probe = async (url: string) => { try { const r = await fetch(url, { headers: UA }); return r.status; } catch (e) { return String((e as Error).message).slice(0, 80); } };
+  const api = await probe('https://commons.wikimedia.org/w/api.php?action=query&titles=File:White_House_north_and_south_sides.jpg&prop=imageinfo&iiprop=url&iiurlwidth=640&format=json');
+  const thumb = await probe('https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/White_House_north_and_south_sides.jpg/640px-White_House_north_and_south_sides.jpg');
+  return Response.json({ commonsApi: api, commonsThumb: thumb, ua: UA['User-Agent'] }, { headers: { 'Cache-Control': 'no-store' } });
+}
+
 export async function POST(request: Request): Promise<Response> {
   const key = process.env.STATS_KEY;
   let body: Json;
