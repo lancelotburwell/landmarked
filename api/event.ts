@@ -1,6 +1,7 @@
 // POST /api/event  { type, day, score?, returning?, yesterday?, ref? }
 // Adds one anonymous event to the day's counters. A finish answers with the
-// day's rank so far: { players, beat } (beat = % of players with a lower score).
+// day's rank so far: { players, beat, bands } (beat = % of players with a lower score,
+// bands = everyone's scores in 100-point bands).
 import { parseEvent, rank, record, redis } from './_lib.js';
 
 export async function POST(request: Request): Promise<Response> {

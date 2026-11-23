@@ -87,16 +87,21 @@ export async function record(store: Store, ev: GameEvent, country?: string | nul
 const counts = (h: Record<string, unknown> | null) =>
   Object.fromEntries(Object.entries(h ?? {}).map(([f, v]) => [f, Number(v) || 0])) as Record<string, number>;
 
-/** How a score compares with everyone who finished that day. */
-export async function rank(store: Store, day: string, score: number): Promise<{ players: number; beat: number }> {
+/**
+ * How a score compares with everyone who finished that day, plus the day's spread of
+ * scores in ten 100-point bands (0–99 … 900–1000), for the end screen's chart.
+ */
+export async function rank(store: Store, day: string, score: number): Promise<{ players: number; beat: number; bands: number[] }> {
   const hist = counts(await store.hgetall(`lm:${day}:hist`));
   const mine = bucket(score);
+  const bands = Array<number>(10).fill(0);
   let players = 0, below = 0;
   for (const [b, n] of Object.entries(hist)) {
     players += n;
     if (Number(b) < mine) below += n;
+    bands[Math.min(9, Math.floor(Number(b) / 10))] += n;
   }
-  return { players, beat: players ? Math.round((100 * below) / players) : 0 };
+  return { players, beat: players ? Math.round((100 * below) / players) : 0, bands };
 }
 
 export interface DaySummary {

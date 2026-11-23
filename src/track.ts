@@ -5,7 +5,8 @@ const ON = location.hostname === 'landmarked.land' || new URLSearchParams(locati
 const API = `${import.meta.env.BASE_URL}api/`;
 
 export type EventType = 'visit' | 'start' | 'finish' | 'share' | 'practice';
-export interface Rank { players: number; beat: number }
+/** players: finished today; beat: % of them with a lower score; bands: scores in 100-point bands. */
+export interface Rank { players: number; beat: number; bands?: number[] }
 
 async function post(body: Record<string, unknown>): Promise<Response | null> {
   if (!ON) return null;

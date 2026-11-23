@@ -286,6 +286,16 @@ button { font: inherit; color: inherit; }
 .band.mine { color: var(--text); }
 .band.mine .band-track > i { background: var(--accent); }
 .end-rank { margin: 0 0 6px; font-size: 13px; font-weight: 600; color: var(--accent); }
+/* Everyone's scores today, in 100-point bands; yours in the accent colour. */
+.everyone { margin: 4px 0 10px; }
+.everyone-head, .everyone-axis { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.everyone-head { margin-bottom: 18px; } /* room for the "you" label above a full bar */
+.everyone-axis { margin-top: 4px; }
+.everyone-bars { display: grid; grid-template-columns: repeat(10, 1fr); gap: 3px; height: 64px; align-items: end; }
+.everyone-bar { position: relative; height: 100%; display: flex; align-items: flex-end; background: var(--panel-2); border-radius: 3px; }
+.everyone-bar > i { display: block; width: 100%; border-radius: 3px; background: var(--line); }
+.everyone-bar.mine > i { background: var(--accent); }
+.everyone-you { position: absolute; left: 50%; top: -16px; transform: translateX(-50%); font-size: 10px; font-weight: 600; color: var(--accent); }
 
 /* Result card photo: fixed height so the card never scrolls; the whole photo
    (object-fit: contain), with a blurred, darkened copy of it filling the sides. */

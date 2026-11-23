@@ -1,4 +1,4 @@
-// GET /api/rank?day=YYYY-MM-DD&score=674 → { players, beat }
+// GET /api/rank?day=YYYY-MM-DD&score=674 → { players, beat, bands }
 // How a finished score compares with everyone else that day (read only).
 import { plausibleDay, rank, redis } from './_lib.js';
 

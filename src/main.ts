@@ -66,6 +66,7 @@ const el = {
   introStreak: $('intro-streak'),
   endStats: $('end-stats'),
   endRank: $('end-rank'),
+  endEveryone: $('end-everyone'),
   catchup: $('catchup'),
   toast: $('toast'),
 };
@@ -293,13 +294,40 @@ function renderIntroStreak() {
   el.introStreak.textContent = `🔥 ${s.streak}-day streak${done ? '' : '. Play today to keep it going.'}`;
   el.introStreak.hidden = false;
 }
-/** "You beat 72% of today's players", once enough people have finished. */
+/**
+ * How everyone did today, once enough people have finished: "You beat 72% of today's
+ * players" and a chart of all of today's scores in 100-point bands, with your band
+ * highlighted. Anonymous totals only (api/_lib.ts): no names, no player ids.
+ */
+const RANK_MIN_PLAYERS = 10;
 async function renderRank() {
   if (catchUp) return;
-  const r = await finishAndRank(date, total());
-  if (!r || r.players < 20) return;
-  el.endRank.textContent = r.beat >= 1 ? `You beat ${r.beat}% of today's players` : `${r.players.toLocaleString('en-US')} players so far today`;
+  const score = total();
+  const r = await finishAndRank(date, score);
+  if (!r || r.players < RANK_MIN_PLAYERS) return;
+  const players = r.players.toLocaleString('en-US');
+  el.endRank.textContent = r.beat >= 1 ? `You beat ${r.beat}% of today's players` : `${players} players so far today`;
   el.endRank.hidden = false;
+  if (!r.bands || r.bands.length !== 10) return;
+
+  const head = h('div', 'everyone-head');
+  head.append(h('span', '', 'Everyone today'), h('span', '', `${players} players`));
+  const bars = h('div', 'everyone-bars');
+  const max = Math.max(1, ...r.bands);
+  const mine = Math.min(9, Math.floor(score / 100));
+  r.bands.forEach((n, i) => {
+    const bar = h('div', `everyone-bar${i === mine ? ' mine' : ''}`);
+    bar.title = `${i * 100}–${i === 9 ? 1000 : i * 100 + 99}: ${n.toLocaleString('en-US')}`;
+    const fill = h('i');
+    fill.style.height = `${n ? Math.max(4, (n / max) * 100) : 0}%`;
+    bar.append(fill);
+    if (i === mine) bar.append(h('span', 'everyone-you', 'you'));
+    bars.append(bar);
+  });
+  const axis = h('div', 'everyone-axis');
+  axis.append(h('span', '', '0'), h('span', '', '500'), h('span', '', '1000'));
+  el.endEveryone.replaceChildren(head, bars, axis);
+  el.endEveryone.hidden = false;
 }
 function renderStats() {
   const s = stats(today);
