@@ -48,5 +48,6 @@
   {"date":"2026-12-17","ids":["leaning-tower-pisa","marina-bay-sands","fallingwater","hallgrimskirkja","yoyogi-gymnasium"],"clues":[0,0,0,0,0]},
   {"date":"2026-12-18","ids":["taj-mahal","petronas-towers","guggenheim-bilbao","turning-torso","shwedagon-pagoda"],"clues":[0,0,0,0,0]},
   {"date":"2026-12-19","ids":["big-ben","st-basils","potala-palace","habitat-67","zeitz-mocaa"],"clues":[0,0,0,0,0]},
-  {"date":"2026-12-20","ids":["sagrada-familia","cn-tower","cctv-hq","heydar-aliyev-center","cardboard-cathedral"],"clues":[0,0,0,0,0]}
+  {"date":"2026-12-20","ids":["sagrada-familia","cn-tower","cctv-hq","heydar-aliyev-center","cardboard-cathedral"],"clues":[0,0,0,0,0]},
+  {"date":"2026-12-21","ids":["notre-dame","empire-state-building","brasilia-cathedral","hassan-ii-mosque","great-mosque-djenne"],"clues":[0,0,0,0,0]}
 ]
