@@ -10,13 +10,13 @@
 // under them (some time zones are already a day ahead), and the weekly
 // Instagram sneak peeks (data/social.json) are made a week ahead from them.
 //
-// Rules per day: 2 easy, 1 medium, 2 hard; least recently used first (never
+// Rules per day: 2 easy, 2 medium, 1 hard; least recently used first (never
 // used counts as oldest); not within MIN_GAP_DAYS of its last use; at least
 // MIN_SPREAD_KM from the day's other buildings. Rules relax, with a warning,
 // only when the pool is too small. A building that comes back gets its next clue.
 import { readFileSync, writeFileSync } from 'node:fs';
 
-const DAY_TIERS = ['easy', 'easy', 'medium', 'hard', 'hard'];
+const DAY_TIERS = ['easy', 'easy', 'medium', 'medium', 'hard']; // 2/1/2 until 2026-11-23
 const BUFFER_DAYS = 28;
 const FROZEN_DAYS = 8; // today + 8: covers next week's sneak peeks, made the day before the week starts
 const MIN_GAP_DAYS = 45;

@@ -61,9 +61,14 @@ button { font: inherit; color: inherit; }
 .tier.medium { background: var(--medium); }
 .tier.hard { background: var(--hard); }
 .tier:empty { display: none; }
-.dots { margin-left: auto; display: flex; gap: 4px; }
-.dots i { width: 14px; height: 4px; border-radius: 2px; background: var(--line); }
-.dots i.cur { background: var(--muted); }
+/* Difficulty meter: five rising bars that fill and warm round by round. */
+.dots, .meter { display: inline-flex; align-items: flex-end; gap: 3px; }
+.dots { margin-left: auto; height: 12px; }
+.dots i, .meter i { display: block; width: 6px; border-radius: 1.5px; background: var(--line); transition: background 0.3s; }
+.dots i:nth-child(1) { height: 4px; } .dots i:nth-child(2) { height: 6px; } .dots i:nth-child(3) { height: 8px; } .dots i:nth-child(4) { height: 10px; } .dots i:nth-child(5) { height: 12px; }
+.meter { height: 10px; }
+.meter i { width: 4px; }
+.meter i:nth-child(1) { height: 3px; } .meter i:nth-child(2) { height: 4.75px; } .meter i:nth-child(3) { height: 6.5px; } .meter i:nth-child(4) { height: 8.25px; } .meter i:nth-child(5) { height: 10px; }
 .clue { margin: 6px 0 0; font-size: 13.5px; line-height: 1.45; }
 
 /* ---- globe stage ---- */
@@ -174,7 +179,7 @@ button { font: inherit; color: inherit; }
 }
 .round:last-child { border-bottom: 1px solid var(--line); }
 .r-num { grid-area: n; align-self: start; color: var(--muted); font-size: 12px; }
-.round .tier { grid-area: t; }
+.round .meter { grid-area: t; }
 .r-name { grid-area: name; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
 .r-pts { grid-area: pts; font-weight: 600; font-variant-numeric: tabular-nums; }
 .r-track { grid-area: bar; height: 6px; border-radius: 3px; background: var(--panel-2); overflow: hidden; }
@@ -232,8 +237,6 @@ button { font: inherit; color: inherit; }
 #qnum { white-space: nowrap; }
 @media (max-width: 420px) {
   .qhead { gap: 6px; letter-spacing: 0.06em; font-size: 10.5px; }
-  .dots { gap: 3px; }
-  .dots i { width: 9px; }
 }
 /* Phones: the result card sits at the bottom, so keep the imagery credit visible at the top. */
 @media (max-width: 759px) {

@@ -22,8 +22,8 @@ const written = {};
 for (const f of readdirSync(new URL('data/clues/', root)).filter((f) => f.endsWith('.json'))) Object.assign(written, read(`data/clues/${f}`));
 
 const todo = sel.filter((s) => !pool.has(s.id) && !written[s.id]);
-// Keep each batch in the daily ratio (2 easy, 1 medium, 2 hard), most famous first within each tier.
-const share = { easy: 0.37, medium: 0.26, hard: 0.37 };
+// Keep each batch in the daily ratio (2 easy, 2 medium, 1 hard), most famous first within each tier.
+const share = { easy: 0.4, medium: 0.4, hard: 0.2 };
 const picked = [];
 for (const tier of ['easy', 'medium', 'hard']) picked.push(...todo.filter((s) => s.tier === tier).slice(0, Math.round(COUNT * share[tier])));
 for (const s of todo) if (picked.length < COUNT && !picked.includes(s)) picked.push(s); // top up if a tier ran dry

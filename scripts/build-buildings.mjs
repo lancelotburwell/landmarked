@@ -13,7 +13,7 @@
 // existing id updates its text fields, and extra clues are appended (used when
 // the building comes back). A "drop" on an existing id marks it retired, so it
 // is never scheduled again. New buildings get a tier from their fame rank in
-// the whole selection: top 37% easy, next 26% medium, rest hard.
+// the whole selection: top 40% easy, next 40% medium, rest hard (the daily 2/2/1).
 import { readFileSync, writeFileSync, readdirSync } from 'node:fs';
 
 const root = new URL('../', import.meta.url);
@@ -24,7 +24,7 @@ const byId = new Map(pool.map((b) => [b.id, b]));
 const rank = new Map(sel.map((s, i) => [s.id, i]));
 const tierFor = (id) => {
   const r = (rank.get(id) ?? sel.length) / sel.length;
-  return r < 0.37 ? 'easy' : r < 0.63 ? 'medium' : 'hard';
+  return r < 0.4 ? 'easy' : r < 0.8 ? 'medium' : 'hard';
 };
 
 const clues = {};

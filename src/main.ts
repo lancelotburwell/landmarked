@@ -1,8 +1,7 @@
 import './style.css';
 import {
-  DAY_TIERS,
   ROUNDS,
-  TIER_COLOR,
+  ROUND_COLOR,
   distanceKm,
   formatKm,
   load,
@@ -31,7 +30,6 @@ const el = {
   date: $('date'),
   score: $('score'),
   qnum: $('qnum'),
-  qtier: $('qtier'),
   dots: $('dots'),
   clue: $('clue'),
   globe: $('globe'),
@@ -171,14 +169,12 @@ function showQuestion() {
   const i = round();
   const b = day[i];
   el.qnum.textContent = `QUESTION ${i + 1} OF ${ROUNDS}`;
-  el.qtier.textContent = DAY_TIERS[i].toUpperCase();
-  el.qtier.className = `tier ${DAY_TIERS[i]}`;
   el.clue.textContent = b.clue;
   // Preload the photo while the player reads the clue, so the result card shows it instantly.
   if (creditMap[b.id]) new Image().src = photoUrl(b.id);
-  renderDots();
   el.result.hidden = true;
   awaiting = true;
+  renderDots();
   if (!globe) el.globeStatus.textContent = 'Loading globe…';
 }
 
@@ -201,13 +197,13 @@ function lockIn(lon: number, lat: number) {
   const card = el.result.getBoundingClientRect();
   const fullWidth = card.width > stage.width * 0.6;
   const inset = fullWidth ? Math.min(0.6, (stage.bottom - card.top) / stage.height) : 0;
-  globe?.showResult({ lon: b.lon, lat: b.lat, name: b.name, color: TIER_COLOR[b.tier], guess: { lon, lat } }, inset);
+  globe?.showResult({ lon: b.lon, lat: b.lat, name: b.name, color: ROUND_COLOR[i], guess: { lon, lat } }, inset);
   setScore(total(), true);
 }
 
 function showResultCard(b: Building, km: number, pts: number, i: number) {
   el.rPoints.textContent = String(pts);
-  el.rPoints.style.color = TIER_COLOR[b.tier];
+  el.rPoints.style.color = ROUND_COLOR[i];
   el.rDistance.textContent = formatKm(km);
   el.rName.textContent = b.name;
   el.rArchitect.textContent = b.architect;
@@ -268,14 +264,25 @@ function setScore(to: number, animate: boolean) {
   requestAnimationFrame(step);
 }
 
+/** The difficulty meter: five rising bars that fill and warm up to the current round. */
 function renderDots() {
-  const dots = el.dots.querySelectorAll('i');
-  dots.forEach((d, i) => {
-    const g = state.guesses[i];
-    d.className = !g && i === round() ? 'cur' : '';
-    d.style.background = g ? TIER_COLOR[DAY_TIERS[i]] : '';
-    d.style.opacity = g ? String(0.35 + (0.65 * g.pts) / 200) : '';
+  // While a question is open, its own bar is lit; once guessed, round() has moved on.
+  const reached = Math.min(awaiting ? round() : round() - 1, ROUNDS - 1);
+  el.dots.querySelectorAll('i').forEach((d, i) => {
+    d.style.background = i <= reached ? ROUND_COLOR[i] : '';
   });
+}
+
+/** A small copy of the meter, filled up to round i, for the results and cards. */
+function meter(i: number): HTMLElement {
+  const m = h('span', 'meter');
+  m.setAttribute('aria-label', `Difficulty ${i + 1} of ${ROUNDS}`);
+  for (let k = 0; k < ROUNDS; k++) {
+    const bar = h('i');
+    if (k <= i) bar.style.background = ROUND_COLOR[k];
+    m.append(bar);
+  }
+  return m;
 }
 
 // ---------- end screen ----------
@@ -353,7 +360,6 @@ function h<K extends keyof HTMLElementTagNameMap>(tag: K, cls = '', text = ''): 
 function showEnd() {
   awaiting = false;
   el.qnum.textContent = practice ? 'PRACTICE DONE' : 'DONE FOR TODAY';
-  el.qtier.textContent = '';
   el.clue.textContent = practice
     ? `You scored ${total()} of 1000. Tap a building on the globe to read about it.`
     : `You scored ${total()} of 1000. Tap a building on the globe to read about it, and come back tomorrow for five more.`;
@@ -369,12 +375,12 @@ function showEnd() {
     const b = day[i];
     const li = h('li', 'round');
     const pts = h('span', 'r-pts', String(g.pts));
-    pts.style.color = TIER_COLOR[b.tier];
+    pts.style.color = ROUND_COLOR[i];
     const track = h('span', 'r-track');
     const fill = h('i');
-    fill.style.background = TIER_COLOR[b.tier];
+    fill.style.background = ROUND_COLOR[i];
     track.append(fill);
-    li.append(h('span', 'r-num', String(i + 1)), h('span', `tier ${b.tier}`, b.tier.toUpperCase()), h('span', 'r-name', b.name), pts, track, h('span', 'r-dist', formatKm(g.km)));
+    li.append(h('span', 'r-num', String(i + 1)), meter(i), h('span', 'r-name', b.name), pts, track, h('span', 'r-dist', formatKm(g.km)));
     el.endRounds.append(li);
     requestAnimationFrame(() => requestAnimationFrame(() => (fill.style.width = `${Math.max(2, (g.pts / 200) * 100)}%`)));
   });
@@ -425,7 +431,7 @@ function buildingCard(i: number, cr: Record<string, PhotoCredit>): HTMLElement {
         }
         const body = h('div', 'bbody');
         const top = h('div', 'btop');
-        top.append(h('span', `tier ${b.tier}`, b.tier.toUpperCase()), h('span', 'bres', `${g.pts} pts · ${formatKm(g.km)}`));
+        top.append(meter(i), h('span', 'bres', `${g.pts} pts · ${formatKm(g.km)}`));
         body.append(top, h('h4', '', b.name), h('p', 'bmeta', `${b.architect} · ${b.year} · ${b.city}, ${b.country}`), h('p', 'bblurb', b.blurb ?? ''));
         card.append(body);
         return card;
@@ -444,7 +450,7 @@ async function showPins() {
         lon: b.lon,
         lat: b.lat,
         name: b.name,
-        color: TIER_COLOR[b.tier],
+        color: ROUND_COLOR[i],
         guess,
         photo: cr[b.id] ? `${import.meta.env.BASE_URL}photos/${b.id}.jpg` : undefined,
       };

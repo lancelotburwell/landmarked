@@ -21,8 +21,11 @@ export interface DayState { date: string; ids: string[]; guesses: Guess[] }
 export const ROUNDS = 5;
 export const MAX_POINTS = 200;
 /** Order of tiers through the day. */
-export const DAY_TIERS: Tier[] = ['easy', 'easy', 'medium', 'hard', 'hard'];
+export const DAY_TIERS: Tier[] = ['easy', 'easy', 'medium', 'medium', 'hard'];
 export const TIER_COLOR: Record<Tier, string> = { easy: '#8cc5a0', medium: '#e3b261', hard: '#e2775c' };
+/** The day's difficulty as a progression, round 1 to 5: green warming through gold to coral.
+ *  Shown instead of tier names (user's choice, 2026-11-23: nobody gets labelled "hard"). */
+export const ROUND_COLOR = ['#8cc5a0', '#b9bb7c', '#e3b261', '#e39560', '#e2775c'];
 
 // ---------- dates ----------
 /** Local calendar date as YYYY-MM-DD: a new puzzle at each player's midnight. */
@@ -104,7 +107,7 @@ export function formatKm(km: number): string {
   return `${Math.round(km).toLocaleString('en-US')} km away`;
 }
 
-/** A random five (2 easy, 1 medium, 2 hard), spread out like a normal day. Not saved as today. */
+/** A random five (2 easy, 2 medium, 1 hard), spread out like a normal day. Not saved as today. */
 export function pickPractice(pool: Building[], rnd = Math.random): Building[] {
   const out: Building[] = [];
   for (const tier of DAY_TIERS) {

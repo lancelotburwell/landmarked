@@ -16,7 +16,7 @@
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 
 const COUNT = Number(process.argv[2] ?? 300);
-const TIER_SHARE = { easy: 0.37, medium: 0.26 }; // rest hard
+const TIER_SHARE = { easy: 0.4, medium: 0.4 }; // rest hard (matches the daily 2/2/1)
 const CITY_KM = 30;
 const CITY_CAP = 4;
 const COUNTRY_CAP = Math.round(COUNT * 0.085);
