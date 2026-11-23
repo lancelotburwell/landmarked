@@ -374,5 +374,653 @@
   "license": "CC BY-SA 3.0",
   "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
   "page": "https://commons.wikimedia.org/wiki/File:Yoyogi-National-Gymnasium-01.jpg"
+ },
+ "white-house": {
+  "w": 640,
+  "h": 474,
+  "artist": "This image or media was taken or created by Matt H. Wade. To see his entire portfolio, click here.@thatmattwade This ima",
+  "license": "CC BY-SA 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+  "page": "https://commons.wikimedia.org/wiki/File:WhiteHouseSouthFacade.JPG"
+ },
+ "st-peter-s-basilica": {
+  "w": 640,
+  "h": 334,
+  "artist": "Alvesgaspar",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Basilica_di_San_Pietro_in_Vaticano_September_2015-1a.jpg"
+ },
+ "palace-of-versailles": {
+  "w": 640,
+  "h": 480,
+  "artist": "ToucanWings",
+  "license": "CC BY-SA 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Vue_a%C3%A9rienne_du_domaine_de_Versailles_par_ToucanWings_-_Creative_Commons_By_Sa_3.0_-_083.jpg"
+ },
+ "cologne-cathedral": {
+  "w": 640,
+  "h": 1007,
+  "artist": "Thomas Wolf, www.foto-tw.de",
+  "license": "CC BY-SA 3.0 de",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
+  "page": "https://commons.wikimedia.org/wiki/File:K%C3%B6lner_Dom_von_Osten.jpg"
+ },
+ "willis-tower": {
+  "w": 640,
+  "h": 984,
+  "artist": "Daniel Schwen",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Chicago_Sears_Tower.jpg"
+ },
+ "buckingham-palace": {
+  "w": 640,
+  "h": 419,
+  "artist": "Diliff",
+  "license": "CC BY-SA 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Buckingham_Palace,_London_-_April_2009.jpg"
+ },
+ "one-world-trade-center": {
+  "w": 640,
+  "h": 1101,
+  "artist": "Pedro Szekely from Los Angeles, USA",
+  "license": "CC BY-SA 2.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+  "page": "https://commons.wikimedia.org/wiki/File:One_World_Trade_Center,_New_York_(33224081040).jpg"
+ },
+ "windsor-castle": {
+  "w": 640,
+  "h": 427,
+  "artist": "Diliff",
+  "license": "CC BY 2.5",
+  "licenseUrl": "https://creativecommons.org/licenses/by/2.5",
+  "page": "https://commons.wikimedia.org/wiki/File:Windsor_Castle_at_Sunset_-_Nov_2006.jpg"
+ },
+ "al-masjid-al-haram": {
+  "w": 640,
+  "h": 491,
+  "artist": "Khalili Collections",
+  "license": "Public domain",
+  "licenseUrl": null,
+  "page": "https://commons.wikimedia.org/wiki/File:Khalili_Collection_Hajj_and_Arts_of_Pilgrimage_arc.pp_0211.04_CROP.jpg"
+ },
+ "british-museum": {
+  "w": 640,
+  "h": 398,
+  "artist": "Ham",
+  "license": "CC BY-SA 3.0",
+  "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+  "page": "https://commons.wikimedia.org/wiki/File:British_Museum_from_NE_2_(cropped).JPG"
+ },
+ "metropolitan-museum-of-art": {
+  "w": 640,
+  "h": 357,
+  "artist": "Hugo Schneider",
+  "license": "CC BY-SA 2.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Metropolitan_Museum_of_Art_(The_Met)_-_Central_Park,_NYC.jpg"
+ },
+ "united-states-capitol": {
+  "w": 640,
+  "h": 331,
+  "artist": "United_States_Capitol_-_west_front.jpg: Architect of the Capitol derivative work: O.J.",
+  "license": "Public domain",
+  "licenseUrl": null,
+  "page": "https://commons.wikimedia.org/wiki/File:United_States_Capitol_west_front_edit2.jpg"
+ },
+ "st-paul-s-cathedral": {
+  "w": 640,
+  "h": 439,
+  "artist": "Mark Fosh",
+  "license": "CC BY 2.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+  "page": "https://commons.wikimedia.org/wiki/File:St_Pauls_aerial_(cropped).jpg"
+ },
+ "rock-and-roll-hall-of-fame": {
+  "w": 640,
+  "h": 427,
+  "artist": "MusikAnimal",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Rock_and_Roll_Hall_of_Fame,_May_2016.jpg"
+ },
+ "milan-cathedral": {
+  "w": 640,
+  "h": 556,
+  "artist": "Jakub Hałun",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:20110724_Milan_Cathedral_5260.jpg"
+ },
+ "tokyo-skytree": {
+  "w": 640,
+  "h": 1138,
+  "artist": "Akonnchiroll",
+  "license": "CC0",
+  "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+  "page": "https://commons.wikimedia.org/wiki/File:Tokyo_Skytree_2023.jpg"
+ },
+ "florence-cathedral": {
+  "w": 640,
+  "h": 464,
+  "artist": "Petar Milošević",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Florence_Duomo_from_Michelangelo_hill.jpg"
+ },
+ "reichstag": {
+  "w": 640,
+  "h": 377,
+  "artist": "Jörg Braukmann",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Reichstagsgeb%C3%A4ude_von_Westen.jpg"
+ },
+ "winter-palace": {
+  "w": 640,
+  "h": 384,
+  "artist": "Florstein (Telegram:WikiPhoto.Space)",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Winter_Palace_Panorama_3.jpg"
+ },
+ "topkap-palace": {
+  "w": 640,
+  "h": 283,
+  "artist": "Bjørn Christian Tørrissen",
+  "license": "CC BY-SA 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Topkapi_Palace_Seen_From_Harem.JPG"
+ },
+ "sultan-ahmed-mosque": {
+  "w": 640,
+  "h": 418,
+  "artist": "Moonik",
+  "license": "CC BY-SA 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Exterior_of_Sultan_Ahmed_I_Mosque_in_Istanbul,_Turkey_002.jpg"
+ },
+ "abraj-al-bait": {
+  "w": 640,
+  "h": 853,
+  "artist": "King Eliot",
+  "license": "CC BY-SA 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Abraj-al-Bait-Towers.JPG"
+ },
+ "jumeirah-burj-al-arab": {
+  "w": 640,
+  "h": 363,
+  "artist": "Yacine Hary",
+  "license": "CC BY 2.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Burj_Al_Arab_and_Jumeirah_Beach_(9601659067).jpg"
+ },
+ "schonbrunn-palace": {
+  "w": 640,
+  "h": 437,
+  "artist": "C.Stadler/Bwag",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Wien_-_Schloss_Sch%C3%B6nbrunn.JPG"
+ },
+ "mosque-cathedral-of-cordoba": {
+  "w": 640,
+  "h": 425,
+  "artist": "Toni Castillo Quero",
+  "license": "CC BY-SA 2.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Mezquita_de_C%C3%B3rdoba_desde_el_aire_(C%C3%B3rdoba,_Espa%C3%B1a).jpg"
+ },
+ "tokyo-tower": {
+  "w": 640,
+  "h": 853,
+  "artist": "Akonnchiroll",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Tokyo_Tower_2023.jpg"
+ },
+ "castel-sant-angelo": {
+  "w": 640,
+  "h": 573,
+  "artist": "Livioandronico2013",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Castel_Sant%27Angelo_at_Night.jpg"
+ },
+ "jeronimos-monastery": {
+  "w": 640,
+  "h": 385,
+  "artist": "Holger Uwe Schmitt",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:1502_legte_K%C3%B6nig_Manuel_I._den_Grundstein_f%C3%BCr_das_Hieronymus_Kloster_in_Lissabon._06.jpg"
+ },
+ "york-minster": {
+  "w": 640,
+  "h": 480,
+  "artist": "MatzeTrier",
+  "license": "CC BY-SA 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+  "page": "https://commons.wikimedia.org/wiki/File:York_Minster_from_M%26S.JPG"
+ },
+ "prambanan-temple": {
+  "w": 640,
+  "h": 489,
+  "artist": "Gunawan Kartapranata",
+  "license": "CC BY-SA 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Prambanan_Complex_1.jpg"
+ },
+ "basilica-of-san-vitale": {
+  "w": 640,
+  "h": 586,
+  "artist": "Commonists",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Basilica_of_San_Vitale.jpg"
+ },
+ "bolshoi-theatre": {
+  "w": 640,
+  "h": 427,
+  "artist": "Юрий Д.К.",
+  "license": "CC BY 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Moscow_-_2025_-_Facade_of_Big_Theatre_(1).jpg"
+ },
+ "todai-ji-temple": {
+  "w": 640,
+  "h": 426,
+  "artist": "663highland",
+  "license": "CC BY 2.5",
+  "licenseUrl": "https://creativecommons.org/licenses/by/2.5",
+  "page": "https://commons.wikimedia.org/wiki/File:Daibutsu-den_in_Todaiji_Nara02bs3200.jpg"
+ },
+ "dolby-theatre": {
+  "w": 640,
+  "h": 511,
+  "artist": "File:Dolby_Theatre.jpg: Adam Fagen from Washington, DC, USA derivative work: Jullit31",
+  "license": "CC BY-SA 2.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Dolby_Theatre_v2.jpg"
+ },
+ "palace-of-fontainebleau": {
+  "w": 640,
+  "h": 452,
+  "artist": "user:Carolus",
+  "license": "CC BY 2.5",
+  "licenseUrl": "https://creativecommons.org/licenses/by/2.5",
+  "page": "https://commons.wikimedia.org/wiki/File:Le_Grand_Escalier_%C3%A0_Fer_de_Cheval.jpg"
+ },
+ "stirling-castle": {
+  "w": 640,
+  "h": 480,
+  "artist": "Unknown",
+  "license": "CC BY-SA 3.0",
+  "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+  "page": "https://commons.wikimedia.org/wiki/File:Stirlingcastle.jpg"
+ },
+ "lakhta-centre": {
+  "w": 640,
+  "h": 427,
+  "artist": "Florstein (Telegram:WikiPhoto.Space)",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Lakhta_Center_(img4).jpg"
+ },
+ "palazzo-pitti": {
+  "w": 640,
+  "h": 427,
+  "artist": "Almaak",
+  "license": "CC BY-SA 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Palazzo_Pitti_nel_tardo_pomeriggio.jpg"
+ },
+ "pashupatinath-temple": {
+  "w": 640,
+  "h": 480,
+  "artist": "Chainwit.",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:2023_January_night_aarti_at_Pashupatinath_Temple,_Kathmandu_02.jpg"
+ },
+ "holyrood-palace": {
+  "w": 640,
+  "h": 360,
+  "artist": "瑞丽江的河水",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Holyrood_Palace_-_aerial_-_2025-04-19_04.jpg"
+ },
+ "kailasa-temple-ellora": {
+  "w": 640,
+  "h": 477,
+  "artist": "G41rn8",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Ellora_Cave_16_si0308.jpg"
+ },
+ "palace-of-culture-and-science": {
+  "w": 640,
+  "h": 991,
+  "artist": "Adrian Grycuk",
+  "license": "CC BY-SA 3.0 pl",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/pl/deed.en",
+  "page": "https://commons.wikimedia.org/wiki/File:Pa%C5%82ac_Kultury_i_Nauki_2019.jpg"
+ },
+ "paro-taktsang": {
+  "w": 640,
+  "h": 419,
+  "artist": "Original: Nina R from Africa Derivative work: UnpetitproleX",
+  "license": "CC BY 2.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Paro_Taktsang,_Bhutan_(edited).jpg"
+ },
+ "kunsthistorisches-museum": {
+  "w": 640,
+  "h": 480,
+  "artist": "Andrzej Otrębski",
+  "license": "CC BY-SA 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Wien_Kunsthistorisches_Museum.jpg"
+ },
+ "mexico-city-metropolitan-cathedral": {
+  "w": 640,
+  "h": 360,
+  "artist": "ProtoplasmaKid",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Catedral_Metropolitana_de_la_Ciudad_de_M%C3%A9xico_1.jpg"
+ },
+ "landmark-81": {
+  "w": 640,
+  "h": 1137,
+  "artist": "Joefrance1995",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Landmark_81_in_2021.jpg"
+ },
+ "etchmiadzin-cathedral": {
+  "w": 640,
+  "h": 493,
+  "artist": "Well-read MountainMan",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:-_2026_%D0%AD%D1%87%D0%BC%D0%B8%D0%B0%D0%B4%D0%B7%D0%B8%D0%BD%D1%81%D0%BA%D0%B8%D0%B9_%D0%BA%D0%B0%D1%84%D0%B5%D0%B4%D1%80%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9_%D1%81%D0%BE%D0%B1%D0%BE%D1%80_1-1.jpg"
+ },
+ "art-institute-of-chicago": {
+  "w": 640,
+  "h": 360,
+  "artist": "ajay_suresh",
+  "license": "CC BY 2.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Art_Institute_of_Chicago_(51575570710).jpg"
+ },
+ "buda-castle": {
+  "w": 640,
+  "h": 425,
+  "artist": "Jakub Hałun",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:20190502_Zamek_w_Budapeszcie_0647_1862_DxO.jpg"
+ },
+ "basilica-of-santa-croce": {
+  "w": 640,
+  "h": 480,
+  "artist": "Grueslayer",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:ITA_Firenze_Basilica_di_Santa_Croce_2.jpg"
+ },
+ "875-north-michigan-avenue": {
+  "w": 640,
+  "h": 895,
+  "artist": "No machine-readable author provided. JeremyA assumed (based on copyright claims).",
+  "license": "CC BY-SA 2.5",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.5",
+  "page": "https://commons.wikimedia.org/wiki/File:Hancock_from_Navy_Pier.jpg"
+ },
+ "lotte-world-tower": {
+  "w": 640,
+  "h": 437,
+  "artist": "kallerna",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Lotte_World_morning_view_8.jpg"
+ },
+ "cathedral-of-the-holy-cross-and-saint-eulalia": {
+  "w": 640,
+  "h": 960,
+  "artist": "Fernando",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Barcelona_Cathedral_Saint_Eulalia.jpg"
+ },
+ "notre-dame-d-amiens": {
+  "w": 640,
+  "h": 982,
+  "artist": "Jean-Pol GRANDMONT",
+  "license": "CC BY 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+  "page": "https://commons.wikimedia.org/wiki/File:0_Amiens_-_Cath%C3%A9drale_Notre-Dame_(1).JPG"
+ },
+ "temple-of-kukulcan": {
+  "w": 640,
+  "h": 341,
+  "artist": "Daniel Schwen",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Chichen_Itza_3.jpg"
+ },
+ "dancing-house": {
+  "w": 640,
+  "h": 964,
+  "artist": "No machine-readable author provided. Chosovi assumed (based on copyright claims).",
+  "license": "CC BY-SA 2.5",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.5",
+  "page": "https://commons.wikimedia.org/wiki/File:La_Casa_Danzante_de_Praga_1.JPG"
+ },
+ "casa-mila": {
+  "w": 640,
+  "h": 499,
+  "artist": "Thomas Ledl",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Casa_Mil%C3%A0,_general_view.jpg"
+ },
+ "heidelberg-castle": {
+  "w": 640,
+  "h": 481,
+  "artist": "Pumuckel42 (Reinhard Wolf) at de:Wikipedia",
+  "license": "CC BY-SA 3.0",
+  "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+  "page": "https://commons.wikimedia.org/wiki/File:Heidelberg-Schlo%C3%9F.JPG"
+ },
+ "tomb-of-cyrus-the-great": {
+  "w": 640,
+  "h": 427,
+  "artist": "Bernd81",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Pasargad_Tomb_Cyrus3.jpg"
+ },
+ "museo-nacional-centro-de-arte-reina-sofia": {
+  "w": 640,
+  "h": 468,
+  "artist": "Luis García (Zaqarbal)",
+  "license": "CC BY-SA 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+  "page": "https://commons.wikimedia.org/wiki/File:MNCARS_05.jpg"
+ },
+ "frauenkirche": {
+  "w": 640,
+  "h": 399,
+  "artist": "Diliff",
+  "license": "CC BY 2.5",
+  "licenseUrl": "https://creativecommons.org/licenses/by/2.5",
+  "page": "https://commons.wikimedia.org/wiki/File:Frauenkirche_Munich_-_View_from_Peterskirche_Tower.jpg"
+ },
+ "conwy-castle": {
+  "w": 640,
+  "h": 390,
+  "artist": "Source: Llywelyn2000Derivative: User:MathKnight",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Conwy-Castle-0006.jpg"
+ },
+ "mauritshuis": {
+  "w": 640,
+  "h": 477,
+  "artist": "Roman Boed from The Netherlands",
+  "license": "CC BY 2.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Mauritshuis_Museum_(14346890947).jpg"
+ },
+ "peace-palace": {
+  "w": 640,
+  "h": 521,
+  "artist": "Thomas Wolf, www.foto-tw.de",
+  "license": "CC BY-SA 3.0 de",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
+  "page": "https://commons.wikimedia.org/wiki/File:Friedenspalast_Den_Haag_(100MP).jpg"
+ },
+ "griffith-observatory": {
+  "w": 640,
+  "h": 427,
+  "artist": "Carol M. Highsmith",
+  "license": "Public domain",
+  "licenseUrl": null,
+  "page": "https://commons.wikimedia.org/wiki/File:Griffith_Observatory_on_the_south-facing_slope_of_Mount_Hollywood_in_L.A.%27s_Griffith_Park_(LC-DIG-highsm-_22255).tif"
+ },
+ "speyer-cathedral": {
+  "w": 640,
+  "h": 773,
+  "artist": "Carsten Steger",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Aerial_image_of_the_Speyer_Cathedral_(view_from_the_southwest)_(cropped).jpg"
+ },
+ "saint-catherine-monastery": {
+  "w": 640,
+  "h": 429,
+  "artist": "Berthold Werner",
+  "license": "CC BY-SA 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Katharinenkloster_Sinai_BW_2.jpg"
+ },
+ "canterbury-cathedral": {
+  "w": 640,
+  "h": 493,
+  "artist": "Hans Musil",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Canterbury_Cathedral_-_Portal_Nave_Cross-spire.jpeg"
+ },
+ "ryugyong-hotel": {
+  "w": 640,
+  "h": 854,
+  "artist": "Martin Cígler",
+  "license": "CC BY-SA 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Pr%C3%A1zdn%C3%A9_slnice_a_rozestav%C4%9Bn%C3%BD_hotel_Ryugyong_-_panoramio.jpg"
+ },
+ "royal-monastery-of-san-lorenzo-de-el-escorial": {
+  "w": 640,
+  "h": 427,
+  "artist": "Zvonimir Stamenov",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Monasterio_de_El_Escorial_en_Madrid.jpg"
+ },
+ "museo-del-prado": {
+  "w": 640,
+  "h": 478,
+  "artist": "Emilio J. Rodríguez Posada",
+  "license": "CC BY-SA 2.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Museo_del_Prado_2016_(25185969599).jpg"
+ },
+ "umayyad-mosque": {
+  "w": 640,
+  "h": 480,
+  "artist": "Unknown",
+  "license": "Public domain",
+  "licenseUrl": null,
+  "page": "https://commons.wikimedia.org/wiki/File:Ommayyad_masjed.jpg"
+ },
+ "catherine-palace": {
+  "w": 640,
+  "h": 424,
+  "artist": "Florstein (Telegram:WikiPhoto.Space)",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Catherine_Palace_in_Tsarskoe_Selo_02.jpg"
+ },
+ "imam-ali-mosque": {
+  "w": 640,
+  "h": 455,
+  "artist": "U.S. Navy photo by Photographer's Mate 1st Class Arlo K. Abrahamson.",
+  "license": "Public domain",
+  "licenseUrl": null,
+  "page": "https://commons.wikimedia.org/wiki/File:Meshed_ali_usnavy_(PD).jpg"
+ },
+ "church-of-saint-sava": {
+  "w": 640,
+  "h": 475,
+  "artist": "kallerna",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Church_of_Saint_Sava_4.jpg"
+ },
+ "gur-e-amir": {
+  "w": 640,
+  "h": 426,
+  "artist": "Arina Pan",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:%D0%92%D0%B5%D1%87%D0%B5%D1%80%D0%BD%D0%B8%D0%B9_%D0%93%D1%83%D1%80-%D0%AD%D0%BC%D0%B8%D1%80.jpg"
+ },
+ "transamerica-pyramid": {
+  "w": 640,
+  "h": 1114,
+  "artist": "Daniel Schwen",
+  "license": "CC BY-SA 2.5",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.5",
+  "page": "https://commons.wikimedia.org/wiki/File:SF_Transamerica_full_CA.jpg"
+ },
+ "galleria-borghese": {
+  "w": 640,
+  "h": 360,
+  "artist": "Blackcat",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Roma_Museo_Borghese.jpg"
+ },
+ "selimiye-mosque": {
+  "w": 640,
+  "h": 446,
+  "artist": "Nevit Dilmen",
+  "license": "CC BY-SA 3.0",
+  "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+  "page": "https://commons.wikimedia.org/wiki/File:Edirne_7333_Nevit.JPG"
+ },
+ "philadelphia-museum-of-art": {
+  "w": 640,
+  "h": 457,
+  "artist": "Unknown",
+  "license": "Public domain",
+  "licenseUrl": null,
+  "page": "https://commons.wikimedia.org/wiki/File:Philadelphia_Museum_of_Art,_main_building.jpg"
+ },
+ "stockholm-palace": {
+  "w": 640,
+  "h": 427,
+  "artist": "Jorge Láscar from Melbourne, Australia",
+  "license": "CC BY 2.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Stockholms_slott_(Stockholm_Palace)_(24831039126).jpg"
  }
 }

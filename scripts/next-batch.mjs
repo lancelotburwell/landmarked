@@ -23,6 +23,8 @@ for (const f of readdirSync(new URL('data/clues/', root)).filter((f) => f.endsWi
 
 const todo = sel.filter((s) => !pool.has(s.id) && !written[s.id]);
 // Keep each batch in the daily ratio (2 easy, 2 medium, 1 hard), most famous first within each tier.
+// These are the selection's own tiers. build-buildings would recompute a tier from the fame rank
+// (which can leave a batch with no hard ones), so clue entries copy this tier explicitly.
 const share = { easy: 0.4, medium: 0.4, hard: 0.2 };
 const picked = [];
 for (const tier of ['easy', 'medium', 'hard']) picked.push(...todo.filter((s) => s.tier === tier).slice(0, Math.round(COUNT * share[tier])));
