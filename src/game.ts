@@ -91,9 +91,12 @@ export function distanceKm(lon1: number, lat1: number, lon2: number, lat2: numbe
   const h = Math.sin(dLat / 2) ** 2 + Math.cos(lat1 * r) * Math.cos(lat2 * r) * Math.sin(dLon / 2) ** 2;
   return 2 * R * Math.asin(Math.min(1, Math.sqrt(h)));
 }
+/** Falloff distance in km. GeoGuessr's world map uses 1492.7 (half points at
+ *  about 1,000 km); it was 800 until 2026-11-23, which felt too hard. */
+const FALLOFF_KM = 1492.7;
 export function points(km: number): number {
   if (km <= 10) return MAX_POINTS;
-  return Math.round(MAX_POINTS * Math.exp(-(km - 10) / 800));
+  return Math.round(MAX_POINTS * Math.exp(-(km - 10) / FALLOFF_KM));
 }
 export function formatKm(km: number): string {
   if (km < 1) return `${Math.round(km * 1000)} m away`;
