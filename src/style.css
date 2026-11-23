@@ -61,14 +61,6 @@ button { font: inherit; color: inherit; }
 .tier.medium { background: var(--medium); }
 .tier.hard { background: var(--hard); }
 .tier:empty { display: none; }
-/* Difficulty meter: five rising bars that fill and warm round by round. */
-.dots, .meter { display: inline-flex; align-items: flex-end; gap: 3px; }
-.dots { margin-left: auto; height: 12px; }
-.dots i, .meter i { display: block; width: 6px; border-radius: 1.5px; background: var(--line); transition: background 0.3s; }
-.dots i:nth-child(1) { height: 4px; } .dots i:nth-child(2) { height: 6px; } .dots i:nth-child(3) { height: 8px; } .dots i:nth-child(4) { height: 10px; } .dots i:nth-child(5) { height: 12px; }
-.meter { height: 10px; }
-.meter i { width: 4px; }
-.meter i:nth-child(1) { height: 3px; } .meter i:nth-child(2) { height: 4.75px; } .meter i:nth-child(3) { height: 6.5px; } .meter i:nth-child(4) { height: 8.25px; } .meter i:nth-child(5) { height: 10px; }
 .clue { margin: 6px 0 0; font-size: 13.5px; line-height: 1.45; }
 
 /* ---- globe stage ---- */
@@ -110,7 +102,7 @@ button { font: inherit; color: inherit; }
 }
 @keyframes rise { from { transform: translateY(16px); opacity: 0; } }
 .result-top { display: flex; justify-content: space-between; align-items: baseline; }
-.points { font-size: 34px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.points { color: var(--accent); font-size: 34px; font-weight: 600; font-variant-numeric: tabular-nums; }
 .pts { margin-left: 6px; font-size: 11px; letter-spacing: 0.14em; color: var(--muted); }
 .distance { font-size: 13px; color: var(--muted); }
 .result h2 { margin: 2px 0 8px; font-size: 17px; font-weight: 600; }
@@ -174,16 +166,15 @@ button { font: inherit; color: inherit; }
 .end-h { margin: 22px 0 10px; text-align: left; font-size: 11px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
 .rounds { list-style: none; margin: 0 0 16px; padding: 0; text-align: left; }
 .round {
-  display: grid; grid-template-columns: 16px auto 1fr auto; grid-template-areas: 'n t name pts' 'n bar bar dist';
+  display: grid; grid-template-columns: 16px 1fr auto; grid-template-areas: 'n name pts' 'n bar dist';
   column-gap: 10px; row-gap: 6px; align-items: center; padding: 10px 0; border-top: 1px solid var(--line); font-size: 13px;
 }
 .round:last-child { border-bottom: 1px solid var(--line); }
 .r-num { grid-area: n; align-self: start; color: var(--muted); font-size: 12px; }
-.round .meter { grid-area: t; }
 .r-name { grid-area: name; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
-.r-pts { grid-area: pts; font-weight: 600; font-variant-numeric: tabular-nums; }
+.r-pts { grid-area: pts; color: var(--accent); font-weight: 600; font-variant-numeric: tabular-nums; }
 .r-track { grid-area: bar; height: 6px; border-radius: 3px; background: var(--panel-2); overflow: hidden; }
-.r-track > i { display: block; height: 100%; width: 0; border-radius: 3px; transition: width 0.8s cubic-bezier(.2,.8,.2,1); }
+.r-track > i { display: block; height: 100%; width: 0; border-radius: 3px; background: var(--accent); transition: width 0.8s cubic-bezier(.2,.8,.2,1); }
 .r-dist { grid-area: dist; font-size: 11.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
 .share { display: grid; gap: 8px; margin-bottom: 4px; }
 .share pre { margin: 0; padding: 10px; background: var(--bg); border: 1px solid var(--line); border-radius: 8px; font: inherit; font-size: 12px; line-height: 1.5; white-space: pre-wrap; text-align: left; }
@@ -202,6 +193,16 @@ button { font: inherit; color: inherit; }
 .bmeta { margin: 0 0 8px; font-size: 11.5px; color: var(--muted); line-height: 1.45; }
 .bblurb { margin: 0; font-size: 13px; line-height: 1.55; }
 .countdown { margin-top: 14px; font-size: 12px; color: var(--muted); }
+.catchup { margin-top: 16px; }
+.cdays-label { margin-bottom: 8px; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.cdays { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+.cday {
+  display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 7px 0; border: 1px solid var(--line); border-radius: 9px;
+  color: var(--text); text-decoration: none; font-size: 12px;
+}
+.cday:hover, .cday:focus-visible, .cday.cur { border-color: var(--accent); }
+.cday-name { color: var(--muted); font-size: 11px; }
+.cday-score { font-weight: 600; font-variant-numeric: tabular-nums; color: var(--accent); }
 .follow { margin-top: 12px; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 8px 10px; font-size: 12px; color: var(--muted); }
 .social {
   display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; border: 1px solid var(--line); border-radius: 999px;

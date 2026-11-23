@@ -16,16 +16,14 @@ export interface Building {
   qid?: string;
 }
 export interface Guess { lon: number; lat: number; km: number; pts: number }
-export interface DayState { date: string; ids: string[]; guesses: Guess[] }
+/** late: finished through catch-up after its own day, so it doesn't count toward the streak. */
+export interface DayState { date: string; ids: string[]; guesses: Guess[]; late?: boolean }
 
 export const ROUNDS = 5;
 export const MAX_POINTS = 200;
 /** Order of tiers through the day. */
 export const DAY_TIERS: Tier[] = ['easy', 'easy', 'medium', 'medium', 'hard'];
 export const TIER_COLOR: Record<Tier, string> = { easy: '#8cc5a0', medium: '#e3b261', hard: '#e2775c' };
-/** The day's difficulty as a progression, round 1 to 5: green warming through gold to coral.
- *  Shown instead of tier names (user's choice, 2026-11-23: nobody gets labelled "hard"). */
-export const ROUND_COLOR = ['#8cc5a0', '#b9bb7c', '#e3b261', '#e39560', '#e2775c'];
 
 // ---------- dates ----------
 /** Local calendar date as YYYY-MM-DD: a new puzzle at each player's midnight. */
@@ -67,7 +65,7 @@ async function getJSON<T>(path: string): Promise<T> {
   if (!res.ok) throw new Error(`${path}: ${res.status}`);
   return (await res.json()) as T;
 }
-/** Every active building (practice rounds, and the fallback below). */
+/** Every active building (for the fallback below). */
 export function loadPool(): Promise<Building[]> {
   return getJSON<Building[]>('pool.json');
 }
@@ -117,6 +115,22 @@ export function pickPractice(pool: Building[], rnd = Math.random): Building[] {
     out.push(from[Math.floor(rnd() * from.length)]);
   }
   return out;
+}
+
+/** How many past days a player can catch up on. */
+export const CATCH_UP = 5;
+/** The CATCH_UP days before today, newest first. */
+export function pastDays(today: string, n = CATCH_UP): string[] {
+  const [y, m, d] = today.split('-').map(Number);
+  return Array.from({ length: n }, (_, i) => todayKey(new Date(y, m - 1, d - 1 - i)));
+}
+/** A day's saved progress on this device: guesses made and points so far, or null. */
+export function progress(day: string): { guesses: number; total: number } | null {
+  try {
+    const s = JSON.parse(localStorage.getItem(keyFor(day)) ?? 'null') as DayState | null;
+    if (!s?.guesses?.length) return null;
+    return { guesses: s.guesses.length, total: s.guesses.reduce((t, g) => t + g.pts, 0) };
+  } catch { return null; }
 }
 
 export function formatDay(key: string, opts: Intl.DateTimeFormatOptions = { weekday: 'short', day: 'numeric', month: 'short' }): string {
@@ -178,7 +192,7 @@ export function puzzleNumber(date: string): number {
 export function shareText(s: DayState, site: string): string {
   const total = s.guesses.reduce((t, g) => t + g.pts, 0);
   const squares = s.guesses.map((g) => square(g.pts)).join('');
-  const title = s.date === 'practice' ? 'Landmarked practice' : `Landmarked #${puzzleNumber(s.date)}`;
+  const title = `Landmarked #${puzzleNumber(s.date)}`;
   return `${title}\n${squares} ${total}/1000\n${site}`;
 }
 
@@ -192,9 +206,10 @@ export interface Stats {
   /** Finished days per 200-point band: 0–199, 200–399, …, 800–1000. */
   bands: number[];
 }
-/** Stats from the finished days saved on this device (practice rounds don't count). */
+/** Stats from the finished days saved on this device. Catch-up days count, but not toward streaks. */
 export function stats(today: string): Stats {
   const totals = new Map<string, number>();
+  const onTime = new Set<string>();
   try {
     for (let i = 0; i < localStorage.length; i++) {
       const k = localStorage.key(i) ?? '';
@@ -202,16 +217,17 @@ export function stats(today: string): Stats {
       const s = JSON.parse(localStorage.getItem(k) ?? 'null') as DayState | null;
       if (!s || !/^\d{4}-\d{2}-\d{2}$/.test(s.date) || s.guesses?.length !== ROUNDS || s.date > today) continue;
       totals.set(s.date, s.guesses.reduce((t, g) => t + g.pts, 0));
+      if (!s.late) onTime.add(s.date);
     }
   } catch { /* storage unavailable */ }
-  const dates = [...totals.keys()].sort();
+  const dates = [...onTime].sort();
   const n = (d: string) => puzzleNumber(d);
   // Best run of consecutive days.
   let bestStreak = 0, run = 0;
   dates.forEach((d, i) => { run = i && n(d) === n(dates[i - 1]) + 1 ? run + 1 : 1; bestStreak = Math.max(bestStreak, run); });
   // Current streak: ends today, or yesterday if today isn't finished yet.
   let streak = 0;
-  for (let day = totals.has(today) ? n(today) : n(today) - 1; dates.some((d) => n(d) === day); day--) streak++;
+  for (let day = onTime.has(today) ? n(today) : n(today) - 1; dates.some((d) => n(d) === day); day--) streak++;
   const scores = [...totals.values()];
   const bands = [0, 0, 0, 0, 0];
   for (const t of scores) bands[Math.min(4, Math.floor(t / 200))]++;

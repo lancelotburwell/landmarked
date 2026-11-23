@@ -41,7 +41,6 @@
         <div class="question">
           <div class="qhead">
             <span id="qnum">QUESTION 1 OF 5</span>
-            <span id="dots" class="dots" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
           </div>
           <button id="results-btn" class="btn small results-btn" hidden>Results</button>
           <p id="clue" class="clue">Five buildings. One clue each. Tap the globe where you think it stands.</p>
@@ -100,7 +99,7 @@
             <li>Every day there are <b>5 buildings</b>, the same for everyone. They start easy and get harder as you go.</li>
             <li>Read the clue, then <b>tap the globe</b> where you think the building stands. Drag to spin, pinch or scroll to zoom.</li>
             <li>Each building is worth <b>200 points</b>. Within 10 km you get them all; after that, points fall off with distance (half at about 1,000 km away).</li>
-            <li>Best possible day: <b>1,000</b>. Share your score and come back tomorrow.</li>
+            <li>Best possible day: <b>1,000</b>. Share your score and come back tomorrow. Missed a day? You can catch up on the last five from the results screen.</li>
           </ol>
           <h3>Credits</h3>
           <p class="small-print">
@@ -133,7 +132,8 @@
               <button id="showall-btn" class="btn">See them on the globe</button>
             </div>
           </div>
-          <div id="countdown-row" class="countdown">Next buildings in <span id="countdown">--:--:--</span> · <a href="?practice=new">Practice round</a></div>
+          <div id="countdown-row" class="countdown">Next buildings in <span id="countdown">--:--:--</span></div>
+          <div id="catchup" class="catchup" hidden></div>
           <!-- Social links. To add X: copy the <a> with href="https://x.com/<handle>" and an X icon. -->
           <div class="follow">
             <span>Daily building sneak peek</span>

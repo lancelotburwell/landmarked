@@ -1,7 +1,6 @@
 import './style.css';
 import {
   ROUNDS,
-  ROUND_COLOR,
   distanceKm,
   formatKm,
   load,
@@ -11,11 +10,10 @@ import {
   shareText,
   todayKey,
   formatDay,
-  peek,
-  pickPractice,
   stats,
   loadDay,
-  loadPool,
+  pastDays,
+  progress,
   type Building,
   type DayState,
 } from './game';
@@ -30,7 +28,6 @@ const el = {
   date: $('date'),
   score: $('score'),
   qnum: $('qnum'),
-  dots: $('dots'),
   clue: $('clue'),
   globe: $('globe'),
   placeholder: $('globe-placeholder'),
@@ -69,25 +66,26 @@ const el = {
   introStreak: $('intro-streak'),
   endStats: $('end-stats'),
   endRank: $('end-rank'),
+  catchup: $('catchup'),
   toast: $('toast'),
 };
 
 // ---------- state ----------
-// ?practice plays a random five (resumes the last practice round);
-// ?practice=new deals a fresh one. Today's puzzle is never touched.
+// ?day=YYYY-MM-DD plays one of the last CATCH_UP days (catch-up), so new players
+// can play the days they missed. It replaced the random practice round on
+// 2026-11-23; old ?practice links land on today's puzzle.
 const params = new URLSearchParams(location.search);
 const today = todayKey();
-const practice = params.has('practice');
-const date = practice ? 'practice' : today;
+const recent = pastDays(today); // newest first
+const catchUp = recent.includes(params.get('day') ?? '');
+if (!catchUp && (params.has('day') || params.has('practice'))) history.replaceState(null, '', import.meta.env.BASE_URL);
+const date = catchUp ? params.get('day')! : today;
 // Start fetching Cesium now, in parallel with the day's buildings.
 const globeModule = import('./globe');
-// Practice draws from the whole pool; a normal day is that date's five.
-const buildings: Building[] = practice ? await loadPool() : await loadDay(date);
-const newPractice = (): DayState => ({ date: 'practice', ids: pickPractice(buildings).map((b) => b.id), guesses: [] });
-if (practice && params.get('practice') === 'new') history.replaceState(null, '', `${import.meta.env.BASE_URL}?practice`);
-const state: DayState = practice
-  ? (params.get('practice') !== 'new' && peek('practice', buildings)) || newPractice()
-  : load(date, buildings);
+const buildings: Building[] = await loadDay(date);
+const state: DayState = load(date, buildings);
+// Finishing a past day now doesn't count toward the streak.
+if (catchUp && state.guesses.length < ROUNDS) state.late = true;
 save(state); // pin this round's ids right away
 const day: Building[] = state.ids.map((id) => buildings.find((b) => b.id === id)!);
 let globe: Globe | null = null;
@@ -102,16 +100,14 @@ const SITE = 'landmarked.land';
 const shareUrl = () => SITE;
 
 // ---------- static UI ----------
-el.date.textContent = practice ? 'Practice round' : formatDay(date);
-if (practice) el.lede.textContent = "A random five, just for practice. Today's puzzle stays untouched.";
+el.date.textContent = catchUp ? `${formatDay(date)} · catch-up` : formatDay(date);
+if (catchUp) el.lede.textContent = `Catch up on ${formatDay(date, { weekday: 'long', day: 'numeric', month: 'long' })}. Today's puzzle stays untouched.`;
 setScore(total(), false);
-renderDots();
 
 renderIntroStreak();
-// Anonymous counters: a visit (with the referring site), or a practice round.
-if (practice) {
-  if (params.get('practice') === 'new') track('practice', today);
-} else {
+// Anonymous counters: a visit (with the referring site). Catch-up rounds are
+// counted under 'practice' on today's date when they start (see the Play button).
+if (!catchUp) {
   const ref = (() => { try { return document.referrer ? new URL(document.referrer).hostname : ''; } catch { return ''; } })();
   track('visit', date, ref && ref !== location.hostname ? { ref } : {});
 }
@@ -152,7 +148,8 @@ const globeReady = globeModule
 // ---------- flow ----------
 el.play.addEventListener('click', () => {
   el.intro.hidden = true;
-  if (!practice && round() === 0) {
+  if (catchUp && round() === 0) track('practice', today);
+  if (!catchUp && round() === 0) {
     // Returning player, and back after finishing yesterday: the numbers that show whether people come back.
     const before = stats(today);
     trackOnce('start', date, { returning: before.played > 0, yesterday: before.streak > 0 });
@@ -174,7 +171,6 @@ function showQuestion() {
   if (creditMap[b.id]) new Image().src = photoUrl(b.id);
   el.result.hidden = true;
   awaiting = true;
-  renderDots();
   if (!globe) el.globeStatus.textContent = 'Loading globe…';
 }
 
@@ -190,20 +186,18 @@ function lockIn(lon: number, lat: number) {
   awaiting = false;
   state.guesses.push({ lon: +lon.toFixed(4), lat: +lat.toFixed(4), km: +km.toFixed(2), pts });
   save(state);
-  renderDots();
   showResultCard(b, km, pts, i);
   // How much of the stage the card covers, so the camera frames the pair above it.
   const stage = el.globe.getBoundingClientRect();
   const card = el.result.getBoundingClientRect();
   const fullWidth = card.width > stage.width * 0.6;
   const inset = fullWidth ? Math.min(0.6, (stage.bottom - card.top) / stage.height) : 0;
-  globe?.showResult({ lon: b.lon, lat: b.lat, name: b.name, color: ROUND_COLOR[i], guess: { lon, lat } }, inset);
+  globe?.showResult({ lon: b.lon, lat: b.lat, name: b.name, color: ACCENT, guess: { lon, lat } }, inset);
   setScore(total(), true);
 }
 
 function showResultCard(b: Building, km: number, pts: number, i: number) {
   el.rPoints.textContent = String(pts);
-  el.rPoints.style.color = ROUND_COLOR[i];
   el.rDistance.textContent = formatKm(km);
   el.rName.textContent = b.name;
   el.rArchitect.textContent = b.architect;
@@ -264,26 +258,9 @@ function setScore(to: number, animate: boolean) {
   requestAnimationFrame(step);
 }
 
-/** The difficulty meter: five rising bars that fill and warm up to the current round. */
-function renderDots() {
-  // While a question is open, its own bar is lit; once guessed, round() has moved on.
-  const reached = Math.min(awaiting ? round() : round() - 1, ROUNDS - 1);
-  el.dots.querySelectorAll('i').forEach((d, i) => {
-    d.style.background = i <= reached ? ROUND_COLOR[i] : '';
-  });
-}
-
-/** A small copy of the meter, filled up to round i, for the results and cards. */
-function meter(i: number): HTMLElement {
-  const m = h('span', 'meter');
-  m.setAttribute('aria-label', `Difficulty ${i + 1} of ${ROUNDS}`);
-  for (let k = 0; k < ROUNDS; k++) {
-    const bar = h('i');
-    if (k <= i) bar.style.background = ROUND_COLOR[k];
-    m.append(bar);
-  }
-  return m;
-}
+// The day goes from easy to hard without saying so (user's choice, 2026-11-23):
+// no tier names or difficulty meter, one accent colour throughout.
+const ACCENT = '#e3b261';
 
 // ---------- end screen ----------
 interface PhotoCredit { w: number; h: number; artist: string; license: string; licenseUrl: string | null; page: string }
@@ -305,9 +282,9 @@ function verdict(score: number): string {
   return 'Lost in the lobby. Tomorrow is a new blueprint.';
 }
 
-// ---------- streaks and stats (this device only; practice doesn't count) ----------
+// ---------- streaks and stats (this device only; catch-up days don't extend streaks) ----------
 function renderIntroStreak() {
-  if (practice) return;
+  if (catchUp) return;
   const s = stats(today);
   if (!s.streak) return;
   const done = state.guesses.length >= ROUNDS;
@@ -316,14 +293,13 @@ function renderIntroStreak() {
 }
 /** "You beat 72% of today's players", once enough people have finished. */
 async function renderRank() {
-  if (practice) return;
+  if (catchUp) return;
   const r = await finishAndRank(date, total());
   if (!r || r.players < 20) return;
   el.endRank.textContent = r.beat >= 1 ? `You beat ${r.beat}% of today's players` : `${r.players.toLocaleString('en-US')} players so far today`;
   el.endRank.hidden = false;
 }
 function renderStats() {
-  if (practice) return;
   const s = stats(today);
   const cell = (value: string | number, label: string) => {
     const c = h('div', 'stat');
@@ -359,15 +335,15 @@ function h<K extends keyof HTMLElementTagNameMap>(tag: K, cls = '', text = ''): 
 
 function showEnd() {
   awaiting = false;
-  el.qnum.textContent = practice ? 'PRACTICE DONE' : 'DONE FOR TODAY';
-  el.clue.textContent = practice
+  el.qnum.textContent = catchUp ? 'CATCH-UP DONE' : 'DONE FOR TODAY';
+  el.clue.textContent = catchUp
     ? `You scored ${total()} of 1000. Tap a building on the globe to read about it.`
     : `You scored ${total()} of 1000. Tap a building on the globe to read about it, and come back tomorrow for five more.`;
-  renderDots();
   el.endScore.textContent = String(total());
   el.endVerdict.textContent = verdict(total());
   renderStats();
   void renderRank();
+  renderCatchUp();
 
   // Results breakdown: one row per round.
   el.endRounds.replaceChildren();
@@ -375,12 +351,10 @@ function showEnd() {
     const b = day[i];
     const li = h('li', 'round');
     const pts = h('span', 'r-pts', String(g.pts));
-    pts.style.color = ROUND_COLOR[i];
     const track = h('span', 'r-track');
     const fill = h('i');
-    fill.style.background = ROUND_COLOR[i];
     track.append(fill);
-    li.append(h('span', 'r-num', String(i + 1)), meter(i), h('span', 'r-name', b.name), pts, track, h('span', 'r-dist', formatKm(g.km)));
+    li.append(h('span', 'r-num', String(i + 1)), h('span', 'r-name', b.name), pts, track, h('span', 'r-dist', formatKm(g.km)));
     el.endRounds.append(li);
     requestAnimationFrame(() => requestAnimationFrame(() => (fill.style.width = `${Math.max(2, (g.pts / 200) * 100)}%`)));
   });
@@ -431,7 +405,7 @@ function buildingCard(i: number, cr: Record<string, PhotoCredit>): HTMLElement {
         }
         const body = h('div', 'bbody');
         const top = h('div', 'btop');
-        top.append(meter(i), h('span', 'bres', `${g.pts} pts · ${formatKm(g.km)}`));
+        top.append(h('span', 'bres', `${g.pts} pts · ${formatKm(g.km)}`));
         body.append(top, h('h4', '', b.name), h('p', 'bmeta', `${b.architect} · ${b.year} · ${b.city}, ${b.country}`), h('p', 'bblurb', b.blurb ?? ''));
         card.append(body);
         return card;
@@ -450,7 +424,7 @@ async function showPins() {
         lon: b.lon,
         lat: b.lat,
         name: b.name,
-        color: ROUND_COLOR[i],
+        color: ACCENT,
         guess,
         photo: cr[b.id] ? `${import.meta.env.BASE_URL}photos/${b.id}.jpg` : undefined,
       };
@@ -476,7 +450,7 @@ async function openPin(id: string) {
 }
 
 el.shareBtn.addEventListener('click', async () => {
-  if (!practice) track('share', date);
+  if (!catchUp) track('share', date);
   const text = shareText(state, shareUrl());
   try {
     if (navigator.share && matchMedia('(pointer: coarse)').matches) {
@@ -501,15 +475,30 @@ el.showAll.addEventListener('click', async () => {
 
 el.resultsBtn.addEventListener('click', () => showEnd());
 
+/** The last five days, oldest first: each shows its score, or invites you to play it. */
+function renderCatchUp() {
+  const row = h('div', 'cdays');
+  for (const d of [...recent].reverse()) {
+    const p = progress(d);
+    const a = h('a', `cday${d === date ? ' cur' : ''}`);
+    a.href = `?day=${d}`;
+    a.append(
+      h('span', 'cday-name', formatDay(d, { weekday: 'short' })),
+      h('span', 'cday-score', !p ? 'Play' : p.guesses >= ROUNDS ? String(p.total) : 'Resume'),
+    );
+    row.append(a);
+  }
+  el.catchup.replaceChildren(h('div', 'cdays-label', 'Catch up on the last 5 days'), row);
+  el.catchup.hidden = false;
+}
+
 let countdownTimer = 0;
 function tickCountdown() {
   clearTimeout(countdownTimer);
-  if (practice) {
-    const again = h('a', '', 'New practice round');
-    again.href = '?practice=new';
-    const back = h('a', '', "Today's buildings");
+  if (catchUp) {
+    const back = h('a', '', "Back to today's buildings");
     back.href = import.meta.env.BASE_URL;
-    el.countdownRow.replaceChildren(again, ' · ', back);
+    el.countdownRow.replaceChildren(back);
     return;
   }
   const ms = msToMidnight();
