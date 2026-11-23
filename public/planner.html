@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="robots" content="noindex, nofollow" />
-<title>Landmarked planner</title>
+<title>Landmarked admin</title>
 <style>
   :root { --bg: #0e1012; --panel: #16191c; --panel-2: #1d2125; --line: #2b3036; --text: #ece6da; --muted: #99938a; --accent: #e3b261; --bad: #e2775c; --warn: #d9b54a; --ok: #7fb685; --ig: #d58bd0; color-scheme: dark; }
   * { box-sizing: border-box; }
@@ -77,6 +77,21 @@
   .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
   .toast { position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%); background: var(--panel); border: 1px solid var(--accent); border-radius: 10px; padding: 10px 14px; z-index: 20; max-width: calc(100% - 32px); font-size: 13px; }
   .toast.bad { border-color: var(--bad); }
+  /* sections: one button per tool; add more to TABS in the script */
+  .tabs { display: flex; gap: 6px; flex-wrap: wrap; border-bottom: 1px solid var(--line); padding-bottom: 10px; }
+  .tabs a { text-decoration: none; color: var(--muted); padding: 7px 14px; border: 1px solid var(--line); border-radius: 99px; font-size: 12.5px; letter-spacing: 0.06em; text-transform: uppercase; }
+  .tabs a:hover { color: var(--text); border-color: var(--muted); }
+  .tabs a[aria-current="page"] { color: #1a1408; background: var(--accent); border-color: var(--accent); font-weight: 600; }
+  .view { display: grid; gap: 20px; }
+  .scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  th, td { padding: 6px 8px; border-bottom: 1px solid var(--line); text-align: right; white-space: nowrap; }
+  th { font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+  th:first-child, td:first-child { text-align: left; }
+  .two { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 22px; }
+  .hbar { display: grid; grid-template-columns: 1fr 3fr 48px; gap: 8px; align-items: center; font-size: 12px; padding: 2px 0; }
+  .hbar i { display: block; height: 8px; border-radius: 3px; background: var(--accent); }
+  .hbar em { font-style: normal; text-align: right; color: var(--muted); }
   @media (max-width: 760px) {
     .five { grid-template-columns: 1fr; }
     .b { flex-direction: row; } .b .ph { width: 92px; aspect-ratio: auto; min-height: 76px; flex: none; }
@@ -88,7 +103,7 @@
 <main>
   <header>
     <div>
-      <h1>LANDMARKED <span>planner</span></h1>
+      <h1>LANDMARKED <span>admin</span></h1>
       <p class="note" id="gen">Loading…</p>
     </div>
     <form id="unlock" class="row" autocomplete="off">
@@ -98,6 +113,9 @@
     <div id="unlocked" class="row" hidden><span class="chip ok">editing on</span><button id="lockBtn" type="button">Lock</button></div>
   </header>
 
+  <nav class="tabs" id="tabs" aria-label="Sections"></nav>
+
+  <div class="view" id="view-plan">
   <section class="tiles" id="tiles"></section>
   <section class="box" id="alerts" hidden></section>
 
@@ -113,6 +131,21 @@
     <h2>How changes work</h2>
     <p style="margin:0;font-size:12.5px">Every saved change is a commit to the game's files and goes live about a minute later. Clues, texts and photos change in place. Moving or retiring a building re-plans the schedule straight away: a locked day only swaps that one building, later days are redrawn. Instagram drafts already in Metricool are not changed; redo those there.</p>
   </section>
+  </div>
+
+  <div class="view" id="view-stats" hidden>
+    <p class="note" style="margin:0">Anonymous daily totals (UTC days). No player ids, cookies or IP addresses are stored.</p>
+    <p id="st-msg" class="note"></p>
+    <section id="st-out" class="view" hidden>
+      <div><h2>Last 7 days</h2><div id="st-tiles" class="tiles"></div></div>
+      <div><h2>By day</h2><div class="scroll"><table id="st-days"></table></div>
+        <p class="note">Players = games started (one per device per day). Returning = had played an earlier day. Came back = also finished the day before (next-day retention). Average score is estimated from 10-point bands.</p></div>
+      <div class="two">
+        <div><h2>Countries, 7 days</h2><div id="st-countries"></div></div>
+        <div><h2>Came from, 7 days</h2><div id="st-refs"></div></div>
+      </div>
+    </section>
+  </div>
 </main>
 
 <div class="shade" id="shade" hidden></div>
@@ -126,6 +159,7 @@
   const words = (s) => String(s).trim().split(/\s+/).filter(Boolean).length;
   let plan = null;
   let key = store.get('key');
+  try { key ||= localStorage.getItem('landmarked:statskey'); } catch {}
 
   // ---------- read-only overview ----------
   function render() {
@@ -149,7 +183,7 @@
           b.photo ? '' : '<span class="chip warn">no photo</span>',
         ].join(' ');
         return `<button type="button" class="b${d.social?.id === b.id ? ' ig' : ''}" data-id="${esc(b.id)}" data-date="${d.date}">
-          <div class="ph" ${b.photo ? `style="background-image:url('photos/${esc(b.id)}.jpg')"` : ''}>${b.photo ? '' : 'no photo'}</div>
+          <div class="ph" ${b.photo ? `style="background-image:url('photos/${esc(b.id)}.jpg?v=${esc(full.credit?.v ?? '')}')"` : ''}>${b.photo ? '' : 'no photo'}</div>
           <div class="tx"><span class="tier">${esc(b.tier)}</span><span class="nm">${esc(full.name ?? b.name)}</span><span class="pl">${esc(full.city ?? b.city)}, ${esc(full.country ?? b.country)}</span><span class="chips">${bc}</span>
           ${showClues ? `<span class="clue">${esc(full.clues?.[b.clueNo - 1] ?? b.clue)}</span>` : ''}</div></button>`;
       }).join('');
@@ -194,10 +228,11 @@
       const j = await res.json().catch(() => ({}));
       if (!res.ok) { toast(j.error || `Could not check the key (${res.status})`, true); return; }
       key = k; store.set('key', key); $('keyIn').value = ''; setKeyUI();
+      stats.loaded = false; showView();
       toast(j.canSave ? 'Key accepted. Editing is on.' : 'Key accepted, but saving is off: GITHUB_TOKEN is missing in Vercel.', !j.canSave);
     } catch { toast('Could not reach the server to check the key.', true); }
   });
-  $('lockBtn').addEventListener('click', () => { key = null; store.set('key', null); setKeyUI(); });
+  $('lockBtn').addEventListener('click', () => { key = null; store.set('key', null); try { localStorage.removeItem('landmarked:statskey'); } catch {} setKeyUI(); stats.loaded = false; showView(); });
 
   let toastTimer;
   function toast(msg, bad) {
@@ -382,7 +417,7 @@
       let r;
       try { r = await send('photo', { id, file }); } catch { $('useBtn').disabled = false; return; }
       b.credit = r.credit;
-      toast('New photo saved. Live in about a minute (browsers may show the old one for a while).');
+      toast('New photo saved. Live on the site in about a minute.');
       open(id, date);
     }
 
@@ -403,6 +438,77 @@
   }
 
   $('days').addEventListener('click', (e) => { const el = e.target.closest('.b'); if (el) open(el.dataset.id, el.dataset.date); });
+
+  // ---------- sections ----------
+  // One entry per tool. To add one: a <div class="view" id="view-<id>" hidden> in the page,
+  // an entry here, and an optional show() that runs when it opens.
+  const TABS = [
+    { id: 'plan', label: 'Planning' },
+    { id: 'stats', label: 'Statistics', show: () => stats.show() },
+  ];
+  $('tabs').innerHTML = TABS.map((t) => `<a href="#${t.id}" data-tab="${t.id}">${esc(t.label)}</a>`).join('');
+  function showView() {
+    const cur = TABS.find((t) => '#' + t.id === location.hash) ?? TABS[0];
+    for (const t of TABS) {
+      $('view-' + t.id).hidden = t !== cur;
+      const link = document.querySelector(`[data-tab="${t.id}"]`);
+      if (t === cur) link.setAttribute('aria-current', 'page'); else link.removeAttribute('aria-current');
+    }
+    $('gen').hidden = cur.id !== 'plan';
+    cur.show?.();
+  }
+  window.addEventListener('hashchange', showView);
+
+  // ---------- statistics (was stats.html) ----------
+  const stats = {
+    loaded: false,
+    async show() {
+      if (this.loaded) return;
+      if (!key) { $('st-out').hidden = true; $('st-msg').textContent = 'Unlock with your key (top right) to see the statistics.'; return; }
+      this.loaded = true;
+      $('st-msg').textContent = 'Loading…';
+      let res, data = null;
+      try { res = await fetch('/api/stats?days=30&key=' + encodeURIComponent(key), { cache: 'no-store' }); data = res.ok ? await res.json() : null; } catch { res = null; }
+      if (!data?.days) {
+        this.loaded = false;
+        if (res && res.status === 403) { key = null; store.set('key', null); setKeyUI(); }
+        $('st-msg').innerHTML = `<span style="color:var(--bad)">${res && res.status === 403 ? 'Wrong key: unlock again.' : 'Stats unavailable (is Upstash connected?).'}</span>`;
+        return;
+      }
+      $('st-msg').textContent = '';
+      this.render(data.days);
+    },
+    render(days) {
+      const n = (v) => Number(v || 0).toLocaleString('en-US');
+      const pct = (a, b) => (b ? Math.round((100 * a) / b) + '%' : '–');
+      const avg = (hist) => { let c = 0, sum = 0; for (const [b, k] of Object.entries(hist)) { c += k; sum += k * Math.min(1000, Number(b) * 10 + 5); } return c ? Math.round(sum / c) : null; };
+      const bars = (el, counts) => {
+        const rows = Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 12);
+        const max = Math.max(1, ...rows.map((r) => r[1]));
+        el.innerHTML = rows.length ? rows.map(([k, v]) => `<div class="hbar"><span>${esc(k)}</span><i style="width:${(100 * v) / max}%"></i><em>${n(v)}</em></div>`).join('') : '<p class="note">Nothing yet.</p>';
+      };
+      const week = days.slice(0, 7);
+      const sum = (f) => week.reduce((t, d) => t + (d.totals[f] || 0), 0);
+      const merge = (f) => { const m = {}; for (const d of week) for (const [k, v] of Object.entries(d[f])) m[k] = (m[k] || 0) + v; return m; };
+      const tiles = [
+        [n(sum('visit')), 'visits'], [n(sum('start')), 'players (games started)'],
+        [pct(sum('finish'), sum('start')), 'finished the five'], [pct(sum('returning'), sum('start')), 'returning players'],
+        [pct(sum('yesterday'), sum('start')), 'came back from the day before'], [n(sum('share')), 'shares'],
+        [avg(merge('hist')) ?? '–', 'average score'], [n(sum('practice')), 'catch-up rounds'],
+      ];
+      $('st-tiles').innerHTML = tiles.map(([v, l]) => `<div class="tile"><b>${esc(v)}</b><span>${l}</span></div>`).join('');
+      const head = ['Day', 'Visits', 'Players', 'Finished', 'Returning', 'Came back', 'Shares', 'Avg score'];
+      $('st-days').innerHTML = '<tr>' + head.map((h) => `<th>${h}</th>`).join('') + '</tr>' + days.map((d) => {
+        const t = d.totals;
+        return `<tr><td>${d.day}</td><td>${n(t.visit)}</td><td>${n(t.start)}</td><td>${n(t.finish)} <span class="note">${pct(t.finish, t.start)}</span></td>` +
+          `<td>${pct(t.returning, t.start)}</td><td>${pct(t.yesterday, t.start)}</td><td>${n(t.share)}</td><td>${avg(d.hist) ?? '–'}</td></tr>`;
+      }).join('');
+      bars($('st-countries'), merge('country'));
+      bars($('st-refs'), merge('ref'));
+      $('st-out').hidden = false;
+    },
+  };
+  setKeyUI(); showView();
 
   fetch('plan.json', { cache: 'no-store' }).then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); }).then((p) => {
     plan = p;

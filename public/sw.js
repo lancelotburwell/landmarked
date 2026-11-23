@@ -34,8 +34,8 @@ self.addEventListener('fetch', (e) => {
     return;
   }
 
-  // The day's puzzle and the pool: network first, so a new schedule shows up at once.
-  if (url.origin === self.location.origin && (url.pathname.includes('/days/') || url.pathname.endsWith('/pool.json'))) {
+  // The day's puzzle, the pool and the photo index: network first, so a new schedule shows up at once.
+  if (url.origin === self.location.origin && (url.pathname.includes('/days/') || url.pathname.endsWith('/pool.json') || url.pathname.endsWith('/photos.json'))) {
     e.respondWith(
       fetch(req)
         .then((res) => { if (res.ok) { const copy = res.clone(); caches.open(APP).then((c) => c.put(req, copy)); } return res; })

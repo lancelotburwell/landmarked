@@ -263,16 +263,18 @@ function setScore(to: number, animate: boolean) {
 const ACCENT = '#e3b261';
 
 // ---------- end screen ----------
-interface PhotoCredit { w: number; h: number; artist: string; license: string; licenseUrl: string | null; page: string }
+interface PhotoCredit { v?: string; w: number; h: number; artist: string; license: string; licenseUrl: string | null; page: string }
 let credits: Promise<Record<string, PhotoCredit>> | null = null;
 const loadCredits = () =>
-  (credits ??= fetch(`${import.meta.env.BASE_URL}photos/credits.json`)
+  (credits ??= fetch(`${import.meta.env.BASE_URL}photos.json`)
     .then((r): Promise<Record<string, PhotoCredit>> => (r.ok ? r.json() : Promise.resolve({})))
     .catch((): Record<string, PhotoCredit> => ({})));
 // Photo credits, loaded early so the result card can show the photo at once.
 let creditMap: Record<string, PhotoCredit> = {};
 void loadCredits().then((c) => (creditMap = c));
-const photoUrl = (id: string) => `${import.meta.env.BASE_URL}photos/${id}.jpg`;
+// photos.json (written on every build) gives each photo a content hash, so a replaced
+// photo gets a new URL and never comes from an old browser or service-worker cache.
+const photoUrl = (id: string) => `${import.meta.env.BASE_URL}photos/${id}.jpg${creditMap[id]?.v ? `?v=${creditMap[id].v}` : ''}`;
 
 function verdict(score: number): string {
   if (score >= 900) return 'Master builder. You could find these blindfolded.';
@@ -380,7 +382,7 @@ function buildingCard(i: number, cr: Record<string, PhotoCredit>): HTMLElement {
         if (c) {
           const fig = h('figure', 'bphoto');
           const img = h('img');
-          img.src = `${import.meta.env.BASE_URL}photos/${b.id}.jpg`;
+          img.src = photoUrl(b.id);
           img.alt = b.name;
           img.loading = 'lazy';
           img.width = c.w;
@@ -426,7 +428,7 @@ async function showPins() {
         name: b.name,
         color: ACCENT,
         guess,
-        photo: cr[b.id] ? `${import.meta.env.BASE_URL}photos/${b.id}.jpg` : undefined,
+        photo: cr[b.id] ? photoUrl(b.id) : undefined,
       };
     }),
   );

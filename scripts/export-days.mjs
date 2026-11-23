@@ -27,6 +27,18 @@ for (const d of schedule) {
 }
 writeFileSync(new URL('public/pool.json', root), JSON.stringify(pool.filter((b) => !b.retired).map((b) => withClue(b))));
 
+// public/photos.json: the photo credits plus a short content hash per photo (v). The game
+// asks for photos/<id>.jpg?v=<hash>, so a photo replaced in the planner shows up at once
+// instead of waiting out the week-long browser cache.
+const { createHash } = await import('node:crypto');
+const photoIndex = {};
+for (const [id, c] of Object.entries(JSON.parse(readFileSync(new URL('public/photos/credits.json', root), 'utf8')))) {
+  let v;
+  try { v = createHash('md5').update(readFileSync(new URL(`public/photos/${id}.jpg`, root))).digest('hex').slice(0, 10); } catch { continue; }
+  photoIndex[id] = { v, ...c };
+}
+writeFileSync(new URL('public/photos.json', root), JSON.stringify(photoIndex));
+
 // public/plan.json for the planner page (public/planner.html): the last few days and
 // the whole plan ahead, with the Instagram posts, pins and the health check. It shows
 // nothing the day files don't already.
@@ -36,7 +48,7 @@ writeFileSync(new URL('public/pool.json', root), JSON.stringify(pool.filter((b) 
   const todayK = todayKey();
   const social = new Map(readOrP('data/social.json', []).map((s) => [s.date, s]));
   const pins = readOrP('data/pins.json', []);
-  const credits = readOrP('public/photos/credits.json', {});
+  const credits = photoIndex;
   const health = checkPlan({ pool, schedule });
   const lastSeen = new Map(), shown = new Map();
   const days = [];
