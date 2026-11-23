@@ -53,21 +53,43 @@ const FORMATS = {
   detail: { start: 2.5, spinEnd: 5.0, turnEnd: 6.6, hoverEnd: 7.3, diveEnd: 8.4, pinAt: 9.0, cardEnd: 9.5, outAt: 11.8, total: 12.8, detail: true },
   timer: { spinEnd: 3.5, turnEnd: 5.0, hoverEnd: 7.5, diveEnd: 8.5, pinAt: 9.0, cardEnd: 9.5, outAt: 11.8, total: 12.8, timer: true },
   country: { reveal: 'strip', country: true, hoverEnd: 5.6, diveEnd: 7.0, pinAt: 7.6, cardEnd: 8.6, outAt: 10.8, total: 11.8 },
+  // The two chosen formats (user, 2026-11-23). Neither reveals the building; the
+  // question is for the comments.
+  //   where: opens on the carousel's close-up crop, then the globe just spins, the clue
+  //          above it and "Where am I?" below. No zoom, no pin.
+  //   who:   "Who am I?" on top, the clue at the bottom, the globe spins, turns and dives
+  //          to the pin. The building is never shown.
+  where: { layout: 'where', title: 'Where am I?', reveal: 'none', detail: true, start: 2.5, spinEnd: 11, total: 11, spin: -12,
+    turnEnd: 99, hoverEnd: 99, diveEnd: 99, pinAt: 100, cardEnd: 100, outAt: 101 },
+  // who stops at ~3,000 km: closer, the map is just forest or desert with no landmarks to place the pin by.
+  who: { layout: 'who', title: 'Who am I?', reveal: 'none', closeAlt: 3_000_000, spinEnd: 4.5, turnEnd: 6.0, hoverEnd: 6.0, diveEnd: 7.4, pinAt: 8.0, cardEnd: 8.0, outAt: 10.5, total: 11.5 },
 };
-const TITLE = 'Where am I?';
 
-const [date, fmtName = 'classic', url = 'http://localhost:4173/'] = process.argv.slice(2);
-if (!/^\d{4}-\d{2}-\d{2}$/.test(date ?? '') || !FORMATS[fmtName]) {
-  console.error(`usage: node scripts/make-reel.mjs <YYYY-MM-DD> [${Object.keys(FORMATS).join('|')}] [url]`);
+// <date> (a day in data/social.json) or a building id; for an id, CLUE=<n> picks its clue
+// (default the first) and the carousel crop is used if the building has had a post.
+const [what, fmtName = 'classic', url = 'http://localhost:4173/'] = process.argv.slice(2);
+const isDate = /^\d{4}-\d{2}-\d{2}$/.test(what ?? '');
+if (!what || !FORMATS[fmtName]) {
+  console.error(`usage: node scripts/make-reel.mjs <YYYY-MM-DD | building id> [${Object.keys(FORMATS).join('|')}] [url]`);
   process.exit(1);
 }
 const F = { ...BASE, ...FORMATS[fmtName] };
-const post = read('data/social.json').find((s) => s.date === date);
-if (!post) { console.error(`${date} has no Instagram post in data/social.json`); process.exit(1); }
-const day = read('data/schedule.json').find((d) => d.date === date);
+const TITLE = F.title ?? 'Where am I?';
+const social = read('data/social.json');
+const post = isDate ? social.find((s) => s.date === what) : social.findLast((s) => s.id === what) ?? { id: what };
+if (!post) { console.error(`${what} has no Instagram post in data/social.json`); process.exit(1); }
 const b = read('data/buildings.json').find((x) => x.id === post.id);
-const slot = day.ids.indexOf(b.id);
-const clue = b.clues[day.clues?.[slot] ?? 0] ?? b.clues[0];
+if (!b) { console.error(`unknown building ${post.id}`); process.exit(1); }
+let clue;
+if (isDate) {
+  const day = read('data/schedule.json').find((d) => d.date === what);
+  clue = b.clues[day.clues?.[day.ids.indexOf(b.id)] ?? 0] ?? b.clues[0];
+} else clue = b.clues[Number(process.env.CLUE ?? 0)] ?? b.clues[0];
+const date = isDate ? what : 'sample';
+// The opening close-up: CROP=x,y,width (fractions of the large photo, 4:5 like the
+// carousel's; look at python scripts/social-grid.py <id>), or the carousel's own crop.
+const crop = process.env.CROP ? process.env.CROP.split(',').map(Number) : post.crop;
+if (F.detail && !crop) { console.error(`${b.id}: give CROP=x,y,width for the opening close-up`); process.exit(1); }
 
 const big = `social/src/${b.id}.jpg`;
 const photoFile = existsSync(new URL(big, root)) ? big : `public/photos/${b.id}.jpg`;
@@ -108,7 +130,7 @@ if (F.country) {
   countryBox = { w: Math.min(...xs), e: Math.max(...xs), s: Math.min(...ys), n: Math.max(...ys), name: best.name };
   T = { lon: (countryBox.w + countryBox.e) / 2, lat: (countryBox.s + countryBox.n) / 2 };
 }
-const next = new Date(Date.parse(date + 'T12:00:00Z') + 86_400_000).toISOString().slice(0, 10);
+const next = isDate ? new Date(Date.parse(date + 'T12:00:00Z') + 86_400_000).toISOString().slice(0, 10) : 'sample';
 
 const frames = path(`social/reels/.frames-${date}/`);
 rmSync(frames, { recursive: true, force: true });
@@ -137,6 +159,7 @@ await page.evaluate(async ({ clue, title, name, architect, photo, crop, regular,
     #reel { visibility: visible; position: fixed; inset: 0; z-index: 20; pointer-events: none; font-family: ReelPlex, monospace; color: #ece6da; overflow: hidden; }
     #reel .shadow { text-shadow: 0 2px 6px rgb(0 0 0 / 0.9), 0 0 28px rgb(0 0 0 / 0.75); }
     #reel .clue { position: absolute; left: 90px; right: 90px; top: 170px; text-align: center; font-size: 50px; line-height: 1.38; font-weight: 600; z-index: 3; }
+    #reel .bigtitle { position: absolute; left: 60px; right: 60px; top: -400px; text-align: center; color: #e3b261; font-size: 84px; font-weight: 600; z-index: 3; }
     #reel .title { color: #e3b261; font-size: 1.25em; margin-bottom: 18px; }
     #reel .q { position: absolute; left: 0; top: 0; width: 120px; height: 120px; margin: -60px 0 0 -60px; border-radius: 50%; background: #e3b261; color: #1a1408;
       display: grid; place-items: center; font-size: 84px; font-weight: 600; opacity: 0; z-index: 2; box-shadow: 0 6px 18px rgb(0 0 0 / 0.5); }
@@ -174,6 +197,7 @@ await page.evaluate(async ({ clue, title, name, architect, photo, crop, regular,
   reel.innerHTML = `
     <div class="detail" style="background-image:${img}"></div>
     <div class="clue shadow"><div class="title">${esc(title)}</div>${esc(clue)}</div>
+    <div class="bigtitle shadow">${esc(title)}</div>
     <div class="timer" hidden><i></i></div>
     <div class="ring"></div>
     <div class="q">?</div>
@@ -205,7 +229,7 @@ await page.evaluate(async ({ clue, title, name, architect, photo, crop, regular,
   // Lift the zoom limit (the reel sets its own).
   scene.screenSpaceCameraController.minimumZoomDistance = 1;
   g.closestAlt = () => 1;
-}, { clue, title: TITLE, name: b.name, architect: b.architect, photo, crop: post.crop, regular: font(400), semi: font(600), W, H });
+}, { clue, title: TITLE, name: b.name, architect: b.architect, photo, crop, regular: font(400), semi: font(600), W, H });
 await page.evaluate(() => document.fonts.ready);
 
 // Layout: shrink long clues so they end by about y=620, make the card's photo shorter if
@@ -225,10 +249,10 @@ const L = await page.evaluate(({ H }) => {
 const freeTop = L.clueBottom + 30;
 const freeBottom = F.reveal === 'card' ? L.cardTop - 20 : F.reveal === 'strip' ? L.stripTop - 30 : H - 420;
 // The pin is drawn above its tip, so its tip sits a little below the middle of the band.
-const PIN_Y = F.country ? (freeTop + freeBottom) / 2 : Math.min(freeBottom - 20, (freeTop + freeBottom) / 2 + 60);
+let PIN_Y = F.country ? (freeTop + freeBottom) / 2 : Math.min(freeBottom - 20, (freeTop + freeBottom) / 2 + 60);
 // Closest height: CLOSE_ALT, or for the country format high enough that its outline
 // fits the free band and the screen's width, with a margin.
-let closeAlt = CLOSE_ALT;
+let closeAlt = F.closeAlt ?? CLOSE_ALT;
 if (countryBox) {
   const tan = Math.tan(Math.PI / 6);
   const hM = (countryBox.n - countryBox.s) * 111_320;
@@ -242,7 +266,51 @@ const hoverAlt = Math.max(HOVER_ALT, closeAlt * 1.6);
 
 // Home height: the whole globe fits the width, with a margin; a bit smaller than in the
 // game, so the clue sits clear above it.
-const HOME = await page.evaluate(() => window.__landmarked.globe.homeAlt()) * 1.18;
+let HOME = await page.evaluate(() => window.__landmarked.globe.homeAlt()) * 1.18;
+
+// The two chosen layouts: a big gold title and the clue around a globe that sits in the
+// band between them. The globe canvas is made taller and moved so its centre is the
+// band's centre (the camera always looks at the canvas centre).
+let canvasTop = 0, Hc = H;
+if (F.layout) {
+  const G = await page.evaluate(({ layout, H }) => {
+    const $ = (s) => document.querySelector('#reel ' + s);
+    const clueEl = $('.clue'), title = $('.bigtitle');
+    $('.clue .title').remove();
+    if (layout === 'who') {
+      // Title on top, clue at the bottom (above Instagram's caption area).
+      title.style.top = '170px';
+      Object.assign(clueEl.style, { top: 'auto', bottom: '430px' });
+      for (const fs of [50, 46, 42, 39]) { clueEl.style.fontSize = fs + 'px'; clueEl.dataset.fs = fs + 'px'; if (clueEl.offsetHeight <= 420) break; }
+      const tb = title.getBoundingClientRect().bottom, ct = clueEl.getBoundingClientRect().top;
+      return { top: tb + 50, bottom: ct - 50 };
+    }
+    // where: clue on top, title under the globe.
+    const cb = clueEl.getBoundingClientRect().bottom;
+    const th = title.offsetHeight;
+    const bottom = H - 430 - th - 40;
+    title.style.top = bottom + 40 + 'px';
+    return { top: cb + 50, bottom };
+  }, { layout: F.layout, H });
+  const cy = (G.top + G.bottom) / 2;
+  const r = Math.min((G.bottom - G.top) / 2, 470);
+  Hc = Math.round(H + 2 * Math.abs(cy - H / 2));
+  canvasTop = Math.round(cy - Hc / 2);
+  await page.evaluate(({ top, h }) => {
+    const el = document.getElementById('globe');
+    el.style.setProperty('inset', 'auto', 'important');
+    el.style.setProperty('left', '0', 'important');
+    el.style.setProperty('top', top + 'px', 'important');
+    el.style.setProperty('height', h + 'px', 'important');
+    window.__landmarked.globe.widget.resize();
+  }, { top: canvasTop, h: Hc });
+  // Height at which the globe's radius on screen is r pixels (60° across the canvas height).
+  const R = 6_378_137;
+  const a = Math.atan((r * Math.tan(Math.PI / 6)) / (Hc / 2));
+  HOME = R / Math.sin(a) - R;
+  PIN_Y = cy + 40;
+  console.log(`layout ${F.layout}: globe band ${Math.round(G.top)}–${Math.round(G.bottom)} px, radius ${Math.round(r)} px`);
+}
 
 const clamp = (u) => Math.max(0, Math.min(1, u));
 const ease = (u) => u * u * (3 - 2 * u);
@@ -258,7 +326,7 @@ const DEG_M = 111_320;
 const lon0 = T.lon - F.spin * (F.spinEnd - F.start + (F.turnEnd - F.spinEnd) / 2);
 // Top-down: look a little south of the building near the ground so its pin sits at
 // PIN_Y (the camera looks straight down, 60° across the height).
-const shiftAt = (alt) => (((H / 2 - PIN_Y) / H) * 2 * Math.tan(Math.PI / 6) * alt) / DEG_M;
+const shiftAt = (alt) => (((Hc / 2 - (PIN_Y - canvasTop)) / Hc) * 2 * Math.tan(Math.PI / 6) * alt) / DEG_M;
 
 // The camera's look-at point (lon, lat), height and tilt amount k (0..1).
 function view(t) {
@@ -323,7 +391,7 @@ const only = process.env.AT ? process.env.AT.split(',').map((x) => Math.min(n - 
 for (let i = 0; i < n; i++) {
   if (only && !only.includes(i)) continue;
   const t = i / FPS;
-  await page.evaluate(({ cam, ov, lon, lat }) => {
+  await page.evaluate(({ cam, ov, lon, lat, top }) => {
     const scene = window.__landmarked.globe.widget.scene;
     const C3 = scene.camera.position.constructor;
     scene.camera.setView({ destination: C3.fromDegrees(cam.lon, cam.lat, cam.alt), orientation: { heading: 0, pitch: (cam.pitch * Math.PI) / 180, roll: 0 } });
@@ -335,7 +403,7 @@ for (let i = 0; i < n; i++) {
     scene.requestRender();
     scene.render();
     const p = scene.cartesianToCanvasCoordinates(C3.fromDegrees(lon, lat, 0));
-    const x = p ? p.x : -999, y = p ? p.y : -999;
+    const x = p ? p.x : -999, y = p ? p.y + top : -999;
     const $ = (s) => document.querySelector('#reel ' + s);
     $('.pin').style.opacity = ov.pinOpacity;
     $('.pin').style.transform = `translate(${x}px, ${y + ov.pinDrop}px)`;
@@ -349,11 +417,12 @@ for (let i = 0; i < n; i++) {
     $('.full .fp').style.transform = `scale(${ov.fullScale})`;
     $('.clue').classList.toggle('big', ov.clueBig);
     $('.clue').style.fontSize = ov.clueBig ? '' : $('.clue').dataset.fs;
-    $('.clue').style.visibility = ov.clueHidden ? 'hidden' : '';
+    $('.clue').style.visibility = ov.clueHidden || ov.detail ? 'hidden' : '';
+    $('.bigtitle').style.visibility = ov.detail ? 'hidden' : '';
     $('.detail').style.display = ov.detail ? 'block' : 'none';
     $('.timer').hidden = ov.timer < 0;
     $('.timer i').style.transform = `scaleX(${Math.max(0, ov.timer)})`;
-  }, { cam: camera(t), ov: overlay(t), lon: b.lon, lat: b.lat });
+  }, { cam: camera(t), ov: overlay(t), lon: b.lon, lat: b.lat, top: canvasTop });
   // Wait for this view's tiles, then draw once more and capture.
   await page.waitForFunction(() => {
     const s = window.__landmarked.globe.widget.scene;
