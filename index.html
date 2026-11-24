@@ -144,6 +144,19 @@
             </a>
           </div>
 
+          <!-- Feedback: api/feedback.ts emails it to the creator (Resend) and keeps a copy for the planner. -->
+          <div class="feedback">
+            <button id="fb-open" class="btn small fb-open" type="button" aria-expanded="false" aria-controls="fb-form">✉ Feedback straight to the creator</button>
+            <form id="fb-form" class="fb-form" hidden>
+              <label for="fb-text" class="fb-label">Ideas, bugs, a building you'd love to see? I read every message.</label>
+              <textarea id="fb-text" maxlength="2000" rows="4" required placeholder="Type your message… (add your email if you'd like a reply)"></textarea>
+              <div class="fb-row">
+                <span id="fb-msg" class="fb-msg" role="status"></span>
+                <button id="fb-send" class="btn primary small" type="submit">Send</button>
+              </div>
+            </form>
+          </div>
+
           <h3 class="end-h">Today's buildings</h3>
           <div id="end-cards" class="cards"></div>
         </div>

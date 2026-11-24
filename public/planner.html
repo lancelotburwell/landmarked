@@ -146,6 +146,11 @@
       </div>
     </section>
   </div>
+  <div class="view" id="view-feedback" hidden>
+    <p class="note" style="margin:0">Messages from the end screen's "Feedback straight to the creator" box, newest first. Each one is also emailed when RESEND_API_KEY and FEEDBACK_TO are set in Vercel.</p>
+    <p id="fb-msg" class="note"></p>
+    <section id="fb-list" style="display:grid;gap:10px"></section>
+  </div>
 </main>
 
 <div class="shade" id="shade" hidden></div>
@@ -445,6 +450,7 @@
   const TABS = [
     { id: 'plan', label: 'Planning' },
     { id: 'stats', label: 'Statistics', show: () => stats.show() },
+    { id: 'feedback', label: 'Feedback', show: () => feedback.show() },
   ];
   $('tabs').innerHTML = TABS.map((t) => `<a href="#${t.id}" data-tab="${t.id}">${esc(t.label)}</a>`).join('');
   function showView() {
@@ -458,6 +464,26 @@
     cur.show?.();
   }
   window.addEventListener('hashchange', showView);
+
+  // ---------- feedback (api/feedback.ts) ----------
+  const feedback = {
+    async show() {
+      if (!key) { $('fb-list').innerHTML = ''; $('fb-msg').textContent = 'Unlock with your key (top right) to read the feedback.'; return; }
+      $('fb-msg').textContent = 'Loading…';
+      let res, data = null;
+      try { res = await fetch('/api/feedback?key=' + encodeURIComponent(key), { cache: 'no-store' }); data = res.ok ? await res.json() : null; } catch { res = null; }
+      if (!data?.items) {
+        if (res && res.status === 403) { key = null; store.set('key', null); setKeyUI(); }
+        $('fb-msg').innerHTML = `<span style="color:var(--bad)">${res && res.status === 403 ? 'Wrong key: unlock again.' : 'Feedback unavailable (is Upstash connected?).'}</span>`;
+        return;
+      }
+      $('fb-msg').textContent = `${data.items.length} message${data.items.length === 1 ? '' : 's'}.${data.email ? '' : ' Email is off: set RESEND_API_KEY and FEEDBACK_TO in Vercel.'}`;
+      $('fb-list').innerHTML = data.items.map((m) => {
+        const ctx = [new Date(m.at).toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' }), m.day && ('day ' + m.day + (m.catchUp ? ' (catch-up)' : '')), m.score != null && (m.score + '/1000'), m.country].filter(Boolean).join(' · ');
+        return `<div class="box"><p class="note" style="margin:0 0 6px">${esc(ctx)}</p><div style="white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px">${esc(m.message)}</div></div>`;
+      }).join('');
+    },
+  };
 
   // ---------- statistics (was stats.html) ----------
   const stats = {

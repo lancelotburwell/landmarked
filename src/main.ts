@@ -1,6 +1,8 @@
 import './style.css';
 import {
   ROUNDS,
+  SQUARE_COLOR,
+  square,
   distanceKm,
   formatKm,
   load,
@@ -18,7 +20,7 @@ import {
   type DayState,
 } from './game';
 import type { Globe } from './globe';
-import { finishAndRank, track, trackOnce } from './track';
+import { finishAndRank, sendFeedback, track, trackOnce } from './track';
 
 // Cesium reads this global to find Workers/Assets; must be set before the engine loads.
 (window as unknown as { CESIUM_BASE_URL: string }).CESIUM_BASE_URL = `${import.meta.env.BASE_URL}cesium/`;
@@ -397,6 +399,7 @@ function showEnd() {
     track.append(fill);
     li.append(h('span', 'r-num', String(i + 1)), h('span', 'r-name', b.name), pts, track, h('span', 'r-dist', formatKm(g.km)));
     el.endRounds.append(li);
+    fill.style.background = SQUARE_COLOR[square(g.pts)];
     requestAnimationFrame(() => requestAnimationFrame(() => (fill.style.width = `${Math.max(2, (g.pts / 200) * 100)}%`)));
   });
 
@@ -506,6 +509,38 @@ el.shareBtn.addEventListener('click', async () => {
     r.selectNodeContents(el.shareText);
     getSelection()?.removeAllRanges();
     getSelection()?.addRange(r);
+  }
+});
+
+// ---------- feedback (end screen) ----------
+const fb = {
+  open: $<HTMLButtonElement>('fb-open'),
+  form: $<HTMLFormElement>('fb-form'),
+  text: $<HTMLTextAreaElement>('fb-text'),
+  send: $<HTMLButtonElement>('fb-send'),
+  msg: $('fb-msg'),
+};
+fb.open.addEventListener('click', () => {
+  fb.form.hidden = !fb.form.hidden;
+  fb.open.setAttribute('aria-expanded', String(!fb.form.hidden));
+  if (!fb.form.hidden) fb.text.focus();
+});
+fb.form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const message = fb.text.value.trim();
+  if (!message) return;
+  fb.send.disabled = true;
+  fb.msg.className = 'fb-msg';
+  fb.msg.textContent = 'Sending…';
+  const ok = await sendFeedback({ message, day: date, score: total(), rounds: state.guesses.length, catchUp });
+  fb.send.disabled = false;
+  if (ok) {
+    fb.text.value = '';
+    fb.form.hidden = true;
+    fb.open.setAttribute('aria-expanded', 'false');
+    fb.open.textContent = '✓ Thanks! Message sent';
+  } else {
+    fb.msg.textContent = 'Could not send. Please try again later.';
   }
 });
 

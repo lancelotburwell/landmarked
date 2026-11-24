@@ -178,6 +178,8 @@ export function square(pts: number): string {
   if (pts >= 50) return '🟧';
   return '🟥';
 }
+/** The colour of each share square, so the results bars match the share text. */
+export const SQUARE_COLOR: Record<string, string> = { '🟩': '#78b159', '🟨': '#fdcb58', '🟧': '#f4900c', '🟥': '#dd2e44' };
 /** Puzzle number: #1 was 2026-11-01, the first day. */
 export function puzzleNumber(date: string): number {
   const [y, m, d] = date.split('-').map(Number);

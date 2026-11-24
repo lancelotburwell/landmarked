@@ -209,6 +209,25 @@ button { font: inherit; color: inherit; }
   color: var(--text); text-decoration: none; font-size: 12px; font-weight: 600;
 }
 .social:hover, .social:focus-visible { border-color: var(--accent); color: var(--accent); }
+.feedback { margin-top: 16px; }
+/* Meant to stand out: gold outline and text on a gold-tinted panel. */
+.fb-open {
+  width: 100%; height: auto; min-height: 48px; padding: 10px 14px; font-size: 14px; font-weight: 600;
+  color: var(--accent); background: rgba(227, 178, 97, 0.12); border: 1.5px solid var(--accent);
+  box-shadow: 0 0 18px rgba(227, 178, 97, 0.18);
+}
+.fb-open:hover, .fb-open:focus-visible { background: rgba(227, 178, 97, 0.2); border-color: var(--accent); }
+.fb-open[aria-expanded="true"] { box-shadow: none; }
+.fb-form { display: grid; gap: 8px; margin-top: 10px; text-align: left; }
+.fb-label { font-size: 12px; color: var(--muted); line-height: 1.45; }
+.fb-form textarea {
+  width: 100%; box-sizing: border-box; resize: vertical; min-height: 90px; padding: 10px; border: 1px solid var(--line); border-radius: 8px;
+  background: var(--bg); color: var(--text); font: inherit; font-size: 13px; line-height: 1.5;
+}
+.fb-form textarea:focus { outline: none; border-color: var(--accent); }
+.fb-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.fb-msg { font-size: 12px; color: var(--muted); }
+.fb-msg.ok { color: var(--accent); }
 #countdown { color: var(--text); font-variant-numeric: tabular-nums; }
 
 .toast {
