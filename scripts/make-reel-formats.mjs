@@ -16,6 +16,17 @@
 //              rewatch is a retry. Comment where you stopped.
 //   pick       four places as strips: one free flight, where to? No wrong answer; tag a friend.
 //   speed      five close-ups, two seconds each. Comment your score x/5.
+// Second batch, after current Reels trends:
+//   pixel      depixelates in six levels with ticks (synthesised sound). Comment the level.
+//   silhouettes  four countries as gold outlines; bonus: a building in each.
+//   wrongonly  "wrong answers only": one striking building, best comment gets pinned.
+//   spotdiff   spot three differences in 10 s (ticks and a buzzer).
+//   wordsearch "the first city you see is your next trip".
+//   distance   two named buildings and an arc: closest guess in km wins.
+//   blindrank  five places one at a time; rank each before seeing the next.
+//   realorai   three real, unreal-looking buildings: real or AI? (All real.)
+//   thisorthat five quick pairs; comment your combo.
+//   mistake    seven pinned buildings, one in the wrong city.
 //
 //   npm run build && npx vite preview --port 4173, then
 //   GPU=1 node scripts/make-reel-formats.mjs <format> [url]
@@ -182,7 +193,192 @@ const FORMATS = {
     answer: '1 Petronas Towers (Kuala Lumpur), 2 Chrysler Building (New York), 3 CN Tower (Toronto), 4 Leaning Tower of Pisa, 5 Eiffel Tower (Paris).',
     mood: 'fast beat with a hit every 2 s (cuts at 0, 2, 4, 6, 8 s)',
   },
+
+  // ----- second batch (2026-11-24), inspired by what's trending on Reels -----
+  pixel: {
+    ids: ['taj-mahal'],
+    cfg: () => ({ photo: photo('taj-mahal'), crop: [0.5, 0.5, 0.389], blocks: [96, 60, 38, 24, 15, 10], step: 1.3,
+      hook: "Name it before it's clear", cta: 'Comment the level you got it 👇' }),
+    audio: () => [...[0, 1, 2, 3, 4, 5].map((k) => ({ t: k * 1.3, type: 'tick', f: 880 + k * 150 })), { t: 7.8, type: 'ding' }],
+    hook: 'An emperor built it for his wife, then was buried beside her. Which level did you get it on?',
+    question: 'Name it. Comment the level you got it 👇',
+    answer: 'The Taj Mahal, Agra (India).',
+    mood: 'has its own ticks and a ding (synthesised); add music under it quietly, or none',
+  },
+  silhouettes: {
+    ids: ['colosseum', 'yoyogi-gymnasium', 'hallgrimskirkja', 'great-mosque-djenne'],
+    cfg: () => ({ hook: 'Name all 4 countries', sub: 'Bonus: a famous building in each', cta: 'Comment 1… 2… 3… 4… 👇',
+      shapes: ['Italy', 'Japan', 'Iceland', 'Mali'].map(countryShape) }),
+    hook: 'Four countries, easy to hard. Bonus point if you can name a famous building in each.',
+    question: 'Comment your answers: 1… 2… 3… 4… (+ a building for the bonus) 👇',
+    answer: '1 Italy (Colosseum), 2 Japan (Yoyogi National Gymnasium), 3 Iceland (Hallgrímskirkja), 4 Mali (Great Mosque of Djenné). Shapes: Natural Earth (public domain).',
+    credits: () => [],
+    mood: 'chill lo-fi; four soft beats for the four shapes (0.2, 1.1, 2.0, 2.9 s)',
+  },
+  wrongonly: {
+    ids: ['guggenheim-bilbao'],
+    cfg: () => ({ photo: photo('guggenheim-bilbao'), crop: [0.45, 0.55, 0.375], hook: 'Wrong answers only', sub: 'What is this building?',
+      sticker: 'Best one gets pinned 📌', cta: 'Comment your wrong answer 👇' }),
+    hook: 'Wrong answers only. Best one gets pinned 📌',
+    question: 'What is this building? Wrong answers only 👇',
+    answer: 'Guggenheim Museum Bilbao (Spain). Pin the funniest comment and reply to a few.',
+    mood: 'comedic or deadpan trending sound',
+  },
+  spotdiff: {
+    ids: ['st-basils'],
+    cfg: () => ({ photo: photo('st-basils'), crop: [0, 0.27, 1], seconds: 10,
+      diffs: [
+        { type: 'erase', at: [0.865, 0.35], r: 0.05, aspect: 0.4, from: [0.8, 0.35] },  // the cross on the right
+        { type: 'swap', at: [0.875, 0.505], r: 0.1 },                                    // green dome turns red
+        { type: 'silver', at: [0.37, 0.55], r: 0.07 },                                    // gold dome turns silver
+      ],
+      hook: 'Spot 3 differences in 10 seconds', cta: 'How many did you find? 👇' }),
+    audio: () => [...Array.from({ length: 10 }, (_, k) => ({ t: 0.5 + k, type: 'tick', f: k >= 7 ? 1500 : 1000 })), { t: 10.5, type: 'buzz' }],
+    hook: '3 differences, 10 seconds. Most people find two. How many did you get?',
+    question: 'How many did you find? Comment 0, 1, 2 or 3 👇',
+    answer: "St Basil's Cathedral, Moscow (named nowhere in the reel). The lower photo: the cross on the far-right dome is gone, the green striped dome on the right is red, the golden dome lower left of centre is silver.",
+    mood: 'has its own ticks and a buzzer (synthesised)',
+  },
+  wordsearch: {
+    ids: ['colosseum'],
+    cfg: () => ({ hook: 'The first city you see is your next trip ✈️', grid: wordGrid(11, ['ROME', 'PARIS', 'OSLO', 'DUBAI', 'TOKYO', 'AGRA', 'LHASA', 'MALMO']),
+      cta: 'Comment the first city you saw 👇' }),
+    hook: 'The first city you spot is your next trip. Which one did you get?',
+    question: 'Comment the first city you saw 👇',
+    answer: 'Hidden: ROME, PARIS, OSLO, DUBAI, TOKYO, AGRA, LHASA, MALMO (cities of buildings in the game). No wrong answer: reply with that city\'s building in Landmarked.',
+    credits: () => [],
+    mood: 'dreamy travel / wanderlust trending sound',
+  },
+  distance: {
+    ids: ['eiffel-tower', 'colosseum'],
+    cfg: () => {
+      const a = bld('eiffel-tower'), b = bld('colosseum');
+      return { hook: 'How far apart?', cta: 'Closest guess in km wins 👇', qdx: -40, qdy: -10,
+        points: [{ name: 'Eiffel Tower', lat: a.lat, lon: a.lon }, { name: 'Colosseum', lat: b.lat, lon: b.lon, labelBelow: true }] };
+    },
+    hook: 'Straight line, as the crow flies. Closest guess gets a shout-out.',
+    question: 'How far apart are they? Comment your guess in km 👇',
+    answer: 'About 1,110 km in a straight line (1,109 km between the two buildings).',
+    credits: () => [],
+    mood: 'calm, curious; a soft hit when the line lands (about 4 s)',
+  },
+  blindrank: {
+    ids: ['parthenon', 'shwedagon-pagoda', 'petronas-towers', 'eiffel-tower', 'hallgrimskirkja'],
+    cfg: () => ({ hook: 'Blind rank: dream trips', sub: 'Place each before you see the next', cta: 'Comment your order 👇',
+      items: [
+        { label: 'Parthenon, Greece', photo: photo('parthenon') },
+        { label: 'Shwedagon, Myanmar', photo: photo('shwedagon-pagoda'), focus: [0.6, 0.4] },
+        { label: 'Petronas, Malaysia', photo: photo('petronas-towers'), focus: [0.5, 0.42] },
+        { label: 'Eiffel Tower, France', photo: photo('eiffel-tower'), focus: [0.5, 0.55] },
+        { label: 'Hallgrímskirkja, Iceland', photo: photo('hallgrimskirkja'), focus: [0.5, 0.5] },
+      ] }),
+    hook: 'No peeking ahead, no changing your mind. Where does each one go?',
+    question: 'Blind rank them 1 to 5. Comment your order 👇',
+    answer: 'No answer: an opinion. Reply with a fact about whatever people put at number 1.',
+    mood: 'suspense trending "blind ranking" sound; a beat per card (every 2 s from 0.3 s)',
+  },
+  realorai: {
+    ids: ['cctv-hq', 'brasilia-cathedral', 'turning-torso'],
+    cfg: () => ({ hook: 'Real or AI?', cta: 'Comment your 3 answers 👇',
+      shots: [
+        { photo: photo('cctv-hq'), crop: [0.47, 0.5, 0.47] },
+        { photo: photo('brasilia-cathedral'), crop: [0.5, 0.5, 0.375] },
+        { photo: photo('turning-torso'), crop: [0.5, 0.5, 0.75] },
+      ] }),
+    hook: "Three buildings that look made up. Which ones are real?",
+    question: 'Real or AI? Comment your 3 answers, like R R A 👇',
+    answer: 'All three are real: CCTV Headquarters (Beijing), Cathedral of Brasília, Turning Torso (Malmö). No AI images were used. Reveal it in a reply after a day, or let the debate run.',
+    mood: 'mysterious / glitchy trending sound',
+  },
+  thisorthat: {
+    ids: ['taj-mahal', 'petronas-towers', 'eiffel-tower', 'big-ben', 'colosseum', 'parthenon', 'fallingwater', 'marina-bay-sands', 'sagrada-familia', 'notre-dame'],
+    cfg: () => ({ hook: 'This or that? Pick fast.', cta: 'Comment your 5 picks 👇',
+      pairs: [
+        [{ label: 'Taj Mahal', photo: photo('taj-mahal'), focus: [0.5, 0.42] }, { label: 'Petronas Towers', photo: photo('petronas-towers'), focus: [0.5, 0.42] }],
+        [{ label: 'Eiffel Tower', photo: photo('eiffel-tower'), focus: [0.5, 0.5] }, { label: 'Big Ben', photo: photo('big-ben'), focus: [0.5, 0.33] }],
+        [{ label: 'Colosseum', photo: photo('colosseum') }, { label: 'Parthenon', photo: photo('parthenon') }],
+        [{ label: 'Fallingwater', photo: photo('fallingwater') }, { label: 'Marina Bay Sands', photo: photo('marina-bay-sands'), focus: [0.5, 0.45] }],
+        [{ label: 'Sagrada Família', photo: photo('sagrada-familia'), focus: [0.5, 0.4] }, { label: 'Notre-Dame', photo: photo('notre-dame'), focus: [0.5, 0.45] }],
+      ] }),
+    hook: 'Five rounds, under two seconds each. Go with your gut.',
+    question: 'This or that? Comment your 5 picks, like ABBAB 👇',
+    answer: 'No answer: an opinion. Reply to combos that match yours.',
+    mood: 'fast "this or that" trending beat, a hit every 1.9 s',
+  },
+  mistake: {
+    ids: ['sagrada-familia'],
+    cfg: () => {
+      const p = (id, name, side, dy) => { const b = bld(id); return { name, lat: b.lat, lon: b.lon, side, dy }; };
+      return { hook: 'One pin is in the wrong place', cta: 'Which one? Comment the name 👇',
+        pins: [
+          p('big-ben', 'Big Ben', 'left'),
+          p('eiffel-tower', 'Eiffel Tower', 'right'),
+          p('elbphilharmonie', 'Elbphilharmonie', 'right'),
+          { name: 'Sagrada Família', lat: 40.4168, lon: -3.7038, side: 'right' }, // the mistake: placed in Madrid
+          p('leaning-tower-pisa', 'Tower of Pisa', 'left'),
+          p('colosseum', 'Colosseum', 'right', 30),
+          p('parthenon', 'Parthenon', 'left'),
+        ] };
+    },
+    hook: 'Seven famous buildings, one pin in the wrong city. Spot it?',
+    question: 'One pin is in the wrong place. Which one? Comment the name 👇',
+    answer: 'Sagrada Família: its pin is in Madrid; it is in Barcelona, on the coast. All the other pins are right.',
+    credits: () => [],
+    mood: 'curious, light; a pop for each pin landing (from 2.2 s, every 0.28 s)',
+  },
 };
+
+// ---------- helpers for the second batch ----------
+// A country's outline from Natural Earth (public domain), without its tiny islands.
+function countryShape(admin) {
+  const geo = (countryShape.geo ??= JSON.parse(readFileSync(new URL('data/.cache/ne_50m_admin_0_countries.geojson', root), 'utf8')));
+  const f = geo.features.find((x) => x.properties.ADMIN === admin);
+  const polys = f.geometry.type === 'Polygon' ? [f.geometry.coordinates] : f.geometry.coordinates;
+  const area = (r) => Math.abs(r.reduce((s, p, i) => { const q = r[(i + 1) % r.length]; return s + p[0] * q[1] - q[0] * p[1]; }, 0) / 2);
+  const rings = polys.map((p) => p[0]);
+  const big = Math.max(...rings.map(area));
+  return rings.filter((r) => area(r) > big * 0.02).map((r) => r.filter((_, i) => i % 2 === 0 || r.length < 200));
+}
+// A word-search grid hiding the words across, down and diagonally (seeded, so reruns match).
+function wordGrid(N, words) {
+  let s = 20261124;
+  const rnd = () => ((s = (s * 1_103_515_245 + 12_345) >>> 0) / 2 ** 32);
+  for (let attempt = 0; attempt < 200; attempt++) {
+    const g = Array.from({ length: N }, () => Array(N).fill(''));
+    const dirs = [[1, 0], [0, 1], [1, 1]];
+    const ok = words.every((w, wi) => {
+      for (let tries = 0; tries < 200; tries++) {
+        const [dx, dy] = dirs[(wi + tries) % 3];
+        const x = Math.floor(rnd() * (N - dx * (w.length - 1))), y = Math.floor(rnd() * (N - dy * (w.length - 1)));
+        if ([...w].every((c, i) => !g[y + dy * i][x + dx * i] || g[y + dy * i][x + dx * i] === c)) {
+          [...w].forEach((c, i) => { g[y + dy * i][x + dx * i] = c; });
+          return true;
+        }
+      }
+      return false;
+    });
+    if (!ok) continue;
+    const L = 'ABCDEFGHIJKLMNOPRSTUVWY';
+    return g.map((row) => row.map((c) => c || L[Math.floor(rnd() * L.length)]).join(''));
+  }
+  throw new Error('word grid: no fit');
+}
+// Synthesised sound effects (no music, nothing copyrighted): a WAV for the format's events.
+function soundtrack(total, events, file) {
+  const SR = 44_100, n = Math.round(total * SR), buf = new Float32Array(n);
+  const add = (t0, dur, fn) => { const a = Math.round(t0 * SR); for (let i = 0; i < dur * SR && a + i < n; i++) buf[a + i] += fn(i / SR); };
+  for (const e of events) {
+    if (e.type === 'tick') add(e.t, 0.06, (t) => 0.5 * Math.sin(2 * Math.PI * e.f * t) * Math.exp(-t * 70));
+    if (e.type === 'ding') add(e.t, 1.6, (t) => 0.3 * (Math.sin(2 * Math.PI * 1046.5 * t) + 0.7 * Math.sin(2 * Math.PI * 1568 * t)) * Math.exp(-t * 3));
+    if (e.type === 'buzz') add(e.t, 0.5, (t) => 0.22 * (Math.sign(Math.sin(2 * Math.PI * 150 * t)) + Math.sign(Math.sin(2 * Math.PI * 157 * t))) * Math.min(1, (0.5 - t) * 20));
+  }
+  const out = Buffer.alloc(44 + n * 2);
+  out.write('RIFF', 0); out.writeUInt32LE(36 + n * 2, 4); out.write('WAVEfmt ', 8);
+  out.writeUInt32LE(16, 16); out.writeUInt16LE(1, 20); out.writeUInt16LE(1, 22); out.writeUInt32LE(SR, 24);
+  out.writeUInt32LE(SR * 2, 28); out.writeUInt16LE(2, 32); out.writeUInt16LE(16, 34); out.write('data', 36); out.writeUInt32LE(n * 2, 40);
+  for (let i = 0; i < n; i++) out.writeInt16LE(Math.round(Math.max(-1, Math.min(1, buf[i])) * 32_000), 44 + i * 2);
+  writeFileSync(file, out);
+}
 
 const [name, url = 'http://localhost:4173/'] = process.argv.slice(2);
 const FMT = FORMATS[name];
@@ -230,13 +426,17 @@ await browser.close();
 if (only) { console.log(`frames in social/reels/.frames-${name}/`); process.exit(0); }
 
 const base = `social/reels/${name}-${FMT.ids[0]}`;
+// Formats with sound effects get a synthesised track; the rest stay silent.
+const wav = FMT.audio ? `${frames}sound.wav` : null;
+if (wav) soundtrack(total, FMT.audio(), wav);
 execFileSync('ffmpeg', ['-loglevel', 'error', '-y', '-framerate', String(FPS), '-i', `${frames}%04d.png`,
+  ...(wav ? ['-i', wav, '-c:a', 'aac', '-b:a', '160k', '-shortest'] : []),
   '-c:v', 'libx264', '-preset', 'slow', '-crf', '18', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', path(`${base}.mp4`)]);
 rmSync(frames, { recursive: true, force: true });
 
 // ---------- caption ----------
 const square = FMT.ids.length === 1 ? SQUARE[bld(FMT.ids[0]).tier] ?? '' : '';
-const credits = FMT.credits ? FMT.credits() : FMT.ids.filter((id) => ['zoomout', 'lie', 'timeline', 'pick', 'speed'].includes(name)).map((id) => credit(id));
+const credits = FMT.credits ? FMT.credits() : FMT.ids.filter(() => !['ladder', 'pins', 'stop'].includes(name)).map((id) => credit(id));
 const caption = [
   FMT.hook, '',
   `${FMT.question} ${square}`.trim(),

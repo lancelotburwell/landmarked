@@ -467,6 +467,408 @@
     },
   };
 
+  // ================= second batch (2026-11-24): trend-inspired formats =================
+  const PIN = (inner = '') => `<svg class="pinx" viewBox="0 0 24 32"><path d="M12 1C5.9 1 1 5.8 1 11.8 1 20.2 12 31 12 31s11-10.8 11-19.2C23 5.8 18.1 1 12 1z" fill="${GOLD}" stroke="#1a1408" stroke-width="1"/><circle cx="12" cy="11.6" r="${inner ? 6.4 : 4.2}" fill="#1a1408"/>${inner ? `<text x="12" y="16.8" text-anchor="middle" fill="${GOLD}">${inner}</text>` : ''}</svg>`;
+  const bounceDrop = (u) => (u < 0.75 ? easeOut(u / 0.75) : 1 - Math.sin(((u - 0.75) / 0.25) * Math.PI) * 0.06);
+  // Shared by pins-on-a-region formats: fit the camera to a set of points.
+  function fitRegion(pts, top, bottom, margin = 360) {
+    const lats = pts.map((p) => p.lat), lons = pts.map((p) => p.lon);
+    const lat = (Math.min(...lats) + Math.max(...lats)) / 2, lon = (Math.min(...lons) + Math.max(...lons)) / 2;
+    const spanKm = Math.max((Math.max(...lons) - Math.min(...lons)) * 111 * Math.cos((lat * Math.PI) / 180),
+      (Math.max(...lats) - Math.min(...lats)) * 111 * (W / (bottom - top)));
+    return { lat, lon, alt: Math.max(2.6e6, altSpan(spanKm, W - margin)) };
+  }
+  // Zoom from the neutral whole globe to a region and back (k: 0 = home, 1 = region).
+  const regionCam = (r, home, k) => cam(r.lon + (30 - r.lon) * (1 - ease(Math.min(1, k * 1.6))), 18 + (r.lat - 18) * ease(k), logLerp(home, r.alt, k));
+  const pixelate = (g, src, bs) => {
+    const w = Math.max(1, Math.round(W / bs)), h = Math.max(1, Math.round(H / bs));
+    const small = document.createElement('canvas');
+    small.width = w; small.height = h;
+    const sg = small.getContext('2d', { willReadFrequently: true });
+    sg.imageSmoothingEnabled = true;
+    sg.drawImage(src, 0, 0, w, h);
+    g.imageSmoothingEnabled = false;
+    g.drawImage(small, 0, 0, w, h, 0, 0, W, H);
+  };
+
+  // 11. pixel: the photo starts as big blocks and sharpens in six steps, a tick on each
+  // (audio added by the node script). It stops while still slightly blocky.
+  F.pixel = {
+    total: 10.5,
+    async setup(c) {
+      globeEl().style.visibility = 'hidden';
+      const im = await img(c.photo);
+      [this.src] = canvas(W, H, document.createElement('div'));
+      drawWindow(this.src.getContext('2d'), im, c.crop[0], c.crop[1], c.crop[2], W, H);
+      [this.cv, this.g] = canvas(W, H, root, 'left:0;top:0');
+      this.title = title(esc(c.hook), SAFE_TOP, 56);
+      this.lv = el(`<div class="abs" style="left:0;right:0;top:${SAFE_TOP + this.title.offsetHeight + 24}px;text-align:center"><span class="rpanel" style="display:inline-block;padding:10px 26px;font-size:40px;font-weight:600"></span></div>`);
+      this.cta = cta(c.cta);
+      this.brand = brand();
+      this.c = c;
+    },
+    frame(t) {
+      const { blocks, step } = this.c, END = blocks.length * step;
+      const back = t > this.total - 0.35;
+      const k = back ? 0 : Math.min(blocks.length - 1, Math.floor(t / step));
+      pixelate(this.g, this.src, blocks[k]);
+      const dots = blocks.map((_, i) => (i <= k ? '●' : '○')).join(' ');
+      this.lv.firstChild.innerHTML = `<span class="gold">LEVEL ${k + 1}/${blocks.length}</span> &nbsp;${dots}`;
+      show(this.cta, win(t, END + 0.4, this.total - 0.35), 30);
+    },
+  };
+
+  // 12. silhouettes: four countries as gold shapes, easy to hard. Bonus: a famous building in each.
+  F.silhouettes = {
+    total: 11,
+    async setup(c) {
+      placeGlobe(H / 2); NEUTRAL_ALT = altFor(560);
+      el('<div class="dim" style="background: rgb(8 9 11 / 0.72)"></div>');
+      this.title = title(esc(c.hook), SAFE_TOP, 68);
+      const sub = el(`<div class="abs rmid" style="left:60px;right:60px;text-align:center;top:${SAFE_TOP + this.title.offsetHeight + 8}px">${esc(c.sub)}</div>`);
+      const top = SAFE_TOP + this.title.offsetHeight + sub.offsetHeight + 40, S = 440, G = 30;
+      this.cells = c.shapes.map((polys, i) => {
+        // Equirectangular around the shape's middle latitude, fitted into an S×S box.
+        const all = polys.flat();
+        const lat0 = (Math.min(...all.map((p) => p[1])) + Math.max(...all.map((p) => p[1]))) / 2;
+        const k = Math.cos((lat0 * Math.PI) / 180);
+        const xs = all.map((p) => p[0] * k), ys = all.map((p) => -p[1]);
+        const x0 = Math.min(...xs), y0 = Math.min(...ys), w = Math.max(...xs) - x0, h = Math.max(...ys) - y0;
+        const s = (S - 60) / Math.max(w, h), ox = (S - w * s) / 2, oy = (S - h * s) / 2;
+        const d = polys.map((ring) => 'M' + ring.map((p) => `${(ox + (p[0] * k - x0) * s).toFixed(1)},${(oy + (-p[1] - y0) * s).toFixed(1)}`).join('L') + 'Z').join('');
+        const x = (W - 2 * S - G) / 2 + (i % 2) * (S + G), y = top + Math.floor(i / 2) * (S + G);
+        return el(`<div class="abs rpanel" style="left:${x}px;top:${y}px;width:${S}px;height:${S}px;border:3px solid rgba(227,178,97,0.35)">
+          <svg width="${S}" height="${S}" style="position:absolute;left:0;top:0"><path d="${d}" fill="${GOLD}" stroke="#f3d79c" stroke-width="2" stroke-linejoin="round"/></svg>
+          <div class="abs" style="left:18px;top:8px;font-size:54px;font-weight:600;color:#ece6da">${i + 1}</div></div>`);
+      });
+      this.cta = cta(c.cta, SAFE_BOTTOM + 20);
+    },
+    frame(t) {
+      neutral(t, -6);
+      this.cells.forEach((n, i) => { const o = win(t, 0.15 + i * 0.9, this.total - 0.25, 0.3); show(n, o, 0, 0.8 + 0.2 * easeOut(o)); });
+      show(this.cta, win(t, 4.2, this.total - 0.25), 30);
+    },
+  };
+
+  // 13. wrongonly: one striking building, "wrong answers only". The comments are the show.
+  F.wrongonly = {
+    total: 9,
+    async setup(c) {
+      globeEl().style.visibility = 'hidden';
+      const im = await img(c.photo);
+      [this.cv, this.g] = canvas(W, H, root, 'left:0;top:0');
+      this.im = im; this.c = c;
+      this.title = title(`${esc(c.hook)}`, SAFE_TOP, 82);
+      this.sub = el(`<div class="abs" style="left:0;right:0;top:${SAFE_TOP + this.title.offsetHeight + 16}px;text-align:center"><span class="rpanel rbig" style="display:inline-block;padding:12px 30px">${esc(c.sub)}</span></div>`);
+      this.sticker = el(`<div class="abs" style="right:110px;top:${H - SAFE_BOTTOM - 330}px;transform-origin:50% 50%"><span style="display:inline-block;padding:14px 26px;background:${GOLD};color:#15110a;border-radius:18px;font-size:38px;font-weight:600;transform:rotate(-6deg)">${esc(c.sticker)}</span></div>`);
+      this.cta = cta(c.cta);
+      this.brand = brand();
+    },
+    frame(t) {
+      // A slow breathing push-in that ends where it began.
+      const z = 1 + 0.07 * (0.5 - 0.5 * Math.cos((2 * Math.PI * t) / this.total));
+      drawWindow(this.g, this.im, this.c.crop[0], this.c.crop[1], this.c.crop[2] / z, W, H);
+      const s = ramp(t, 2.2, 0.25);
+      this.sticker.style.opacity = Math.min(s, 1 - ramp(t, this.total - 0.4, 0.3));
+      this.sticker.style.transform = `scale(${s < 1 ? 1.6 - 0.6 * easeOut(s) : 1})`;
+      show(this.cta, win(t, 3.4, this.total - 0.3), 30);
+    },
+  };
+
+  // 14. spotdiff: the same photo twice; the lower one has three changes. 10 s timer with ticks.
+  F.spotdiff = {
+    total: 12.5,
+    async setup(c) {
+      globeEl().style.visibility = 'hidden';
+      const im = await img(c.photo);
+      this.title = title(esc(c.hook), SAFE_TOP - 10, 64);
+      const top = SAFE_TOP + this.title.offsetHeight + 4, PH = 548, G = 14;
+      const [a, ga] = canvas(W, PH, root, `left:0;top:${top}px`);
+      const [b, gb] = canvas(W, PH, root, `left:0;top:${top + PH + G}px`);
+      const [x, y, w] = c.crop, nw = im.naturalWidth, nh = im.naturalHeight;
+      const sw = w * nw, sh = (sw * PH) / W;
+      for (const g of [ga, gb]) g.drawImage(im, x * nw, y * nh, sw, sh, 0, 0, W, PH);
+      // The changes, given in photo fractions; converted to panel pixels.
+      const px = (fx, fy) => [((fx - x) * nw * W) / sw, ((fy * nh - y * nh) * W) / sw];
+      const sc = W / sw;
+      for (const d of c.diffs) {
+        const [cx, cy] = px(d.at[0], d.at[1]), r = d.r * nw * sc;
+        if (d.type === 'erase') {
+          // Cover with the patch from `from` (same size), feathered by drawing a circle clip.
+          const [fx, fy] = px(d.from[0], d.from[1]);
+          gb.save(); gb.beginPath(); gb.ellipse(cx, cy, r * (d.aspect ?? 1), r, 0, 0, Math.PI * 2); gb.clip();
+          gb.drawImage(b, fx - cx, fy - cy);
+          gb.restore();
+        } else {
+          const id = gb.getImageData(Math.max(0, cx - r), Math.max(0, cy - r), 2 * r, 2 * r), p = id.data;
+          for (let i = 0; i < p.length; i += 4) {
+            const ix = (i / 4) % id.width, iy = Math.floor(i / 4 / id.width);
+            if ((ix - r) ** 2 + (iy - r) ** 2 > r * r) continue;
+            const R = p[i], Gr = p[i + 1], B = p[i + 2];
+            if (d.type === 'swap' && Gr > R + 8 && Gr > B + 12) { p[i] = Math.min(255, Gr * 2.4 + 20); p[i + 1] = R * 0.55; p[i + 2] = B * 0.55; }                 // green → red
+            if (d.type === 'silver' && R > B + 40 && Gr > B + 25 && Gr > 0.6 * R) { const v = 0.4 * R + 0.45 * Gr + 0.15 * B; p[i] = p[i + 1] = p[i + 2] = v; } // gold → silver
+          }
+          gb.putImageData(id, Math.max(0, cx - r), Math.max(0, cy - r));
+        }
+      }
+      this.timer = el(`<div class="abs" style="left:60px;right:60px;top:${top + 2 * PH + G + 22}px;display:flex;align-items:center;gap:22px">
+        <div style="font-size:52px;font-weight:600;color:${GOLD};width:120px">10s</div><div style="flex:1;height:16px;border-radius:8px;background:rgb(255 255 255 / 0.12)"><div style="height:100%;border-radius:8px;background:${GOLD};transform-origin:0 50%"></div></div></div>`);
+      this.end = el(`<div class="abs" style="left:0;right:0;top:${top + PH - 80}px;text-align:center"><span class="rpanel" style="display:inline-block;padding:22px 40px;font-size:66px;font-weight:600;color:${GOLD};border:3px solid ${GOLD}">TIME'S UP</span></div>`);
+      this.cta = cta(c.cta, SAFE_BOTTOM + 20);
+      this.c = c;
+    },
+    frame(t) {
+      const T = this.c.seconds, s0 = 0.5;
+      const left = Math.max(0, T - Math.max(0, t - s0));
+      this.timer.firstElementChild.textContent = `${Math.ceil(left)}s`;
+      this.timer.lastElementChild.firstElementChild.style.transform = `scaleX(${left / T})`;
+      this.timer.style.opacity = 1 - ramp(t, this.total - 0.3, 0.3) * 0;
+      const up = s0 + T;
+      show(this.end, win(t, up, this.total - 0.2, 0.15), 0, t > up ? 1 + 0.25 * (1 - easeOut(ramp(t, up, 0.3))) : 1);
+      show(this.cta, win(t, up + 0.3, this.total - 0.2), 30);
+    },
+  };
+
+  // 15. wordsearch: "the first city you see is your next trip". Every comment is right.
+  F.wordsearch = {
+    total: 10,
+    async setup(c) {
+      placeGlobe(H / 2); NEUTRAL_ALT = altFor(600);
+      el('<div class="dim" style="background: rgb(8 9 11 / 0.7)"></div>');
+      this.title = title(esc(c.hook), SAFE_TOP, 58);
+      const N = c.grid.length, CELL = 82, top = SAFE_TOP + this.title.offsetHeight + 40, left = (W - N * CELL) / 2;
+      const box = el(`<div class="abs rpanel" style="left:${left - 24}px;top:${top - 24}px;width:${N * CELL + 48}px;height:${N * CELL + 48}px;border:3px solid rgba(227,178,97,0.45)"></div>`);
+      this.cells = [];
+      c.grid.forEach((row, j) => [...row].forEach((ch, i) => {
+        this.cells.push([el(`<div class="abs" style="left:${left + i * CELL}px;top:${top + j * CELL}px;width:${CELL}px;height:${CELL}px;line-height:${CELL}px;text-align:center;font-size:52px;font-weight:600">${ch}</div>`), i, j]);
+      }));
+      this.box = box;
+      this.cta = cta(c.cta, SAFE_BOTTOM + 30);
+      this.N = N;
+      let seed = 11;
+      this.rnd = () => ((seed = (seed * 1_103_515_245 + 12_345) >>> 0) / 2 ** 32);
+      this.glints = Array.from({ length: 40 }, () => [Math.floor(this.rnd() * this.cells.length), 1.6 + this.rnd() * 8]);
+    },
+    frame(t) {
+      neutral(t, -6);
+      const out = 1 - ramp(t, this.total - 0.35, 0.3);
+      for (const [n, i, j] of this.cells) {
+        const o = clamp((t - (i + j) * 0.045) / 0.25) * out;
+        n.style.opacity = o;
+        n.style.color = '#ece6da';
+      }
+      // Random single letters glint gold now and then (never a word).
+      for (const [k, at] of this.glints) { const g = win(t, at, at + 0.6, 0.2); if (g > 0) this.cells[k][0].style.color = g > 0.5 ? GOLD : '#ece6da'; }
+      show(this.cta, win(t, 2.4, this.total - 0.3), 30);
+    },
+  };
+
+  // 16. distance: two named buildings, a gold arc between them: how far apart? Closest wins.
+  F.distance = {
+    total: 11,
+    async setup(c) {
+      this.title = title(esc(c.hook), SAFE_TOP, 72);
+      const top = SAFE_TOP + this.title.offsetHeight + 40, bottom = H - SAFE_BOTTOM - 150;
+      placeGlobe((top + bottom) / 2);
+      this.home = altFor(Math.min((bottom - top) / 2, 470));
+      this.r = fitRegion(c.points, top, bottom, 460);
+      this.svg = el(`<svg class="abs" style="left:0;top:0" width="${W}" height="${H}"><polyline fill="none" stroke="${GOLD}" stroke-width="7" stroke-dasharray="20 14" stroke-linecap="round"/></svg>`);
+      this.pins = c.points.map(() => el(PIN()));
+      this.labels = c.points.map((p) => el(`<div class="abs rpanel" style="padding:8px 20px;font-size:36px;font-weight:600;white-space:nowrap">${esc(p.name)}</div>`));
+      this.q = el(`<div class="abs" style="font-size:64px;font-weight:600;color:#15110a;background:${GOLD};border-radius:20px;padding:4px 24px;white-space:nowrap">? km</div>`);
+      this.cta = cta(c.cta, SAFE_BOTTOM + 60);
+      // Great-circle points between the two.
+      const v = (p) => { const la = (p.lat * Math.PI) / 180, lo = (p.lon * Math.PI) / 180; return [Math.cos(la) * Math.cos(lo), Math.cos(la) * Math.sin(lo), Math.sin(la)]; };
+      const [a, b] = c.points.map(v);
+      const om = Math.acos(a[0] * b[0] + a[1] * b[1] + a[2] * b[2]);
+      this.arc = Array.from({ length: 41 }, (_, i) => {
+        const f = i / 40, s1 = Math.sin((1 - f) * om) / Math.sin(om), s2 = Math.sin(f * om) / Math.sin(om);
+        const x = s1 * a[0] + s2 * b[0], y = s1 * a[1] + s2 * b[1], z = s1 * a[2] + s2 * b[2];
+        return { lat: (Math.atan2(z, Math.hypot(x, y)) * 180) / Math.PI, lon: (Math.atan2(y, x) * 180) / Math.PI };
+      });
+      this.c = c;
+    },
+    frame(t) {
+      const IN1 = 2.4, OUT0 = 10.0;
+      const k = t < 0.4 ? 0 : t < IN1 ? easeInOut((t - 0.4) / (IN1 - 0.4)) : t < OUT0 ? 1 : 1 - easeInOut((t - OUT0) / (this.total - OUT0));
+      regionCam(this.r, this.home, k);
+      const vis = 1 - ramp(t, OUT0 - 0.1, 0.3);
+      this.c.points.forEach((p, i) => {
+        const q = project(p.lon, p.lat), u = clamp((t - (IN1 - 0.3 + i * 0.35)) / 0.45);
+        this.pins[i].style.opacity = u > 0 ? vis : 0;
+        this.pins[i].style.transform = `translate(${q.x}px, ${q.y - (1 - bounceDrop(u)) * 260}px)`;
+        const l = this.labels[i], below = i === 0 ? p.labelBelow : p.labelBelow;
+        l.style.opacity = clamp((t - (IN1 + 0.2 + i * 0.35)) / 0.3) * vis;
+        l.style.left = `${q.x - l.offsetWidth / 2}px`;
+        l.style.top = `${below ? q.y + 20 : q.y - 130 - l.offsetHeight}px`;
+      });
+      const d = clamp((t - (IN1 + 0.6)) / 1.2);
+      const n = Math.max(2, Math.round(d * 40) + 1);
+      const pts = this.arc.slice(0, n).map((p) => project(p.lon, p.lat));
+      this.svg.firstElementChild.setAttribute('points', pts.map((p) => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' '));
+      this.svg.style.opacity = d > 0 ? vis : 0;
+      const mid = project(this.arc[20].lon, this.arc[20].lat);
+      const qo = clamp((t - (IN1 + 1.8)) / 0.3) * vis;
+      this.q.style.opacity = qo;
+      this.q.style.transform = `translate(${mid.x - this.q.offsetWidth / 2 + (this.c.qdx ?? 0)}px, ${mid.y - this.q.offsetHeight / 2 + (this.c.qdy ?? 0)}px) scale(${qo < 1 ? 0.6 + 0.4 * qo : 1})`;
+      show(this.cta, win(t, IN1 + 2.2, OUT0 + 0.2), 30);
+    },
+  };
+
+  // 17. blindrank: five places one at a time; rank each before seeing the next.
+  F.blindrank = {
+    total: 13,
+    async setup(c) {
+      globeEl().style.visibility = 'hidden';
+      this.title = title(esc(c.hook), SAFE_TOP - 10, 60);
+      const sub = el(`<div class="abs rmid" style="left:60px;right:60px;text-align:center;top:${SAFE_TOP - 10 + this.title.offsetHeight + 4}px;color:#bdb5a5">${esc(c.sub)}</div>`);
+      const top = SAFE_TOP + this.title.offsetHeight + sub.offsetHeight + 10, CH = 600;
+      this.cards = [];
+      for (const [i, b] of c.items.entries()) {
+        const im = await img(b.photo);
+        this.cards.push(el(`<div class="abs" style="left:60px;right:60px;top:${top}px;height:${CH}px;border-radius:28px;overflow:hidden;border:4px solid ${GOLD}">
+          <img src="${tile(im, W - 120, CH, b.focus?.[0] ?? 0.5, b.focus?.[1] ?? 0.5)}" style="width:100%;height:100%">
+          <div class="abs rpanel" style="left:20px;bottom:20px;padding:8px 24px;font-size:42px;font-weight:600;white-space:nowrap">${esc(b.label)}</div>
+          <div class="abs rpanel" style="right:20px;top:20px;padding:6px 20px;font-size:36px;font-weight:600;color:${GOLD}">${i + 1}/5</div></div>`));
+      }
+      const st = top + CH + 30;
+      this.slots = [1, 2, 3, 4, 5].map((n, i) => el(`<div class="abs" style="left:${70 + (i % 5) * 0}px;top:${st + i * 70}px;display:flex;align-items:center;gap:18px;font-size:40px;font-weight:600">
+        <b class="gold" style="width:40px">${n}</b><div style="width:${W - 330}px;height:52px;border-radius:12px;border:3px dashed rgba(227,178,97,0.55)"></div></div>`));
+      this.cta = cta(c.cta, SAFE_BOTTOM + 14);
+      this.D = 2.0; this.c = c;
+    },
+    frame(t) {
+      const D = this.D, END = 5 * D + 0.3;
+      this.cards.forEach((n, i) => {
+        const a = 0.3 + i * D;
+        const inn = i === 0 ? 1 : ramp(t, a - 0.2, 0.25), out = ramp(t, a + D - 0.2, 0.25);
+        const last = i === 4;
+        n.style.opacity = last ? inn * (1 - ramp(t, this.total - 0.3, 0.3)) : inn * (1 - out);
+        n.style.transform = `translateX(${(1 - easeOut(inn)) * 300 - (last ? 0 : easeOut(out) * 300)}px) rotate(${(1 - inn) * 4}deg)`;
+      });
+      // The empty slots pulse gently while each card is up: "where does it go?".
+      const pulse = 0.55 + 0.45 * Math.abs(Math.sin(t * Math.PI));
+      this.slots.forEach((s) => { s.lastElementChild.style.borderColor = `rgba(227,178,97,${t < END ? pulse : 0.55})`; });
+      show(this.cta, win(t, END - 0.6, this.total - 0.3), 30);
+    },
+  };
+
+  // 18. realorai: three real (but unreal-looking) buildings: real or AI? (All real.)
+  F.realorai = {
+    total: 11.4,
+    async setup(c) {
+      globeEl().style.visibility = 'hidden';
+      this.shots = [];
+      for (const s of c.shots) {
+        const im = await img(s.photo);
+        const [cv, g] = canvas(W, H, root, 'left:0;top:0;opacity:0');
+        this.shots.push({ cv, g, im, crop: s.crop });
+      }
+      this.title = title(esc(c.hook), SAFE_TOP, 76);
+      this.round = el(`<div class="abs" style="left:0;right:0;top:${SAFE_TOP + this.title.offsetHeight + 44}px;text-align:center"><span class="rpanel" style="display:inline-block;padding:6px 24px;font-size:38px;font-weight:600"></span></div>`);
+      this.btns = el(`<div class="abs" style="left:0;right:0;bottom:${SAFE_BOTTOM + 90}px;display:flex;justify-content:center;gap:40px">
+        <span style="display:inline-block;width:300px;text-align:center;padding:18px 0;border-radius:999px;background:rgb(10 12 14 / 0.86);border:4px solid ${GOLD};font-size:54px;font-weight:600">REAL</span>
+        <span style="display:inline-block;width:300px;text-align:center;padding:18px 0;border-radius:999px;background:rgb(10 12 14 / 0.86);border:4px solid #8fb3ff;font-size:54px;font-weight:600;color:#8fb3ff">AI</span></div>`);
+      this.ring = el(`<svg class="abs" style="left:${W / 2 - 46}px;bottom:${SAFE_BOTTOM + 300}px" width="92" height="92" viewBox="0 0 92 92"><circle cx="46" cy="46" r="38" fill="rgb(10 12 14 / 0.8)" stroke="rgba(255,255,255,0.2)" stroke-width="8"/><circle cx="46" cy="46" r="38" fill="none" stroke="${GOLD}" stroke-width="8" stroke-dasharray="238.8" transform="rotate(-90 46 46)"/></svg>`);
+      this.end = el(`<div class="abs" style="left:60px;right:60px;top:700px;text-align:center"><div class="rpanel" style="display:inline-block;padding:26px 40px;font-size:54px;font-weight:600;line-height:1.3">3 buildings.<br>How many are real?</div></div>`);
+      this.cta = cta(c.cta, SAFE_BOTTOM + 90);
+      this.D = 3.0;
+    },
+    frame(t) {
+      const D = this.D, END = 3 * D;
+      const k = Math.min(2, Math.floor(t / D)), u = (t % D) / D;
+      this.shots.forEach((s, i) => {
+        const on = t < END && i === k;
+        s.cv.style.opacity = on ? 1 : t >= END && i === 2 ? 0.35 : 0;
+        if (on || (t >= END && i === 2)) drawWindow(s.g, s.im, s.crop[0], s.crop[1], s.crop[2] * (t < END ? 1.05 - 0.05 * u : 1), W, H);
+      });
+      this.round.firstChild.innerHTML = `<span class="gold">ROUND ${k + 1}/3</span>`;
+      for (const n of [this.round, this.btns, this.ring]) n.style.opacity = t < END ? 1 : 0;
+      this.ring.lastElementChild.setAttribute('stroke-dashoffset', String(238.8 * u));
+      show(this.end, t >= END ? win(t, END, this.total - 0.1, 0.25) : 0, 30);
+      show(this.cta, t >= END ? win(t, END + 0.3, this.total - 0.1, 0.25) : 0, 30);
+    },
+  };
+
+  // 19. thisorthat: five quick pairs, top or bottom, no time to think.
+  F.thisorthat = {
+    total: 12,
+    async setup(c) {
+      globeEl().style.visibility = 'hidden';
+      this.title = title(esc(c.hook), SAFE_TOP - 10, 60);
+      const top = SAFE_TOP + this.title.offsetHeight + 4, PH = 540, G = 12;
+      this.rounds = [];
+      for (const pair of c.pairs) {
+        const halves = [];
+        for (const [j, b] of pair.entries()) {
+          const im = await img(b.photo);
+          halves.push(el(`<div class="abs" style="left:0;right:0;top:${top + j * (PH + G)}px;height:${PH}px;overflow:hidden;opacity:0">
+            <img src="${tile(im, W, PH, b.focus?.[0] ?? 0.5, b.focus?.[1] ?? 0.5)}" style="width:${W}px;height:${PH}px">
+            <div class="abs rpanel" style="left:24px;${j ? 'bottom' : 'top'}:20px;padding:6px 22px;font-size:40px;font-weight:600;white-space:nowrap"><b class="gold" style="font-size:52px;margin-right:14px">${'AB'[j]}</b>${esc(b.label)}</div></div>`));
+        }
+        this.rounds.push(halves);
+      }
+      this.vs = el(`<div class="abs" style="left:${W / 2 - 70}px;top:${top + PH + G / 2 - 70}px;width:140px;height:140px;border-radius:50%;background:${GOLD};color:#15110a;font-size:58px;font-weight:600;line-height:140px;text-align:center">VS</div>`);
+      this.n = el(`<div class="abs" style="right:40px;top:${top + 20}px;font-size:40px;font-weight:600"><span class="rpanel" style="display:inline-block;padding:6px 20px;color:${GOLD}"></span></div>`);
+      this.bar = el(`<div class="abs" style="left:60px;right:60px;top:${top + 2 * PH + G + 26}px;height:14px;border-radius:7px;background:rgb(255 255 255 / 0.12)"><div style="height:100%;border-radius:7px;background:${GOLD};transform-origin:0 50%"></div></div>`);
+      this.end = el(`<div class="abs" style="left:60px;right:60px;top:${top + PH - 120}px;text-align:center"><div class="rpanel" style="display:inline-block;padding:26px 40px;font-size:58px;font-weight:600;line-height:1.3;border:3px solid ${GOLD}">5 picks.<br>What's your combo?</div></div>`);
+      this.cta = cta(c.cta, SAFE_BOTTOM + 20);
+      this.D = 1.9;
+    },
+    frame(t) {
+      const D = this.D, END = 5 * D + 0.2;
+      const k = Math.min(4, Math.floor(t / D)), u = (t % D) / D;
+      this.rounds.forEach((h, i) => h.forEach((n, j) => {
+        const on = t < END && i === k;
+        n.style.opacity = on ? 1 : 0;
+        // Each half slides in from its own side.
+        n.style.transform = on && i > 0 ? `translateX(${(j ? 1 : -1) * (1 - easeOut(clamp(u / 0.12))) * 200}px)` : ''; // round 1 starts in place (the cover frame)
+      }));
+      const vs = t < END ? (k === 0 ? 1 : clamp(u / 0.15)) : 0;
+      this.vs.style.opacity = vs;
+      this.vs.style.transform = `scale(${0.5 + 0.5 * easeOut(vs)}) rotate(${(1 - vs) * -30}deg)`;
+      this.n.firstChild.textContent = `${k + 1}/5`;
+      this.n.style.opacity = t < END ? 1 : 0;
+      this.bar.style.opacity = t < END ? 1 : 0;
+      this.bar.firstChild.style.transform = `scaleX(${1 - u})`;
+      show(this.end, t >= END ? win(t, END, this.total - 0.1, 0.2) : 0, 30);
+      show(this.cta, t >= END ? win(t, END + 0.25, this.total - 0.1, 0.2) : 0, 30);
+    },
+  };
+
+  // 20. mistake: famous buildings pinned on a map; one pin is in the wrong place.
+  F.mistake = {
+    total: 12,
+    async setup(c) {
+      this.title = title(esc(c.hook), SAFE_TOP, 62);
+      const top = SAFE_TOP + this.title.offsetHeight + 30, bottom = H - SAFE_BOTTOM - 140;
+      placeGlobe((top + bottom) / 2);
+      this.home = altFor(Math.min((bottom - top) / 2, 470));
+      this.r = { ...fitRegion(c.pins, top, bottom, 440), ...(c.view ?? {}) };
+      this.pins = c.pins.map(() => el(PIN()));
+      this.labels = c.pins.map((p) => el(`<div class="abs rpanel" style="padding:4px 14px;font-size:30px;font-weight:600;white-space:nowrap;border:2px solid rgba(227,178,97,0.6)">${esc(p.name)}</div>`));
+      this.cta = cta(c.cta, SAFE_BOTTOM + 50);
+      this.c = c;
+    },
+    frame(t) {
+      const IN1 = 2.4, OUT0 = 10.8;
+      const k = t < 0.3 ? 0 : t < IN1 ? easeInOut((t - 0.3) / (IN1 - 0.3)) : t < OUT0 ? 1 : 1 - easeInOut((t - OUT0) / (this.total - OUT0));
+      regionCam(this.r, this.home, k);
+      const vis = 1 - ramp(t, OUT0 - 0.1, 0.3);
+      this.c.pins.forEach((p, i) => {
+        const q = project(p.lon, p.lat), u = clamp((t - (IN1 - 0.2 + i * 0.28)) / 0.4);
+        this.pins[i].style.opacity = u > 0 ? vis : 0;
+        this.pins[i].style.transform = `translate(${q.x}px, ${q.y - (1 - bounceDrop(u)) * 240}px)`;
+        const l = this.labels[i];
+        l.style.opacity = clamp((t - (IN1 + 0.1 + i * 0.28)) / 0.3) * vis;
+        const side = p.side ?? 'right';
+        l.style.left = `${side === 'right' ? q.x + 34 : q.x - 34 - l.offsetWidth}px`;
+        l.style.top = `${q.y - 84 - l.offsetHeight / 2 + (p.dy ?? 0)}px`;
+      });
+      show(this.cta, win(t, IN1 + 2.4, OUT0 + 0.2), 30);
+    },
+  };
+
   window.__reel = {
     async setup(name, c, fonts) {
       const css = document.createElement('style');
