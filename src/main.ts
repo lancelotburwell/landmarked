@@ -195,7 +195,7 @@ function lockIn(lon: number, lat: number) {
   const card = el.result.getBoundingClientRect();
   const fullWidth = card.width > stage.width * 0.6;
   const inset = fullWidth ? Math.min(0.6, (stage.bottom - card.top) / stage.height) : 0;
-  globe?.showResult({ lon: b.lon, lat: b.lat, name: b.name, color: ACCENT, guess: { lon, lat } }, inset);
+  globe?.showResult({ lon: b.lon, lat: b.lat, name: b.name, color: SQUARE_COLOR[square(pts)], guess: { lon, lat } }, inset);
   setScore(total(), true);
 }
 
@@ -262,8 +262,7 @@ function setScore(to: number, animate: boolean) {
 }
 
 // The day goes from easy to hard without saying so (user's choice, 2026-11-23):
-// no tier names or difficulty meter, one accent colour throughout.
-const ACCENT = '#e3b261';
+// no tier names or difficulty meter. Flags, pins and bars take the colour of the round's share square.
 
 // ---------- end screen ----------
 interface PhotoCredit { v?: string; w: number; h: number; artist: string; license: string; licenseUrl: string | null; page: string }
@@ -468,7 +467,7 @@ async function showPins() {
         lon: b.lon,
         lat: b.lat,
         name: b.name,
-        color: ACCENT,
+        color: SQUARE_COLOR[square(guess.pts)],
         guess,
         photo: cr[b.id] ? photoUrl(b.id) : undefined,
       };
