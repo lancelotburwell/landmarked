@@ -499,10 +499,10 @@
       const date = (s) => new Date(s).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
       const q = d.quota && !d.quota.error ? ` · ${d.quota.quota_usage ?? 0} of ${d.quota.config?.quota_total ?? '?'} posts used in the last 24 h` : d.quota?.error ? ` · <span style="color:var(--bad)">${esc(d.quota.error)}</span>` : '';
       el.innerHTML = a
-        ? `<h2>Account</h2><div class="row"><span class="chip ok">connected</span><b>@${esc(a.username)}</b><span class="note" style="margin:0">token renews itself weekly, valid until ${date(a.expiresAt)}${q}</span>
+        ? `<h2>Account</h2><div class="row"><span class="chip ok">connected</span><b>@${esc(a.username)}</b><span class="note" style="margin:0">${a.expiresAt ? `token renews itself weekly, valid until ${date(a.expiresAt)}` : 'token never expires'}${q}</span>
            <button type="button" id="ig-replace">Replace token</button><button type="button" class="danger" id="ig-off">Disconnect</button></div>
            <form id="ig-tok" class="row" hidden style="margin-top:8px"><input id="ig-tokIn" type="password" placeholder="new access token" style="flex:1;min-width:220px" autocomplete="off"><button class="primary">Save</button></form>`
-        : `<h2>Connect Instagram</h2><p style="margin:0 0 8px;font-size:12.5px">Paste a long-lived access token from your Meta app (Instagram API with Instagram login → Generate token). It is checked with Instagram and kept on the server, never in this page.</p>
+        : `<h2>Connect Instagram</h2><p style="margin:0 0 8px;font-size:12.5px">Paste the access token from your Meta app (Use cases → Instagram API → API setup with Unified login → Generate access tokens → Generate token). It is checked with Instagram and kept on the server, never in this page.</p>
            <form id="ig-tok" class="row"><input id="ig-tokIn" type="password" placeholder="access token" style="flex:1;min-width:220px" autocomplete="off"><button class="primary">Connect</button></form>`;
       el.hidden = false;
       $('ig-replace')?.addEventListener('click', () => { $('ig-tok').hidden = false; });

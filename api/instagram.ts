@@ -7,7 +7,12 @@
 // by the "Render Instagram posts" Action). The images are served from landmarked.land.
 //
 // State lives in Upstash (no repo commits, so approving doesn't redeploy):
-//   lm:ig:auth       { token, userId, username, savedAt, refreshedAt, expiresAt }
+//   lm:ig:auth       { token, host, userId, username, savedAt, refreshedAt, expiresAt }
+//
+// Two kinds of token work. Apps made since 2026 use "Unified login": a Business Integration
+// System User token (starts EAA, never expires) on graph.facebook.com, generated in the app's
+// Instagram API setup → Generate access tokens. Older apps' Instagram Login tokens (start IG,
+// 60 days, refreshed weekly here) use graph.instagram.com. The publishing calls are the same.
 //   lm:ig:approved   hash date → { at }
 //   lm:ig:posted     hash date → { state: publishing|posted|error, at, mediaId?, permalink?, container?, error?, tries? }
 //   lm:ig:lock:<d>   short lock so two runs never post the same day twice
@@ -23,7 +28,9 @@
 // for reading the repo without the raw-file cache).
 import { redis } from './_lib.js';
 
-const GRAPH = 'https://graph.instagram.com';
+const HOSTS = { facebook: 'https://graph.facebook.com', instagram: 'https://graph.instagram.com' } as const;
+type Host = keyof typeof HOSTS;
+export interface Cred { token: string; host?: Host }
 const TZ = 'Europe/Zurich';
 const DEFAULT_TIME = '08:00';
 const MAX_TRIES = 3;
@@ -45,7 +52,7 @@ const parse = (v: unknown): any => { if (typeof v !== 'string') return v ?? null
 const hall = async (s: IgStore, k: string): Promise<Record<string, any>> => Object.fromEntries(Object.entries((await s.hgetall(k)) ?? {}).map(([f, v]) => [f, parse(v)]));
 
 export interface Post { date: string; time: string; id: string; name: string; images: string[]; text: string | null; clue: string | null; first: string }
-export interface Auth { token: string; userId: string; username: string; savedAt: string; refreshedAt: string; expiresAt: string }
+export interface Auth extends Cred { userId: string; username: string; savedAt: string; refreshedAt: string; expiresAt: string | null }
 
 // ---------- time ----------
 /** Today's date and the time of day in Zurich. */
@@ -75,8 +82,9 @@ export function mergePosts(social: Json[], captions: Json[]): Post[] {
 const loadPosts = async () => mergePosts(await readRepo('data/social.json'), await readRepo('data/social-captions.json'));
 
 // ---------- Instagram Graph API ----------
-async function graph(method: 'GET' | 'POST', path: string, params: Record<string, string>, token: string): Promise<Json> {
-  const q = new URLSearchParams({ ...params, access_token: token });
+async function graph(method: 'GET' | 'POST', path: string, params: Record<string, string>, cred: Cred): Promise<Json> {
+  const GRAPH = HOSTS[cred.host ?? 'instagram'];
+  const q = new URLSearchParams({ ...params, access_token: cred.token });
   const res = method === 'GET'
     ? await fetch(`${GRAPH}${path}?${q}`)
     : await fetch(`${GRAPH}${path}`, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: q });
@@ -89,7 +97,7 @@ async function graph(method: 'GET' | 'POST', path: string, params: Record<string
 }
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
-async function waitFinished(id: string, token: string, wait = 2000): Promise<void> {
+async function waitFinished(id: string, token: Cred, wait = 2000): Promise<void> {
   for (let i = 0; i < 20; i++) {
     const { status_code } = await graph('GET', `/${id}`, { fields: 'status_code' }, token);
     if (status_code === 'FINISHED' || status_code === 'PUBLISHED') return;
@@ -102,10 +110,10 @@ async function waitFinished(id: string, token: string, wait = 2000): Promise<voi
 /** One slide (or a single-image post). Alt text is newer API; drop it if Instagram refuses it. */
 async function createImage(auth: Auth, url: string, extra: Record<string, string>, alt: string): Promise<string> {
   try {
-    return (await graph('POST', `/${auth.userId}/media`, { image_url: url, ...extra, alt_text: alt }, auth.token)).id;
+    return (await graph('POST', `/${auth.userId}/media`, { image_url: url, ...extra, alt_text: alt }, auth)).id;
   } catch (e) {
     if (!/alt_text/i.test((e as Error).message)) throw e;
-    return (await graph('POST', `/${auth.userId}/media`, { image_url: url, ...extra }, auth.token)).id;
+    return (await graph('POST', `/${auth.userId}/media`, { image_url: url, ...extra }, auth)).id;
   }
 }
 
@@ -120,7 +128,7 @@ export async function publish(store: IgStore, auth: Auth, post: Post, opts: { wa
   let container: string | undefined = prev?.state === 'publishing' ? prev.container : undefined;
   if (container) {
     // A run died between creating and publishing: did it go out?
-    const { status_code } = await graph('GET', `/${container}`, { fields: 'status_code' }, auth.token).catch(() => ({ status_code: 'GONE' }));
+    const { status_code } = await graph('GET', `/${container}`, { fields: 'status_code' }, auth).catch(() => ({ status_code: 'GONE' }));
     if (status_code === 'PUBLISHED') {
       const done = { state: 'posted', at: new Date().toISOString(), container };
       await store.hset(K.posted, { [post.date]: JSON.stringify(done) });
@@ -138,35 +146,52 @@ export async function publish(store: IgStore, auth: Auth, post: Post, opts: { wa
     } else {
       const children: string[] = [];
       for (const u of post.images) children.push(await createImage(auth, u, { is_carousel_item: 'true' }, altFor(post, u)));
-      for (const c of children) await waitFinished(c, auth.token, opts.wait);
-      container = (await graph('POST', `/${auth.userId}/media`, { media_type: 'CAROUSEL', children: children.join(','), caption: post.text }, auth.token)).id as string;
+      for (const c of children) await waitFinished(c, auth, opts.wait);
+      container = (await graph('POST', `/${auth.userId}/media`, { media_type: 'CAROUSEL', children: children.join(','), caption: post.text }, auth)).id as string;
     }
-    await waitFinished(container, auth.token, opts.wait);
+    await waitFinished(container, auth, opts.wait);
     await store.hset(K.posted, { [post.date]: JSON.stringify({ state: 'publishing', at: new Date().toISOString(), container, tries: prev?.tries ?? 0 }) });
   }
-  const media = await graph('POST', `/${auth.userId}/media_publish`, { creation_id: container }, auth.token);
+  const media = await graph('POST', `/${auth.userId}/media_publish`, { creation_id: container }, auth);
   let permalink: string | undefined;
-  try { permalink = (await graph('GET', `/${media.id}`, { fields: 'permalink' }, auth.token)).permalink; } catch { /* posted anyway */ }
+  try { permalink = (await graph('GET', `/${media.id}`, { fields: 'permalink' }, auth)).permalink; } catch { /* posted anyway */ }
   const done = { state: 'posted', at: new Date().toISOString(), mediaId: media.id, permalink };
   await store.hset(K.posted, { [post.date]: JSON.stringify(done) });
   return done;
 }
 
 // ---------- token ----------
-async function saveToken(store: IgStore, token: string): Promise<Auth> {
+const preferred = 'landmarked.land';
+export async function saveToken(store: IgStore, token: string): Promise<Auth> {
   token = token.trim();
   if (!/^[A-Za-z0-9_|.-]{40,}$/.test(token)) throw new Fail("that doesn't look like an Instagram access token");
-  const me = await graph('GET', '/me', { fields: 'user_id,username' }, token);
   const now = new Date();
-  const auth: Auth = { token, userId: String(me.user_id ?? me.id), username: me.username, savedAt: now.toISOString(), refreshedAt: now.toISOString(), expiresAt: new Date(now.getTime() + 60 * 86_400_000).toISOString() };
+  let auth: Auth;
+  if (/^IG/.test(token)) {
+    const me = await graph('GET', '/me', { fields: 'user_id,username' }, { token, host: 'instagram' });
+    auth = { token, host: 'instagram', userId: String(me.user_id ?? me.id), username: me.username, savedAt: now.toISOString(), refreshedAt: now.toISOString(), expiresAt: new Date(now.getTime() + 60 * 86_400_000).toISOString() };
+  } else {
+    // Unified login: the token belongs to a system user; the Instagram accounts are assigned to it.
+    const cred: Cred = { token, host: 'facebook' };
+    let accounts: Json[] = [];
+    try { accounts = (await graph('GET', '/me/assigned_instagram_accounts', { fields: 'id,username' }, cred)).data ?? []; } catch { /* a user token: try its Pages below */ }
+    if (!accounts.length) {
+      const pages = (await graph('GET', '/me/accounts', { fields: 'instagram_business_account{id,username}' }, cred)).data ?? [];
+      accounts = pages.map((p: Json) => p.instagram_business_account).filter(Boolean);
+    }
+    const ig = accounts.find((a) => a.username === preferred) ?? accounts[0];
+    if (!ig) throw new Fail('that token has no Instagram account attached');
+    auth = { token, host: 'facebook', userId: String(ig.id), username: ig.username, savedAt: now.toISOString(), refreshedAt: now.toISOString(), expiresAt: null };
+  }
   await store.set(K.auth, JSON.stringify(auth));
   return auth;
 }
 
 /** Long-lived tokens last 60 days; refresh once a week (it must be at least a day old). */
 async function maybeRefresh(store: IgStore, auth: Auth, now = new Date()): Promise<Auth> {
+  if ((auth.host ?? 'instagram') !== 'instagram' || !auth.expiresAt) return auth; // system-user tokens never expire
   if (now.getTime() - Date.parse(auth.refreshedAt) < 7 * 86_400_000) return auth;
-  const j = await graph('GET', '/refresh_access_token', { grant_type: 'ig_refresh_token' }, auth.token);
+  const j = await graph('GET', '/refresh_access_token', { grant_type: 'ig_refresh_token' }, auth);
   const next = { ...auth, token: j.access_token, refreshedAt: now.toISOString(), expiresAt: new Date(now.getTime() + (Number(j.expires_in) || 60 * 86_400) * 1000).toISOString() };
   await store.set(K.auth, JSON.stringify(next));
   return next;
@@ -213,10 +238,10 @@ export async function GET(request: Request): Promise<Response> {
     const [auth, approved, posted, posts] = await Promise.all([store.get(K.auth).then(parse), hall(store, K.approved), hall(store, K.posted), loadPosts()]);
     const today = zurichNow();
     let quota: Json | null = null;
-    if (auth) quota = await graph('GET', `/${auth.userId}/content_publishing_limit`, { fields: 'quota_usage,config' }, auth.token).then((j) => j.data?.[0] ?? null).catch((e) => ({ error: (e as Error).message }));
+    if (auth) quota = await graph('GET', `/${auth.userId}/content_publishing_limit`, { fields: 'quota_usage,config' }, auth).then((j) => j.data?.[0] ?? null).catch((e) => ({ error: (e as Error).message }));
     const from = new Date(Date.parse(today.date + 'T12:00:00Z') - 7 * 86_400_000).toISOString().slice(0, 10);
     return Response.json({
-      account: auth ? { username: auth.username, savedAt: auth.savedAt, refreshedAt: auth.refreshedAt, expiresAt: auth.expiresAt } : null,
+      account: auth ? { host: auth.host ?? 'instagram', username: auth.username, savedAt: auth.savedAt, refreshedAt: auth.refreshedAt, expiresAt: auth.expiresAt } : null,
       quota, cron: !!process.env.CRON_SECRET, now: today,
       posts: posts.filter((p) => p.date >= from).map((p) => ({ ...p, approved: approved[p.date] ?? null, status: posted[p.date] ?? null })),
     }, { headers: noStore });
