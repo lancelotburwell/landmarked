@@ -62,7 +62,7 @@ const hall = async (s: IgStore, k: string): Promise<Record<string, any>> => Obje
 
 export interface Post {
   key: string; date: string; time: string; kind: 'carousel' | 'reel'; id: string; name: string;
-  images: string[]; video: string | null; template: string | null; text: string | null; clue: string | null; first: string;
+  images: string[]; video: string | null; template: string | null; format: string | null; text: string | null; clue: string | null; first: string;
 }
 export interface Auth extends Cred { userId: string; username: string; savedAt: string; refreshedAt: string; expiresAt: string | null }
 
@@ -102,7 +102,7 @@ export function mergePosts(social: Json[], captions: Json[]): Post[] {
     const key = postKey(s), c = cap.get(key);
     return {
       key, date: s.date, time: /^\d{2}:\d{2}$/.test(s.time ?? '') ? s.time : DEFAULT_TIME, kind: s.kind === 'reel' ? 'reel' : 'carousel',
-      id: s.id, name: c?.name ?? s.id, images: c?.images ?? [], video: c?.video ?? null, template: s.template ?? null,
+      id: s.id, name: c?.name ?? s.id, images: c?.images ?? [], video: c?.video ?? null, template: s.template ?? null, format: s.format ?? null,
       text: c?.text ?? null, clue: c?.clue ?? null, first: c?.first ?? s.first ?? 'clue',
     };
   }).sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time));

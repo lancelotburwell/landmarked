@@ -544,7 +544,7 @@
         const media = reel
           ? `<video src="${esc(p.video)}" controls muted loop playsinline preload="metadata" style="width:170px;aspect-ratio:9/16;border-radius:6px;border:1px solid var(--line);background:#000"></video>`
           : p.images.map((u) => `<img src="${esc(u)}" alt="" loading="lazy" style="width:150px;aspect-ratio:4/5;object-fit:cover;border-radius:6px;border:1px solid var(--line)">`).join('');
-        const kind = reel ? `<span class="chip">reel · ${esc(p.template === 'who' ? 'Who am I?' : 'Where am I?')}</span>` : '<span class="chip">carousel</span>';
+        const kind = reel ? `<span class="chip">reel · ${esc(p.format ?? (p.template === 'who' ? 'Who am I?' : 'Where am I?'))}</span>` : '<span class="chip">carousel</span>';
         const waiting = reel ? 'Not rendered yet: the "Render Instagram reels" Action makes the video (10–20 minutes) after the reel is added.' : 'Not rendered yet: the "Render Instagram posts" Action makes the images and caption a few minutes after the post is added.';
         return `<article class="day${past ? ' past' : ''}${p.date === today ? ' today' : ''}">
           <div class="head"><b>${fmt(p.date)}</b><span class="note" style="margin:0">${p.time}${due && !done ? ' · due' : ''}</span> ${kind} <span class="chip ig">${esc(p.name)}</span> ${chip}</div>
