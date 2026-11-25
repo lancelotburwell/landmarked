@@ -399,7 +399,7 @@ export class Globe {
     this.clear();
     this.addDashedLine(m.guess, m);
     this.addGuessDot(m.guess.lon, m.guess.lat);
-    this.addFlag(m.lon, m.lat, m.name, m.color);
+    this.addFlag(m.lon, m.lat, m.name, m.color, false); // no name label: the card shows it (user, 2026-11-25)
     this.lastPair = [m.guess, m];
     this.frame(m.guess, m, bottomInset);
   }
