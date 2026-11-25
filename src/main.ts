@@ -190,14 +190,40 @@ function lockIn(lon: number, lat: number) {
   state.guesses.push({ lon: +lon.toFixed(4), lat: +lat.toFixed(4), km: +km.toFixed(2), pts });
   save(state);
   showResultCard(b, km, pts, i);
-  // How much of the stage the card covers, so the camera frames the pair above it.
+  // Phones (the card spans the screen): show the map first, with just a small bar
+  // (points, distance, name), so the dashed line to the flag can be seen; the full
+  // card with the photo rises after PEEK_MS, or at once on a tap (user, 2026-11-25).
   const stage = el.globe.getBoundingClientRect();
-  const card = el.result.getBoundingClientRect();
-  const fullWidth = card.width > stage.width * 0.6;
-  const inset = fullWidth ? Math.min(0.6, (stage.bottom - card.top) / stage.height) : 0;
-  globe?.showResult({ lon: b.lon, lat: b.lat, name: b.name, color: SQUARE_COLOR[square(pts)], guess: { lon, lat } }, inset);
+  const fullWidth = el.result.getBoundingClientRect().width > stage.width * 0.6;
+  if (fullWidth) el.result.classList.add('peek');
+  globe?.showResult({ lon: b.lon, lat: b.lat, name: b.name, color: SQUARE_COLOR[square(pts)], guess: { lon, lat } }, cardInset());
+  if (fullWidth) peekTimer = window.setTimeout(openCard, PEEK_MS);
+  else el.next.focus({ preventScroll: true });
   setScore(total(), true);
 }
+
+const PEEK_MS = 2400;
+let peekTimer = 0;
+/** How much of the stage the result card covers (0..0.6), so the camera frames the pair above it. */
+function cardInset() {
+  const stage = el.globe.getBoundingClientRect();
+  const card = el.result.getBoundingClientRect();
+  if (card.width <= stage.width * 0.6) return 0;
+  return Math.min(0.6, (stage.bottom - card.top) / stage.height);
+}
+function openCard() {
+  clearTimeout(peekTimer);
+  if (el.result.hidden || !el.result.classList.contains('peek')) return;
+  el.result.classList.remove('peek');
+  el.result.style.animation = 'none';
+  void el.result.offsetWidth; // restart the rise animation
+  el.result.style.animation = '';
+  globe?.reframe(cardInset());
+  el.next.focus({ preventScroll: true });
+}
+el.result.addEventListener('click', () => {
+  if (el.result.classList.contains('peek')) openCard();
+});
 
 function showResultCard(b: Building, km: number, pts: number, i: number) {
   el.rPoints.textContent = String(pts);
@@ -220,7 +246,6 @@ function showResultCard(b: Building, km: number, pts: number, i: number) {
   setCreditShown(false);
   el.next.textContent = i + 1 >= ROUNDS ? 'See results' : 'Next';
   el.result.hidden = false;
-  el.next.focus({ preventScroll: true });
 }
 
 // The photo credit (required by the licences) stays out of the way behind a small "i".
@@ -231,6 +256,8 @@ function setCreditShown(on: boolean) {
 el.rInfo.addEventListener('click', () => setCreditShown(!el.rPhoto.classList.contains('credit-on')));
 
 el.next.addEventListener('click', () => {
+  clearTimeout(peekTimer);
+  el.result.classList.remove('peek');
   el.result.hidden = true;
   globe?.clear();
   globe?.flyHome();

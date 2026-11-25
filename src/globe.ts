@@ -400,8 +400,15 @@ export class Globe {
     this.addDashedLine(m.guess, m);
     this.addGuessDot(m.guess.lon, m.guess.lat);
     this.addFlag(m.lon, m.lat, m.name, m.color);
+    this.lastPair = [m.guess, m];
     this.frame(m.guess, m, bottomInset);
   }
+
+  /** Re-frames the last result for a card that now covers bottomInset of the canvas. */
+  reframe(bottomInset: number, duration = 0.9) {
+    if (this.lastPair) this.frame(this.lastPair[0], this.lastPair[1], bottomInset, 60_000, duration);
+  }
+  private lastPair?: [{ lon: number; lat: number }, { lon: number; lat: number }];
 
   /** All of today's buildings, with the player's guesses. */
   showAll(markers: PinMarker[]) {
@@ -504,7 +511,7 @@ export class Globe {
    * Flies straight down over the midpoint of a and b, high enough that both fit
    * in the part of the canvas not covered by the result card (bottomInset: 0..1).
    */
-  private frame(a: { lon: number; lat: number }, b: { lon: number; lat: number }, bottomInset: number, minAlt = 60_000) {
+  private frame(a: { lon: number; lat: number }, b: { lon: number; lat: number }, bottomInset: number, minAlt = 60_000, duration = 1.8) {
     const camera = this.scene.camera;
     const geod = new EllipsoidGeodesic(
       Cartographic.fromDegrees(a.lon, a.lat),
@@ -533,7 +540,7 @@ export class Globe {
     camera.flyTo({
       destination: Cartesian3.fromDegrees(CesiumMath.toDegrees(mid.longitude), Math.max(-85, lat), alt),
       orientation: { heading: 0, pitch: -CesiumMath.PI_OVER_TWO, roll: 0 },
-      duration: 1.8,
+      duration,
     });
   }
 }

@@ -88,6 +88,9 @@ async function run(name) {
 
     const [dx, dy] = OFFSETS[i];
     await tapLonLat(page, b.lon + dx, b.lat + dy, touch);
+    // Phones show the map and a small bar first; the full card rises ~2.4 s later.
+    await sleep(1900);
+    await page.screenshot({ path: join(out, `${name}-3-peek-${i + 1}.png`) });
     await waitIdle(page, 800);
     await page.screenshot({ path: join(out, `${name}-4-result-${i + 1}.png`) });
     const r = await page.evaluate(() => ({

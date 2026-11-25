@@ -101,6 +101,11 @@ button { font: inherit; color: inherit; }
   animation: rise 0.25s ease-out;
 }
 @keyframes rise { from { transform: translateY(16px); opacity: 0; } }
+/* Phones, first ~2 s after a guess: just a small bar, so the line to the flag stays in view. */
+.result.peek { padding: 10px 16px; cursor: pointer; }
+.result.peek .rphoto, .result.peek .facts, .result.peek .btn { display: none; }
+.result.peek h2 { margin: 0; font-size: 15px; }
+.result.peek .points { font-size: 26px; }
 .result-top { display: flex; justify-content: space-between; align-items: baseline; }
 .points { color: var(--accent); font-size: 34px; font-weight: 600; font-variant-numeric: tabular-nums; }
 .pts { margin-left: 6px; font-size: 11px; letter-spacing: 0.14em; color: var(--muted); }
