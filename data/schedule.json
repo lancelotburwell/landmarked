@@ -50,5 +50,6 @@
   {"date":"2026-12-19","ids":["colosseum","winter-palace","lotus-temple","todai-ji-temple","hallgrimskirkja"],"clues":[0,0,0,0,0]},
   {"date":"2026-12-20","ids":["eiffel-tower","tokyo-skytree","gur-e-amir","temple-of-kukulcan","shwedagon-pagoda"],"clues":[0,0,0,0,0]},
   {"date":"2026-12-21","ids":["abraj-al-bait","metropolitan-museum-of-art","guggenheim-bilbao","church-of-saint-sava","heydar-aliyev-center"],"clues":[0,0,0,0,0]},
-  {"date":"2026-12-22","ids":["leaning-tower-pisa","al-masjid-al-haram","dolby-theatre","art-institute-of-chicago","hassan-ii-mosque"],"clues":[0,0,0,0,0]}
+  {"date":"2026-12-22","ids":["leaning-tower-pisa","al-masjid-al-haram","dolby-theatre","art-institute-of-chicago","hassan-ii-mosque"],"clues":[0,0,0,0,0]},
+  {"date":"2026-12-23","ids":["big-ben","tokyo-tower","alhambra","lakhta-centre","great-mosque-djenne"],"clues":[0,0,0,0,0]}
 ]
