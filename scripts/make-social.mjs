@@ -11,22 +11,24 @@
 // first is "clue" or "photo": which slide leads. Missing ones are picked at
 // random and written back, so the feed varies and a re-render keeps the order.
 //
-//   node scripts/make-social.mjs [date ...]     (default: every date from today on)
+//   node scripts/make-social.mjs [key ...]      (a post key or a date; default: every carousel from today on)
+// Several carousels a day are fine, each at its "time"; reels ("kind": "reel") are made by render-reels.mjs.
 //
 // Writes public/social/<date>-1.jpg and -2.jpg (served from landmarked.land so
-// Metricool can fetch them) and data/social-captions.json (committed, merged by date) with each
+// Instagram can fetch them) and data/social-captions.json (committed, merged by date) with each
 // post's caption: the teaser line, the catchphrase with the difficulty square, the link, hashtags, and the photo credit that CC BY and
 // CC BY-SA require (creator, licence, "cropped").
 import puppeteer from 'puppeteer-core';
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { findChrome } from './chrome.mjs';
+import { isReel, postKey, postTime } from './lib/plan.mjs';
 
 const root = new URL('../', import.meta.url);
 const read = (p) => readFileSync(new URL(p, root), 'utf8');
 const posts = JSON.parse(read('data/social.json'));
-if (posts.some((p) => !p.first)) {
-  for (const p of posts) p.first ??= Math.random() < 0.5 ? 'clue' : 'photo';
+if (posts.some((p) => !isReel(p) && !p.first)) {
+  for (const p of posts) if (!isReel(p)) p.first ??= Math.random() < 0.5 ? 'clue' : 'photo';
   writeFileSync(new URL('data/social.json', root), `[\n${posts.map((p) => '  ' + JSON.stringify(p)).join(',\n')}\n]\n`);
 }
 const buildings = Object.fromEntries(JSON.parse(read('data/buildings.json')).map((b) => [b.id, b]));
@@ -42,7 +44,7 @@ mkdirSync(new URL('public/social/', root), { recursive: true });
 const now = new Date();
 const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
 const dates = process.argv.slice(2);
-const todo = posts.filter((p) => (dates.length ? dates.includes(p.date) : p.date >= today));
+const todo = posts.filter((p) => !isReel(p) && (dates.length ? dates.includes(postKey(p)) || dates.includes(p.date) : p.date >= today));
 const esc = (s) => s.replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' })[c]);
 const out = (p) => fileURLToPath(new URL(p, root));
 
@@ -60,7 +62,7 @@ html, body { margin: 0; width: ${W}px; height: ${H}px; overflow: hidden; backgro
 // social/src/<date>.jpg with its credit in <date>.json; CC0/PD/CC BY/CC BY-SA only.
 const UA = { 'User-Agent': 'landmarked-data/1.0 (static game data import)' };
 async function postPhoto(p) {
-  const img = new URL(`social/src/${p.date}.jpg`, root), meta = new URL(`social/src/${p.date}.json`, root);
+  const img = new URL(`social/src/${postKey(p)}.jpg`, root), meta = new URL(`social/src/${postKey(p)}.json`, root);
   if (existsSync(img) && existsSync(meta) && JSON.parse(readFileSync(meta, 'utf8')).file === p.photo) return JSON.parse(readFileSync(meta, 'utf8'));
   const q = new URLSearchParams({ action: 'query', titles: p.photo, prop: 'imageinfo', iiprop: 'url|size|extmetadata', iiurlwidth: '3840', format: 'json' });
   for (let attempt = 0; ; attempt++) {
@@ -100,10 +102,10 @@ for (const p of todo) {
 
   await page.setContent(`<style>${css}</style><div class="clue"><p>${esc(clue)}</p></div>`);
   await page.evaluate(() => document.fonts.ready);
-  await page.screenshot({ path: out(`public/social/${p.date}-1.jpg`), type: 'jpeg', quality: 90 });
+  await page.screenshot({ path: out(`public/social/${postKey(p)}-1.jpg`), type: 'jpeg', quality: 90 });
 
   const own = p.photo ? await postPhoto(p) : null;
-  const src = `data:image/jpeg;base64,${readFileSync(new URL(`social/src/${own ? p.date : p.id}.jpg`, root)).toString('base64')}`;
+  const src = `data:image/jpeg;base64,${readFileSync(new URL(`social/src/${own ? postKey(p) : p.id}.jpg`, root)).toString('base64')}`;
   await page.setContent(`<style>${css}</style><div class="photo"><img></div>`);
   const [iw, ih] = await page.evaluate(async (s) => {
     const img = document.images[0]; img.src = s; await img.decode(); return [img.naturalWidth, img.naturalHeight];
@@ -113,7 +115,7 @@ for (const p of todo) {
   if (x + w > 1.001 || y * ih + H / scale > ih + 1) throw new Error(`${p.date} ${p.id}: crop runs off the photo`);
   await page.evaluate((st) => Object.assign(document.images[0].style, st),
     { width: `${iw * scale}px`, left: `${-x * iw * scale}px`, top: `${-y * ih * scale}px` });
-  await page.screenshot({ path: out(`public/social/${p.date}-2.jpg`), type: 'jpeg', quality: 90 });
+  await page.screenshot({ path: out(`public/social/${postKey(p)}-2.jpg`), type: 'jpeg', quality: 90 });
 
   const c = own ?? credits[p.id];
   const artist = c.artist
@@ -129,12 +131,12 @@ Play at landmarked.land (link in bio)
 #architecture #geography #dailypuzzle #guessthebuilding
 
 ${credit}`;
-  captions.push({ date: p.date, id: p.id, name: b.name, tier: b.tier, round: round + 1, sourcePx: Math.round(w * iw), first: p.first, images: (p.first === 'photo' ? [2, 1] : [1, 2]).map((n) => `https://landmarked.land/social/${p.date}-${n}.jpg`), clue, text });
-  console.log(p.date, p.id, `round ${round + 1}`, `${p.first} first`, `crop is ${Math.round(w * iw)} px of source${w * iw < 1080 ? ' (soft: under 1080)' : ''}`);
+  captions.push({ key: postKey(p), kind: 'carousel', date: p.date, time: postTime(p), id: p.id, name: b.name, tier: b.tier, round: round + 1, sourcePx: Math.round(w * iw), first: p.first, images: (p.first === 'photo' ? [2, 1] : [1, 2]).map((n) => `https://landmarked.land/social/${postKey(p)}-${n}.jpg`), clue, text });
+  console.log(postKey(p), p.id, `round ${round + 1}`, `${p.first} first`, `crop is ${Math.round(w * iw)} px of source${w * iw < 1080 ? ' (soft: under 1080)' : ''}`);
 }
-// Merge into the committed captions file, one entry per date (the weekly routine reads it for Metricool).
+// Merge into the committed captions file, one entry per post key (reels are merged in by render-reels.mjs).
 const capFile = new URL('data/social-captions.json', root);
-const merged = new Map((existsSync(capFile) ? JSON.parse(readFileSync(capFile, 'utf8')) : []).map((c) => [c.date, c]));
-for (const c of captions) merged.set(c.date, c);
-writeFileSync(capFile, JSON.stringify([...merged.values()].sort((a, b) => a.date.localeCompare(b.date)), null, 1) + '\n');
+const merged = new Map((existsSync(capFile) ? JSON.parse(readFileSync(capFile, 'utf8')) : []).map((c) => [c.key ?? c.date, c]));
+for (const c of captions) merged.set(c.key, c);
+writeFileSync(capFile, JSON.stringify([...merged.values()].sort((a, b) => (a.key ?? a.date).localeCompare(b.key ?? b.date)), null, 1) + '\n');
 await browser.close();

@@ -523,30 +523,34 @@
     },
     renderPosts(d) {
       const today = d.now.date;
-      const open = d.auto?.on ? [] : d.posts.filter((p) => p.date >= today && p.text && p.images.length && !p.approved && !p.status && !p.held);
-      const all = open.length > 1 ? `<div class="row"><button type="button" class="primary" data-ig="all" data-dates="${open.map((p) => p.date).join(',')}">Approve all ${open.length} waiting posts</button><span class="note" style="margin:0">after looking at each one below</span></div>` : '';
+      const ready = (p) => p.text && (p.kind === 'reel' ? p.video : p.images.length);
+      const open = d.auto?.on ? [] : d.posts.filter((p) => p.date >= today && ready(p) && !p.approved && !p.status && !p.held);
+      const all = open.length > 1 ? `<div class="row"><button type="button" class="primary" data-ig="all" data-posts="${open.map((p) => p.key).join(',')}">Approve all ${open.length} waiting posts</button><span class="note" style="margin:0">after looking at each one below</span></div>` : '';
       $('ig-list').innerHTML = all + (d.posts.length ? d.posts.map((p) => {
-        const s = p.status, past = p.date < today, due = p.date === today && p.time <= d.now.hm;
+        const s = p.status, past = p.date < today, due = p.date === today && p.time <= d.now.hm, reel = p.kind === 'reel';
         const chip = s?.state === 'posted' ? `<span class="chip ok">posted ${s.permalink ? `· <a href="${esc(s.permalink)}" target="_blank" rel="noopener">open</a>` : ''}</span>`
           : s?.state === 'error' || s?.error ? `<span class="chip bad" title="${esc(s.error)}">failed ${s.tries ?? ''}×</span>`
-          : s?.state === 'publishing' ? '<span class="chip warn">publishing</span>'
+          : s?.state === 'publishing' ? `<span class="chip warn">${reel ? 'processing' : 'publishing'}</span>`
           : p.held ? '<span class="chip warn">held</span>'
           : p.willPost ? (past ? '<span class="chip warn">not posted</span>' : `<span class="chip ok">${p.approved ? 'approved' : 'posts automatically'}</span>`)
           : past ? '<span class="chip">not posted here</span>' : '<span class="chip warn">waiting for approval</span>';
-        const ready = p.text && p.images.length;
-        const done = s?.state === 'posted';
+        const done = s?.state === 'posted', ok = ready(p), k = esc(p.key);
         const btns = done ? '' : [
-          past ? '' : (p.held ? `<button type="button" data-ig="release" data-date="${p.date}">Release</button>` : p.willPost ? `<button type="button" data-ig="hold" data-date="${p.date}">Hold</button>` : ''),
-          !past && ready && !d.auto?.on && !p.held ? (p.approved ? `<button type="button" data-ig="unapprove" data-date="${p.date}">Unapprove</button>` : `<button type="button" class="primary" data-ig="approve" data-date="${p.date}">Approve</button>`) : '',
-          s?.error ? `<button type="button" data-ig="retry" data-date="${p.date}">Try again</button>` : '',
-          ready && d.account && !past ? `<button type="button" data-ig="now" data-date="${p.date}">Post now</button>` : '',
+          past ? '' : (p.held ? `<button type="button" data-ig="release" data-post="${k}">Release</button>` : p.willPost ? `<button type="button" data-ig="hold" data-post="${k}">Hold</button>` : ''),
+          !past && ok && !d.auto?.on && !p.held ? (p.approved ? `<button type="button" data-ig="unapprove" data-post="${k}">Unapprove</button>` : `<button type="button" class="primary" data-ig="approve" data-post="${k}">Approve</button>`) : '',
+          s?.error ? `<button type="button" data-ig="retry" data-post="${k}">Try again</button>` : '',
+          ok && d.account && !past ? `<button type="button" data-ig="now" data-post="${k}" data-kind="${p.kind}">Post now</button>` : '',
         ].join('');
-        const imgs = p.images.map((u) => `<img src="${esc(u)}" alt="" loading="lazy" style="width:150px;aspect-ratio:4/5;object-fit:cover;border-radius:6px;border:1px solid var(--line)">`).join('');
+        const media = reel
+          ? `<video src="${esc(p.video)}" controls muted loop playsinline preload="metadata" style="width:170px;aspect-ratio:9/16;border-radius:6px;border:1px solid var(--line);background:#000"></video>`
+          : p.images.map((u) => `<img src="${esc(u)}" alt="" loading="lazy" style="width:150px;aspect-ratio:4/5;object-fit:cover;border-radius:6px;border:1px solid var(--line)">`).join('');
+        const kind = reel ? `<span class="chip">reel · ${esc(p.template === 'who' ? 'Who am I?' : 'Where am I?')}</span>` : '<span class="chip">carousel</span>';
+        const waiting = reel ? 'Not rendered yet: the "Render Instagram reels" Action makes the video (10–20 minutes) after the reel is added.' : 'Not rendered yet: the "Render Instagram posts" Action makes the images and caption a few minutes after the post is added.';
         return `<article class="day${past ? ' past' : ''}${p.date === today ? ' today' : ''}">
-          <div class="head"><b>${fmt(p.date)}</b><span class="note" style="margin:0">${p.time}${due && !done ? ' · due' : ''}</span> <span class="chip ig">${esc(p.name)}</span> ${chip}</div>
-          ${ready ? `<div class="row" style="align-items:flex-start"><div class="row" style="gap:6px">${imgs}</div>
+          <div class="head"><b>${fmt(p.date)}</b><span class="note" style="margin:0">${p.time}${due && !done ? ' · due' : ''}</span> ${kind} <span class="chip ig">${esc(p.name)}</span> ${chip}</div>
+          ${ok ? `<div class="row" style="align-items:flex-start"><div class="row" style="gap:6px">${media}</div>
             <div style="flex:1;min-width:240px;white-space:pre-wrap;font-size:12.5px;overflow-wrap:anywhere">${esc(p.text)}</div></div>`
-            : '<p class="note">Not rendered yet: the "Render Instagram posts" Action makes the images and caption a few minutes after the post is added.</p>'}
+            : `<p class="note">${waiting}</p>`}
           ${s?.error ? `<p class="hint bad">${esc(s.error)}</p>` : ''}
           ${btns ? `<div class="row" style="margin-top:8px">${btns}</div>` : ''}</article>`;
       }).join('') : '<p class="note">No posts in data/social.json from the last week on.</p>');
@@ -554,15 +558,19 @@
   };
   $('ig-list').addEventListener('click', async (e) => {
     const b = e.target.closest('[data-ig]'); if (!b) return;
-    const date = b.dataset.date, act = b.dataset.ig;
-    if (act === 'now' && !confirm(`Post the ${date} carousel to Instagram right now? It goes public at once.`)) return;
+    const post = b.dataset.post, act = b.dataset.ig;
+    if (act === 'now' && !confirm(`Post the ${post} ${b.dataset.kind} to Instagram right now? It goes public at once.`)) return;
     b.disabled = true;
     try {
-      if (act === 'approve' || act === 'unapprove') await ig.call('approve', { date, approved: act === 'approve' });
-      if (act === 'all') for (const d of b.dataset.dates.split(',')) await ig.call('approve', { date: d, approved: true });
-      if (act === 'hold' || act === 'release') await ig.call('hold', { date, held: act === 'hold' });
-      if (act === 'retry') await ig.call('retry', { date });
-      if (act === 'now') { const j = await ig.call('publish', { date }); toast('Posted to Instagram.'); if (j.permalink) window.open(j.permalink, '_blank', 'noopener'); }
+      if (act === 'approve' || act === 'unapprove') await ig.call('approve', { post, approved: act === 'approve' });
+      if (act === 'all') for (const p of b.dataset.posts.split(',')) await ig.call('approve', { post: p, approved: true });
+      if (act === 'hold' || act === 'release') await ig.call('hold', { post, held: act === 'hold' });
+      if (act === 'retry') await ig.call('retry', { post });
+      if (act === 'now') {
+        const j = await ig.call('publish', { post });
+        if (j.state === 'processing') toast('Uploaded. Instagram is processing the video; it goes out within 15 minutes.');
+        else { toast('Posted to Instagram.'); if (j.permalink) window.open(j.permalink, '_blank', 'noopener'); }
+      }
     } catch { /* toast shown */ }
     ig.show();
   });

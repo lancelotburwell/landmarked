@@ -43,10 +43,11 @@ writeFileSync(new URL('public/photos.json', root), JSON.stringify(photoIndex));
 // the whole plan ahead, with the Instagram posts, pins and the health check. It shows
 // nothing the day files don't already.
 {
-  const { checkPlan, readOr: readOrP, addDays, dayNum, distanceKm, today: todayKey } = await import('./lib/plan.mjs');
+  const { checkPlan, readOr: readOrP, addDays, dayNum, distanceKm, today: todayKey, isReel, postTime } = await import('./lib/plan.mjs');
   const { existsSync } = await import('node:fs');
   const todayK = todayKey();
-  const social = new Map(readOrP('data/social.json', []).map((s) => [s.date, s]));
+  // The day's first carousel (reels show other days' buildings).
+  const social = new Map(readOrP('data/social.json', []).filter((s) => !isReel(s)).sort((a, b) => postTime(b).localeCompare(postTime(a))).map((s) => [s.date, s]));
   const pins = readOrP('data/pins.json', []);
   const credits = photoIndex;
   const health = checkPlan({ pool, schedule });

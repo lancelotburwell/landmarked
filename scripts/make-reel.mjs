@@ -25,6 +25,9 @@
 //   HOOK="…"      the caption's first line: one surprising fact from the blurb, 10–20 words,
 //                 that doesn't name the building, its architect, city or country. Defaults
 //                 to the carousel's teaser line, if the building has had a post.
+//   OPENER="…"    the hook on screen for the first 1.6 s, 5–8 words (default per template)
+//   DECOYS="x,y"  the two wrong options (cities for where, buildings for who); default:
+//                 picked from the pool, see "A, B, C" below. The answer's letter is seeded.
 //   CLUE=n        which of the building's clues (default 0, the first)
 //   AT=1,3,6.6    render only those moments (s), as PNGs in social/reels/.frames-<id>/
 //
@@ -33,7 +36,7 @@
 // Use easy buildings with good clues, and only post a "who" reel after that building's
 // day has been played: the pin gives the location away.
 import puppeteer from 'puppeteer-core';
-import { readFileSync, writeFileSync, existsSync, mkdirSync, rmSync } from 'node:fs';
+import { readFileSync, writeFileSync, existsSync, mkdirSync, rmSync, copyFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { findChrome } from './chrome.mjs';
@@ -43,12 +46,16 @@ const path = (p) => fileURLToPath(new URL(p, root));
 const read = (p) => JSON.parse(readFileSync(new URL(p, root), 'utf8'));
 
 // ---------- the two templates ----------
+// Both open on a short hook (OPENER) where the clue goes; the clue then comes in a line
+// at a time, and at the end the hook comes back so the loop is seamless. Three options
+// (A, B, C: cities for "where", buildings for "who") sit under the title the whole time,
+// so commenting takes one letter (user, 2026-11-24). The answer is still never shown.
 const TEMPLATES = {
-  where: { title: 'Where am I?', question: 'Where am I? Guess in the comments 👇', total: 11, spin: -12,
+  where: { title: 'Where am I?', opener: 'Can you place this building?', question: 'Where am I? Comment A, B or C 👇', total: 11, spin: -12,
     shrinkAt: 2.2,  // the close-up starts shrinking into the globe
     globeAt: 3.4,   // ... and has become the globe
     growAt: 10.0 }, // the globe starts turning back into the close-up (done at total = frame 0)
-  who: { title: 'Who am I?', question: 'Who am I? Name the building in the comments 👇', total: 11.8, spin: -50,
+  who: { title: 'Who am I?', opener: 'Name this building from one clue', question: 'Who am I? Comment A, B or C 👇', total: 11.8, spin: -50,
     swoopIn: 210,    // degrees turned on the way in (the way out turns the rest of the circle)
     restAt: 6.0,     // comes to rest over the pin
     pinAt: 6.6,      // the pin lands
@@ -66,9 +73,46 @@ if (!TPL || !b) {
 const post = read('data/social.json').findLast((s) => s.id === id);
 const clue = b.clues[Number(process.env.CLUE ?? 0)] ?? b.clues[0];
 const crop = process.env.CROP ? process.env.CROP.split(',').map(Number) : post?.crop;
+const opener = process.env.OPENER ?? TPL.opener;
+
+// ---------- A, B, C ----------
+// Two decoys from the pool, plausible but not the answer: for "where", other cities
+// 300–2,500 km away; for "who", the nearest other buildings (the pin shows the region, so
+// far-away decoys would be no contest). Seeded by the id, so a rerun gives the same three.
+// DECOYS="x,y" sets them by hand.
+const km = (a, z) => {
+  const r = Math.PI / 180, h = Math.sin(((z.lat - a.lat) * r) / 2) ** 2 + Math.cos(a.lat * r) * Math.cos(z.lat * r) * Math.sin(((z.lon - a.lon) * r) / 2) ** 2;
+  return 12_742 * Math.asin(Math.sqrt(h));
+};
+let seed = [...id].reduce((h, c) => (h * 31 + c.charCodeAt(0)) >>> 0, 7);
+const rand = () => ((seed = (seed * 1_103_515_245 + 12_345) >>> 0) / 2 ** 32);
+const answer = tName === 'where' ? b.city : b.name;
+let decoys = process.env.DECOYS?.split(',').map((s) => s.trim());
+if (!decoys) {
+  const pool = read('data/buildings.json').filter((x) => !x.retired && x.id !== id);
+  let cands;
+  if (tName === 'where') {
+    const cities = new Map();
+    for (const x of pool) if (x.city !== b.city && !cities.has(x.city)) cities.set(x.city, km(b, x));
+    const all = [...cities].sort((p, q) => p[1] - q[1]);
+    cands = all.filter(([, d]) => d >= 300 && d <= 2500).map(([c]) => c);
+    if (cands.length < 2) cands = all.filter(([, d]) => d >= 300).slice(0, 4).map(([c]) => c);
+  } else {
+    cands = pool.map((x) => [x.name, km(b, x)]).sort((p, q) => p[1] - q[1]).slice(0, 5).map(([n]) => n);
+  }
+  decoys = [];
+  while (decoys.length < 2 && cands.length) decoys.push(cands.splice(Math.floor(rand() * cands.length), 1)[0]);
+}
+const options = [...decoys];
+options.splice(Math.floor(rand() * 3), 0, answer);
+const LETTERS = ['A', 'B', 'C'];
+const answerLetter = LETTERS[options.indexOf(answer)];
+
 if (tName === 'where' && !crop) { console.error(`${id}: give CROP=x,y,width for the close-up (see the header)`); process.exit(1); }
 
-const bigPhoto = `social/src/${id}.jpg`;
+// A photo picked for the reel (FILE=… scripts/social-photos.mjs <id>) wins over the game's.
+const reelPhoto = existsSync(new URL(`social/src/${id}-reel.jpg`, root));
+const bigPhoto = `social/src/${id}${reelPhoto ? '-reel' : ''}.jpg`;
 if (tName === 'where' && !existsSync(new URL(bigPhoto, root))) { console.error(`run node scripts/social-photos.mjs ${id} first`); process.exit(1); }
 const photo = tName === 'where' ? readFileSync(new URL(bigPhoto, root)).toString('base64') : null;
 const font = (w) => readFileSync(new URL(`node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-${w}-normal.woff2`, root)).toString('base64');
@@ -96,7 +140,7 @@ await page.goto(url, { waitUntil: 'domcontentloaded' });
 await page.waitForFunction(() => window.__landmarked?.globe, { timeout: 90_000 });
 
 // ---------- overlay: title, clue, pin and the close-up, over the game's own globe ----------
-await page.evaluate(async ({ clue, title, photo, crop, regular, semi, W, H }) => {
+await page.evaluate(async ({ clue, title, opener, options, photo, crop, regular, semi, W, H }) => {
   const css = document.createElement('style');
   css.textContent = `
     @font-face { font-family: ReelPlex; font-weight: 400; src: url(data:font/woff2;base64,${regular}) format('woff2'); }
@@ -107,6 +151,10 @@ await page.evaluate(async ({ clue, title, photo, crop, regular, semi, W, H }) =>
     #reel { visibility: visible; position: fixed; inset: 0; z-index: 20; pointer-events: none; font-family: ReelPlex, monospace; color: #ece6da; overflow: hidden; }
     #reel .shadow { text-shadow: 0 2px 6px rgb(0 0 0 / 0.9), 0 0 28px rgb(0 0 0 / 0.75); }
     #reel .clue { position: absolute; left: 90px; right: 90px; text-align: center; font-size: 50px; line-height: 1.38; font-weight: 600; z-index: 3; }
+    #reel .opener { position: absolute; left: 70px; right: 70px; text-align: center; font-size: 68px; line-height: 1.25; font-weight: 600; z-index: 3; }
+    #reel .options { position: absolute; left: 40px; right: 40px; display: flex; flex-wrap: wrap; justify-content: center; gap: 18px 22px; z-index: 3; }
+    #reel .opt { font-size: 38px; font-weight: 600; padding: 12px 30px; border-radius: 999px; background: rgb(12 14 16 / 0.82); border: 3px solid rgb(227 178 97 / 0.85); white-space: nowrap; }
+    #reel .opt b { color: #e3b261; margin-right: 14px; }
     #reel .title { position: absolute; left: 60px; right: 60px; text-align: center; color: #e3b261; font-size: 84px; font-weight: 600; z-index: 3; }
     #reel .pin { position: absolute; left: 0; top: 0; width: 84px; height: 112px; margin: -112px 0 0 -42px; opacity: 0; filter: drop-shadow(0 6px 10px rgb(0 0 0 / 0.6)); z-index: 2; }
     #reel .ring { position: absolute; left: 0; top: 0; width: 120px; height: 120px; margin: -60px 0 0 -60px; border: 5px solid #e3b261; border-radius: 50%; opacity: 0; z-index: 2; }
@@ -119,8 +167,10 @@ await page.evaluate(async ({ clue, title, photo, crop, regular, semi, W, H }) =>
   reel.id = 'reel';
   reel.innerHTML = `
     <div class="closeup-wrap"><div class="closeup"></div></div>
-    <div class="title shadow">${esc(title)}</div>
-    <div class="clue shadow">${esc(clue)}</div>
+    <div class="title shadow"><span>${esc(title)}</span></div>
+    <div class="clue shadow">${clue.split(/\s+/).map((w) => `<span>${esc(w)}</span>`).join(' ')}</div>
+    <div class="opener shadow">${esc(opener)}</div>
+    <div class="options">${options.map((o, i) => `<span class="opt"><b>${'ABC'[i]}</b>${esc(o)}</span>`).join('')}</div>
     <div class="ring"></div>
     <svg class="pin" viewBox="0 0 24 32"><path d="M12 1C5.9 1 1 5.8 1 11.8 1 20.2 12 31 12 31s11-10.8 11-19.2C23 5.8 18.1 1 12 1z" fill="#e3b261" stroke="#1a1408" stroke-width="1"/><circle cx="12" cy="11.6" r="4.2" fill="#1a1408"/></svg>`;
   document.body.append(reel);
@@ -146,7 +196,7 @@ await page.evaluate(async ({ clue, title, photo, crop, regular, semi, W, H }) =>
   const g = window.__landmarked.globe;
   g.widget.scene.screenSpaceCameraController.minimumZoomDistance = 1; // the reel sets its own heights
   g.closestAlt = () => 1;
-}, { clue, title: TPL.title, photo, crop, regular: font(400), semi: font(600), W, H });
+}, { clue, title: TPL.title, opener, options, photo, crop, regular: font(400), semi: font(600), W, H });
 await page.evaluate(() => document.fonts.ready);
 
 // ---------- layout ----------
@@ -156,16 +206,39 @@ await page.evaluate(() => document.fonts.ready);
 // looks at the canvas centre), and the camera height sets its size.
 const band = await page.evaluate(({ tName, W, H, SAFE_BOTTOM }) => {
   const $ = (s) => document.querySelector('#reel ' + s);
-  const clue = $('.clue'), title = $('.title');
+  const clue = $('.clue'), title = $('.title'), opener = $('.opener'), opts = $('.options');
+  opts.style.bottom = SAFE_BOTTOM + 'px';
+  const optH = opts.offsetHeight;
+  // The clue's words, grouped into the lines they wrap to, so they can come in a line at a time.
+  const lines = () => {
+    const out = [];
+    let top = null;
+    for (const w of clue.querySelectorAll('span')) {
+      if (w.offsetTop !== top) { out.push([]); top = w.offsetTop; }
+      out.at(-1).push(w);
+    }
+    window.__lines = out;
+  };
   if (tName === 'who') {
+    // The zoom ends over land (often bright desert), so the text gets dark panels; flat
+    // colours render fine in headless Chrome, unlike gradients and blurs.
+    const panel = 'background: rgb(10 12 14 / 0.66); border-radius: 26px;';
+    title.querySelector('span').style.cssText = panel + 'padding: 4px 34px;';
+    clue.style.cssText += panel + 'padding: 20px 30px; left: 60px; right: 60px;';
     title.style.top = '170px';
-    clue.style.bottom = SAFE_BOTTOM + 'px';
-    for (const fs of [50, 46, 42, 39]) { clue.style.fontSize = fs + 'px'; if (clue.offsetHeight <= 420) break; }
-    return { top: title.getBoundingClientRect().bottom + 50, bottom: clue.getBoundingClientRect().top - 50 };
+    clue.style.bottom = SAFE_BOTTOM + optH + 36 + 'px';
+    for (const fs of [50, 46, 42, 39]) { clue.style.fontSize = fs + 'px'; if (clue.offsetHeight <= 380) break; }
+    // The hook stands where the clue's middle will be.
+    const r = clue.getBoundingClientRect();
+    opener.style.top = r.top + r.height / 2 - opener.offsetHeight / 2 + 'px';
+    lines();
+    return { top: title.getBoundingClientRect().bottom + 50, bottom: r.top - 50 };
   }
   clue.style.top = '170px';
   for (const fs of [50, 46, 42, 39]) { clue.style.fontSize = fs + 'px'; if (clue.getBoundingClientRect().bottom <= 620) break; }
-  const bottom = H - SAFE_BOTTOM - title.offsetHeight - 40;
+  opener.style.top = '200px';
+  lines();
+  const bottom = H - SAFE_BOTTOM - optH - 30 - title.offsetHeight - 40;
   title.style.top = bottom + 40 + 'px';
   // The close-up, drawn into a canvas with the shading baked in (CSS gradients, blurs and
   // shadows don't reliably show in headless Chrome on the graphics card): a dark fade
@@ -244,6 +317,17 @@ function camera(t) {
   return { lon, lat: lat - shiftAt(alt) * k, alt };
 }
 
+// The text: the hook alone until HOOK_END, then the clue a line at a time; in the last
+// half second the clue fades and the hook returns, so the last frame is the first.
+const HOOK_END = 1.6, LINE_GAP = 0.55, FADE = 0.25;
+function text(t) {
+  const back = clamp((t - (TPL.total - 0.5)) / 0.4);
+  return {
+    opener: Math.max(1 - clamp((t - (HOOK_END - FADE)) / FADE), back),
+    line: (i) => clamp((t - HOOK_END - i * LINE_GAP) / FADE) * (1 - back),
+  };
+}
+
 function overlay(t) {
   if (tName === 'where') {
     // Full screen (a circle bigger than the screen's diagonal) → the globe's circle, and back.
@@ -277,11 +361,18 @@ function overlay(t) {
 // ---------- frames ----------
 const n = Math.round(TPL.total * FPS);
 console.log(`${b.name}, ${tName}: ${clue.split(/\s+/).length}-word clue, ${TPL.total} s, ${n} frames`);
+console.log(`options: ${options.map((o, k) => `${LETTERS[k]} ${o}`).join(' · ')} (answer ${answerLetter})`);
 const t0 = Date.now();
 const only = process.env.AT ? process.env.AT.split(',').map((x) => Math.min(n - 1, Math.round(Number(x) * FPS))) : null;
 for (let i = 0; i < n; i++) {
   if (only && !only.includes(i)) continue;
   const t = i / FPS;
+  const tx = text(t);
+  const lineOp = Array.from({ length: 12 }, (_, k) => tx.line(k));
+  await page.evaluate(({ opener, lineOp }) => {
+    document.querySelector('#reel .opener').style.opacity = opener;
+    window.__lines.forEach((ws, k) => ws.forEach((w) => { w.style.opacity = lineOp[Math.min(k, 11)]; }));
+  }, { opener: tx.opener, lineOp });
   await page.evaluate(({ cam, ov, lon, lat, top }) => {
     const scene = window.__landmarked.globe.widget.scene;
     const C3 = scene.camera.position.constructor;
@@ -335,7 +426,10 @@ let credit = '';
 if (tName === 'where') {
   const c = read('public/photos/credits.json')[id];
   const fromPost = Object.values(read('data/social-captions.json')).find((x) => x.id === id)?.text.split('\n').find((l) => l.startsWith('📷'));
-  if (fromPost) credit = fromPost.includes('cropped') ? fromPost : fromPost.replace(' · Wikimedia Commons', ' · cropped · Wikimedia Commons');
+  if (reelPhoto) {
+    const r = read(`social/src/${id}-reel.json`);
+    credit = /^(cc0|pd|public domain)/i.test(r.license) ? '📷 Wikimedia Commons' : `📷 ${r.artist} · ${r.license} · cropped · Wikimedia Commons`;
+  } else if (fromPost) credit = fromPost.includes('cropped') ? fromPost : fromPost.replace(' · Wikimedia Commons', ' · cropped · Wikimedia Commons');
   else if (c) {
     const artist = c.artist.replace(/^No machine-readable author provided\.\s*(.+?) assumed.*$/, '$1').trim();
     credit = /^(cc0|pd|public domain)/i.test(c.license) ? '📷 Wikimedia Commons' : `📷 ${artist} · ${c.license} · cropped · Wikimedia Commons`;
@@ -350,8 +444,18 @@ const caption = [
 ].join('\n');
 const notes = [
   '--- notes, not part of the caption ---',
+  `On screen: ${options.map((o, k) => `${LETTERS[k]} ${o}`).join(' · ')}. Answer: ${answerLetter}. Reply to guesses without giving it away ("warmer!", "right continent").`,
   tName === 'who' ? `The pin lands at ${TPL.pinAt} s: start the song so its beat drop hits there.` : 'Pick calm, neutral music: a song that matches the place would give it away.',
   'No location tag: Instagram shows it above the video, which gives the answer away.',
 ].join('\n');
 writeFileSync(path(`${base}.txt`), caption + '\n\n' + notes + '\n');
 console.log(`wrote ${base}.mp4 and .txt`);
+
+// A copy for the phone (user, 2026-11-24): into a synced folder, by default Google Drive's
+// "Landmarked reels" when this PC has it; REELS_TO=<folder> to change, REELS_TO= to skip.
+const to = process.env.REELS_TO ?? (existsSync('G:/My Drive') ? 'G:/My Drive/Landmarked reels' : '');
+if (to) {
+  mkdirSync(to, { recursive: true });
+  for (const ext of ['mp4', 'txt']) copyFileSync(path(`${base}.${ext}`), `${to}/${id}-${tName}.${ext}`);
+  console.log(`copied to ${to}`);
+}

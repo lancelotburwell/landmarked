@@ -27,6 +27,16 @@ export function distanceKm(a, b) {
   return 2 * R * Math.asin(Math.min(1, Math.sqrt(h)));
 }
 
+// Instagram posts (data/social.json), several a day since 2026-11-25 (user: two carousels
+// and two reels a day). A carousel ("kind" left out) shows one of that day's buildings and
+// pins it to the day; a reel ("kind": "reel") shows a building whose day has been played.
+// Each goes out at its "time" (HH:MM, Europe/Zurich, default 08:00). Its key names its
+// files and its state on the server: the date for the 08:00 carousel (as before), else
+// <date>-<HHMM>, e.g. public/social/2026-12-01-1700-1.jpg.
+export const isReel = (p) => p.kind === 'reel';
+export const postTime = (p) => p.time ?? '08:00';
+export const postKey = (p) => (!isReel(p) && postTime(p) === '08:00' ? p.date : `${p.date}-${postTime(p).replace(':', '')}`);
+
 // data/pins.json: manual decisions the scheduler always respects. One entry per line:
 //   { "date": "2026-12-03", "ids": ["reichstag"], "out": ["x"], "note": "why" }   these buildings run
 //        that day (`out`, optional: and these don't; on a locked day an `ids` building takes an `out` one's place)
@@ -54,7 +64,7 @@ export function readPins(pool) {
       else notBefore.set(p.id, p.notBefore);
     } else problems.push(`pins.json: bad entry ${JSON.stringify(p)}`);
   }
-  for (const s of readOr('data/social.json', [])) add(s.date, s.id, `social.json ${s.date}`);
+  for (const s of readOr('data/social.json', [])) if (!isReel(s)) add(s.date, s.id, `social.json ${s.date}`);
   for (const [date, ids] of dayPins) {
     if (ids.size > 5) problems.push(`${date}: more than five buildings pinned`);
     const tiers = [...ids].map((id) => byId.get(id).tier);
@@ -74,7 +84,8 @@ export function freshAfter(pool, schedule, until) {
 export function checkPlan({ pool, schedule, socialList = readOr('data/social.json', []), today = todayKey(), hasPhoto = (id) => existsSync(new URL(`public/photos/${id}.jpg`, root)) }) {
   const byId = new Map(pool.map((b) => [b.id, b]));
   const byDate = new Map(schedule.map((d) => [d.date, d]));
-  const social = new Map(socialList.map((s) => [s.date, s.id]));
+  const social = new Map();
+  for (const s of socialList.filter((x) => !isReel(x))) social.set(s.date, [...(social.get(s.date) ?? []), s.id]);
   const { problems } = readPins(pool);
 
   const locked = addDays(today, FROZEN_DAYS);
@@ -97,10 +108,23 @@ export function checkPlan({ pool, schedule, socialList = readOr('data/social.jso
 
   // Instagram: a post for every locked day; today and tomorrow are urgent.
   for (let d = today; d <= locked; d = addDays(d, 1)) {
-    const id = social.get(d);
+    const ids = social.get(d) ?? [];
     const day = byDate.get(d);
-    if (!id) (d <= addDays(today, 1) ? errors : warns).push(`${d}: no Instagram post`);
-    else if (day && !day.ids.includes(id)) errors.push(`${d}: the Instagram post shows ${id}, which is not in that day's puzzle`);
+    if (!ids.length) (d <= addDays(today, 1) ? errors : warns).push(`${d}: no Instagram post`);
+    for (const id of ids) if (day && !day.ids.includes(id)) errors.push(`${d}: an Instagram carousel shows ${id}, which is not in that day's puzzle`);
+  }
+  // Two posts can't share a slot, and a reel only shows a building whose day has been played
+  // before the reel goes out (a "who" reel's pin gives the location away).
+  const keys = new Map();
+  for (const s of socialList) {
+    const k = postKey(s);
+    if (keys.has(k)) errors.push(`social.json: two posts at ${k}`);
+    keys.set(k, s);
+    if (!isReel(s) || s.date < today) continue;
+    if (!byId.has(s.id)) { errors.push(`${k}: the reel shows unknown building ${s.id}`); continue; }
+    if (!['where', 'who'].includes(s.template)) errors.push(`${k}: a reel needs "template": "where" or "who"`);
+    if (!schedule.some((x) => x.date < s.date && x.ids.includes(s.id))) errors.push(`${k}: the reel shows ${s.id}, whose day hasn't been played before ${s.date}`);
+    else if (schedule.some((x) => x.date >= s.date && x.date <= addDays(s.date, 30) && x.ids.includes(s.id))) warns.push(`${k}: the reel shows ${s.id}, which comes back as a puzzle within 30 days`);
   }
 
   // Stock: days of never-used buildings beyond the locked days.

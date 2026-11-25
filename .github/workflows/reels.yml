@@ -1,0 +1,102 @@
+# Renders the Instagram reels whenever data/social.json changes: for every reel from
+# today on that has no caption in data/social-captions.json yet, one job builds the site,
+# renders the reel with make-reel.mjs in software (no graphics card here, so 10–20 min),
+# and uploads the MP4 to the GitHub release "reels". A last job merges the captions into
+# data/social-captions.json and commits as Burwell Projects. The site posts each reel at
+# its time (api/instagram.ts). To re-render one, delete its caption entry and push.
+name: Render Instagram reels
+
+on:
+  push:
+    branches: [main]
+    paths: ['data/social.json']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: reels
+  cancel-in-progress: false
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    outputs:
+      keys: ${{ steps.pending.outputs.keys }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - id: pending
+        run: echo "keys=$(node scripts/social-pending.mjs reels)" >> "$GITHUB_OUTPUT"
+      - name: Make sure the release exists
+        if: steps.pending.outputs.keys != '[]'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release view reels >/dev/null 2>&1 || gh release create reels --latest=false \
+            --title "Instagram reels" --notes "Videos rendered by the Render Instagram reels Action. The site posts each one at its time."
+
+  render:
+    needs: plan
+    if: needs.plan.outputs.keys != '[]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      max-parallel: 8
+      matrix:
+        key: ${{ fromJson(needs.plan.outputs.keys) }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: ffmpeg
+        run: command -v ffmpeg || (sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg)
+      - run: npm run build
+      - name: Serve the site
+        run: |
+          npx vite preview --port 4173 --strictPort > preview.log 2>&1 &
+          for i in $(seq 1 60); do curl -sf http://localhost:4173/ >/dev/null && break; sleep 1; done
+      - name: Render
+        env:
+          CHROME_PATH: /usr/bin/google-chrome
+        run: node scripts/render-reels.mjs "${{ matrix.key }}"
+      - name: Upload the video
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload reels "social/out/${{ matrix.key }}.mp4" --clobber
+      - uses: actions/upload-artifact@v4
+        with:
+          name: reel-${{ matrix.key }}
+          path: social/out/${{ matrix.key }}.json
+          retention-days: 3
+
+  captions:
+    needs: [plan, render]
+    if: always() && needs.plan.outputs.keys != '[]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: reel-*
+          merge-multiple: true
+          path: social/out
+      - run: node scripts/render-reels.mjs --merge
+      - name: Commit and push
+        run: |
+          if git diff --quiet data/social-captions.json; then echo "Nothing new."; exit 0; fi
+          git config user.name "Burwell Projects"
+          git config user.email "burwell.projects@gmail.com"
+          git add data/social-captions.json
+          git commit -m "Render Instagram reels"
+          for i in 1 2 3; do git pull --rebase && git push && break; sleep 5; done
