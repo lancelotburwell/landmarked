@@ -147,7 +147,7 @@
     </section>
   </div>
   <div class="view" id="view-instagram" hidden>
-    <p class="note" style="margin:0">Posts go straight to Instagram at their time (Zurich), but only once you approve them here. They come from <code>data/social.json</code>; the images and captions are rendered by the "Render Instagram posts" Action. Don't approve a day here that is also scheduled in Metricool, or it goes out twice.</p>
+    <p class="note" style="margin:0">Posts go straight to Instagram at their time (Zurich): automatically when automatic posting is on, otherwise once you approve them. Hold a post to keep it back. They come from <code>data/social.json</code>; the images and captions are rendered by the "Render Instagram posts" Action.</p>
     <p id="ig-msg" class="note"></p>
     <section id="ig-account" class="box" hidden></section>
     <section id="ig-list" style="display:grid;gap:10px"></section>
@@ -501,11 +501,19 @@
       el.innerHTML = a
         ? `<h2>Account</h2><div class="row"><span class="chip ok">connected</span><b>@${esc(a.username)}</b><span class="note" style="margin:0">${a.expiresAt ? `token renews itself weekly, valid until ${date(a.expiresAt)}` : 'token never expires'}${q}</span>
            <button type="button" id="ig-replace">Replace token</button><button type="button" class="danger" id="ig-off">Disconnect</button></div>
+           <div class="row" style="margin-top:10px"><label style="display:inline-flex;gap:8px;align-items:center;cursor:pointer"><input type="checkbox" id="ig-auto" ${d.auto?.on ? 'checked' : ''}> <b>Post automatically</b></label>
+           <span class="note" style="margin:0">${d.auto?.on ? `on from ${fmt(d.auto.since)}: every post goes out at its time unless you hold it` : 'off: only approved posts go out'}</span></div>
            <form id="ig-tok" class="row" hidden style="margin-top:8px"><input id="ig-tokIn" type="password" placeholder="new access token" style="flex:1;min-width:220px" autocomplete="off"><button class="primary">Save</button></form>`
         : `<h2>Connect Instagram</h2><p style="margin:0 0 8px;font-size:12.5px">Paste the access token from your Meta app (Use cases → Instagram API → API setup with Unified login → Generate access tokens → Generate token). It is checked with Instagram and kept on the server, never in this page.</p>
            <form id="ig-tok" class="row"><input id="ig-tokIn" type="password" placeholder="access token" style="flex:1;min-width:220px" autocomplete="off"><button class="primary">Connect</button></form>`;
       el.hidden = false;
       $('ig-replace')?.addEventListener('click', () => { $('ig-tok').hidden = false; });
+      $('ig-auto')?.addEventListener('change', async (e) => {
+        const on = e.target.checked;
+        if (on && !confirm('Post automatically? From tomorrow, every post goes out at its time without approval. You can still hold any post.')) { e.target.checked = false; return; }
+        try { await this.call('auto', { on }); toast(on ? 'Automatic posting is on.' : 'Automatic posting is off: approve posts by hand.'); } catch { e.target.checked = !on; }
+        this.show();
+      });
       $('ig-off')?.addEventListener('click', async () => { if (!confirm('Disconnect Instagram? Approved posts will not go out until you connect again.')) return; await this.call('disconnect'); this.show(); });
       $('ig-tok').addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -515,19 +523,21 @@
     },
     renderPosts(d) {
       const today = d.now.date;
-      const open = d.posts.filter((p) => p.date >= today && p.text && p.images.length && !p.approved && !p.status);
+      const open = d.auto?.on ? [] : d.posts.filter((p) => p.date >= today && p.text && p.images.length && !p.approved && !p.status && !p.held);
       const all = open.length > 1 ? `<div class="row"><button type="button" class="primary" data-ig="all" data-dates="${open.map((p) => p.date).join(',')}">Approve all ${open.length} waiting posts</button><span class="note" style="margin:0">after looking at each one below</span></div>` : '';
       $('ig-list').innerHTML = all + (d.posts.length ? d.posts.map((p) => {
         const s = p.status, past = p.date < today, due = p.date === today && p.time <= d.now.hm;
         const chip = s?.state === 'posted' ? `<span class="chip ok">posted ${s.permalink ? `· <a href="${esc(s.permalink)}" target="_blank" rel="noopener">open</a>` : ''}</span>`
           : s?.state === 'error' || s?.error ? `<span class="chip bad" title="${esc(s.error)}">failed ${s.tries ?? ''}×</span>`
           : s?.state === 'publishing' ? '<span class="chip warn">publishing</span>'
-          : p.approved ? (past ? '<span class="chip warn">approved, not posted</span>' : '<span class="chip ok">approved</span>')
+          : p.held ? '<span class="chip warn">held</span>'
+          : p.willPost ? (past ? '<span class="chip warn">not posted</span>' : `<span class="chip ok">${p.approved ? 'approved' : 'posts automatically'}</span>`)
           : past ? '<span class="chip">not posted here</span>' : '<span class="chip warn">waiting for approval</span>';
         const ready = p.text && p.images.length;
         const done = s?.state === 'posted';
         const btns = done ? '' : [
-          !past && ready ? (p.approved ? `<button type="button" data-ig="unapprove" data-date="${p.date}">Unapprove</button>` : `<button type="button" class="primary" data-ig="approve" data-date="${p.date}">Approve</button>`) : '',
+          !past && (p.held ? `<button type="button" data-ig="release" data-date="${p.date}">Release</button>` : p.willPost ? `<button type="button" data-ig="hold" data-date="${p.date}">Hold</button>` : ''),
+          !past && ready && !d.auto?.on && !p.held ? (p.approved ? `<button type="button" data-ig="unapprove" data-date="${p.date}">Unapprove</button>` : `<button type="button" class="primary" data-ig="approve" data-date="${p.date}">Approve</button>`) : '',
           s?.error ? `<button type="button" data-ig="retry" data-date="${p.date}">Try again</button>` : '',
           ready && d.account && !past ? `<button type="button" data-ig="now" data-date="${p.date}">Post now</button>` : '',
         ].join('');
@@ -550,6 +560,7 @@
     try {
       if (act === 'approve' || act === 'unapprove') await ig.call('approve', { date, approved: act === 'approve' });
       if (act === 'all') for (const d of b.dataset.dates.split(',')) await ig.call('approve', { date: d, approved: true });
+      if (act === 'hold' || act === 'release') await ig.call('hold', { date, held: act === 'hold' });
       if (act === 'retry') await ig.call('retry', { date });
       if (act === 'now') { const j = await ig.call('publish', { date }); toast('Posted to Instagram.'); if (j.permalink) window.open(j.permalink, '_blank', 'noopener'); }
     } catch { /* toast shown */ }

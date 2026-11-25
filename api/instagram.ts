@@ -13,7 +13,9 @@
 // System User token (starts EAA, never expires) on graph.facebook.com, generated in the app's
 // Instagram API setup → Generate access tokens. Older apps' Instagram Login tokens (start IG,
 // 60 days, refreshed weekly here) use graph.instagram.com. The publishing calls are the same.
-//   lm:ig:approved   hash date → { at }
+//   lm:ig:approved   hash date → { at }       (posts approved by hand)
+//   lm:ig:auto       { on, since }             automatic mode: every post from `since` on goes out
+//   lm:ig:held       hash date → { at }       posts kept back (in either mode)
 //   lm:ig:posted     hash date → { state: publishing|posted|error, at, mediaId?, permalink?, container?, error?, tries? }
 //   lm:ig:lock:<d>   short lock so two runs never post the same day twice
 //
@@ -34,7 +36,13 @@ export interface Cred { token: string; host?: Host }
 const TZ = 'Europe/Zurich';
 const DEFAULT_TIME = '08:00';
 const MAX_TRIES = 3;
-const K = { auth: 'lm:ig:auth', approved: 'lm:ig:approved', posted: 'lm:ig:posted', lock: 'lm:ig:lock:' };
+const K = { auth: 'lm:ig:auth', approved: 'lm:ig:approved', posted: 'lm:ig:posted', lock: 'lm:ig:lock:', auto: 'lm:ig:auto', held: 'lm:ig:held' };
+
+/** Automatic mode: every post dated on or after `since` goes out unless it is held. */
+export interface Auto { on: boolean; since: string; at?: string }
+const readAuto = async (s: IgStore): Promise<Auto | null> => parse(await s.get(K.auto));
+/** Will this post go out at its time? Approved by hand, or automatic and not held. */
+export const willPost = (date: string, approved: Json, held: Json, auto: Auto | null) => !held[date] && (!!approved[date] || (!!auto?.on && date >= auto.since));
 
 type Json = Record<string, any>;
 class Fail extends Error { status: number; constructor(msg: string, status = 400) { super(msg); this.status = status; } }
@@ -206,8 +214,10 @@ export async function run(store: IgStore, posts: Post[], now = new Date(), opts:
 
   const { date, hm } = zurichNow(now);
   const approved = await hall(store, K.approved);
+  const held = await hall(store, K.held);
+  const auto = await readAuto(store);
   const posted = await hall(store, K.posted);
-  const due = posts.filter((p) => p.date === date && p.time <= hm && approved[p.date] && posted[p.date]?.state !== 'posted' && (posted[p.date]?.tries ?? 0) < MAX_TRIES);
+  const due = posts.filter((p) => p.date === date && p.time <= hm && willPost(p.date, approved, held, auto) && posted[p.date]?.state !== 'posted' && (posted[p.date]?.tries ?? 0) < MAX_TRIES);
   for (const p of due) {
     const lock = await store.set(K.lock + p.date, '1', { nx: true, ex: 300 });
     if (!lock) continue; // another run is on it
@@ -235,15 +245,15 @@ export async function GET(request: Request): Promise<Response> {
   if (!key || new URL(request.url).searchParams.get('key') !== key) return Response.json({ error: 'wrong key' }, { status: 403 });
   try {
     const store = redis() as unknown as IgStore;
-    const [auth, approved, posted, posts] = await Promise.all([store.get(K.auth).then(parse), hall(store, K.approved), hall(store, K.posted), loadPosts()]);
+    const [auth, approved, posted, posts, held, auto] = await Promise.all([store.get(K.auth).then(parse), hall(store, K.approved), hall(store, K.posted), loadPosts(), hall(store, K.held), readAuto(store)]);
     const today = zurichNow();
     let quota: Json | null = null;
     if (auth) quota = await graph('GET', `/${auth.userId}/content_publishing_limit`, { fields: 'quota_usage,config' }, auth).then((j) => j.data?.[0] ?? null).catch((e) => ({ error: (e as Error).message }));
     const from = new Date(Date.parse(today.date + 'T12:00:00Z') - 7 * 86_400_000).toISOString().slice(0, 10);
     return Response.json({
       account: auth ? { host: auth.host ?? 'instagram', username: auth.username, savedAt: auth.savedAt, refreshedAt: auth.refreshedAt, expiresAt: auth.expiresAt } : null,
-      quota, cron: !!process.env.CRON_SECRET, now: today,
-      posts: posts.filter((p) => p.date >= from).map((p) => ({ ...p, approved: approved[p.date] ?? null, status: posted[p.date] ?? null })),
+      quota, cron: !!process.env.CRON_SECRET, now: today, auto,
+      posts: posts.filter((p) => p.date >= from).map((p) => ({ ...p, approved: approved[p.date] ?? null, held: held[p.date] ?? null, willPost: willPost(p.date, approved, held, auto), status: posted[p.date] ?? null })),
     }, { headers: noStore });
   } catch (e) {
     return Response.json({ error: (e as Error).message }, { status: e instanceof Fail ? e.status : 500 });
@@ -282,6 +292,18 @@ export async function POST(request: Request): Promise<Response> {
           await store.hset(K.approved, { [post.date]: JSON.stringify({ at: new Date().toISOString(), now: true }) });
           return Response.json({ ok: true, ...(await publish(store, auth, post)) }, { headers: noStore });
         } finally { await store.del(K.lock + post.date); }
+      }
+      case 'auto': { // automatic posting on/off; it starts with tomorrow's post (today's may have gone out elsewhere)
+        const next = zurichNow(new Date(Date.now() + 86_400_000)).date;
+        if (body.on) await store.set(K.auto, JSON.stringify({ on: true, since: isDate(body.since) ? body.since : next, at: new Date().toISOString() }));
+        else await store.del(K.auto);
+        return Response.json({ ok: true, auto: await readAuto(store) }, { headers: noStore });
+      }
+      case 'hold': {
+        if (!isDate(body.date)) throw new Fail('need a date');
+        if (body.held === false) await store.hdel(K.held, body.date);
+        else await store.hset(K.held, { [body.date]: JSON.stringify({ at: new Date().toISOString() }) });
+        return Response.json({ ok: true }, { headers: noStore });
       }
       case 'retry': { // clear a failed post's error so the next run tries again
         if (!isDate(body.date)) throw new Fail('need a date');
