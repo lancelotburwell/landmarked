@@ -148,9 +148,10 @@ async function createImage(auth: Auth, url: string, extra: Record<string, string
 }
 const altFor = (post: Post, url: string) => /-1\.jpg$/.test(url) && post.clue ? `Clue: ${post.clue}` : 'A close-up architectural detail of one of today\'s buildings';
 
-/** A reel: a resumable-upload container, then the video's bytes (from the GitHub release). */
+/** A reel: a resumable-upload container, then the video's bytes (from the GitHub release).
+ *  share_to_feed false keeps reels off the profile's main grid (user, 2026-11-25): they show in the Reels tab only. */
 async function createReel(auth: Auth, post: Post): Promise<string> {
-  const c = await graph('POST', `/${auth.userId}/media`, { media_type: 'REELS', upload_type: 'resumable', caption: post.text!, share_to_feed: 'true' }, auth);
+  const c = await graph('POST', `/${auth.userId}/media`, { media_type: 'REELS', upload_type: 'resumable', caption: post.text!, share_to_feed: 'false' }, auth);
   const vid = await fetch(post.video!);
   if (!vid.ok) throw new Fail(`the video ${post.video} answered ${vid.status}: not rendered yet?`, 502);
   const bytes = new Uint8Array(await vid.arrayBuffer());
