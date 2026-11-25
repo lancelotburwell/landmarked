@@ -34,6 +34,10 @@ export function distanceKm(a, b) {
 // files and its state on the server: the date for the 08:00 carousel (as before), else
 // <date>-<HHMM>, e.g. public/social/2026-12-01-1700-1.jpg.
 export const isReel = (p) => p.kind === 'reel';
+// The game formats of make-reel-formats.mjs that show the spinning globe (the user's rule,
+// 2026-11-25: every reel has the globe). The others hide it; add the globe to one before
+// listing it here.
+export const REEL_FORMATS = ['ladder', 'pins', 'emoji', 'stop', 'speed', 'silhouettes', 'wordsearch', 'distance', 'mistake'];
 export const postTime = (p) => p.time ?? '08:00';
 export const postKey = (p) => (!isReel(p) && postTime(p) === '08:00' ? p.date : `${p.date}-${postTime(p).replace(':', '')}`);
 
@@ -121,10 +125,14 @@ export function checkPlan({ pool, schedule, socialList = readOr('data/social.jso
     if (keys.has(k)) errors.push(`social.json: two posts at ${k}`);
     keys.set(k, s);
     if (!isReel(s) || s.date < today) continue;
-    if (!byId.has(s.id)) { errors.push(`${k}: the reel shows unknown building ${s.id}`); continue; }
-    if (!['where', 'who'].includes(s.template)) errors.push(`${k}: a reel needs "template": "where" or "who"`);
-    if (!schedule.some((x) => x.date < s.date && x.ids.includes(s.id))) errors.push(`${k}: the reel shows ${s.id}, whose day hasn't been played before ${s.date}`);
-    else if (schedule.some((x) => x.date >= s.date && x.date <= addDays(s.date, 30) && x.ids.includes(s.id))) warns.push(`${k}: the reel shows ${s.id}, which comes back as a puzzle within 30 days`);
+    if (!['where', 'who'].includes(s.template) && !REEL_FORMATS.includes(s.format)) errors.push(`${k}: a reel needs "template": "where"|"who" or "format": one of ${REEL_FORMATS.join(', ')}`);
+    if (s.format && (!s.cfg || !s.question || !s.answer)) errors.push(`${k}: a format reel needs cfg, question and answer`);
+    if (!s.line) errors.push(`${k}: the reel needs a hook "line"`);
+    for (const id of s.ids ?? [s.id]) {
+      if (!byId.has(id)) { errors.push(`${k}: the reel shows unknown building ${id}`); continue; }
+      if (!schedule.some((x) => x.date < s.date && x.ids.includes(id))) errors.push(`${k}: the reel shows ${id}, whose day hasn't been played before ${s.date}`);
+      else if (schedule.some((x) => x.date >= s.date && x.date <= addDays(s.date, 30) && x.ids.includes(id))) warns.push(`${k}: the reel shows ${id}, which comes back as a puzzle within 30 days`);
+    }
   }
 
   // Stock: days of never-used buildings beyond the locked days.

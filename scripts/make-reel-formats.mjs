@@ -381,7 +381,20 @@ function soundtrack(total, events, file) {
 }
 
 const [name, url = 'http://localhost:4173/'] = process.argv.slice(2);
-const FMT = FORMATS[name];
+// A reel planned in data/social.json (render-reels.mjs passes it as REEL_ENTRY) brings its
+// own content for the format: ids, cfg (what the page draws, the same shape as the
+// format's cfg() above; "@photo:<id>" becomes that building's photo), line (the caption's
+// hook), question, answer, mood, and optionally credits. The format's sound stays.
+const entry = process.env.REEL_ENTRY ? JSON.parse(process.env.REEL_ENTRY) : null;
+const withPhotos = (v) => (typeof v === 'string' && v.startsWith('@photo:') ? photo(v.slice(7))
+  : Array.isArray(v) ? v.map(withPhotos)
+  : v && typeof v === 'object' ? Object.fromEntries(Object.entries(v).map(([k, x]) => [k, withPhotos(x)])) : v);
+const FMT = entry && FORMATS[name] ? {
+  ...FORMATS[name], ids: entry.ids, cfg: () => withPhotos(entry.cfg), hook: entry.line, question: entry.question,
+  answer: entry.answer, mood: entry.mood ?? FORMATS[name].mood,
+  // Credit exactly the photos it shows.
+  credits: () => entry.credits ?? [...new Set(JSON.stringify(entry.cfg).match(/@photo:[\w-]+/g) ?? [])].map((m) => credit(m.slice(7))),
+} : FORMATS[name];
 if (!FMT) { console.error(`usage: node scripts/make-reel-formats.mjs <${Object.keys(FORMATS).join('|')}> [url]`); process.exit(1); }
 const cfg = FMT.cfg();
 const font = (w) => readFileSync(new URL(`node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-${w}-normal.woff2`, root)).toString('base64');

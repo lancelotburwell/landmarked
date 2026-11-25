@@ -113,6 +113,9 @@ for (const p of todo) {
   const [x, y, w] = p.crop;
   const scale = W / (w * iw);
   if (x + w > 1.001 || y * ih + H / scale > ih + 1) throw new Error(`${p.date} ${p.id}: crop runs off the photo`);
+  // Sharp images only (the user's rule, 2026-11-25): the slide is 1,080 px wide, so the crop
+  // must cover at least that much of the source. Find a higher-resolution "photo" instead.
+  if (w * iw < 1080 && p.date >= today) throw new Error(`${postKey(p)} ${p.id}: the crop is only ${Math.round(w * iw)} px of the source, under 1,080: soft. Use a sharper photo or a wider crop.`);
   await page.evaluate((st) => Object.assign(document.images[0].style, st),
     { width: `${iw * scale}px`, left: `${-x * iw * scale}px`, top: `${-y * ih * scale}px` });
   await page.screenshot({ path: out(`public/social/${postKey(p)}-2.jpg`), type: 'jpeg', quality: 90 });
