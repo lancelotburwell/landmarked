@@ -43,7 +43,7 @@ jobs:
           node scripts/make-social.mjs $dates
       - name: Commit and push
         run: |
-          if git diff --quiet && [ -z "$(git ls-files --others --exclude-standard public/social data/social-captions.json)" ]; then
+          if git diff --quiet -- public/social data/social.json data/social-captions.json && [ -z "$(git ls-files --others --exclude-standard public/social data/social-captions.json)" ]; then
             echo "Nothing new."
             exit 0
           fi
