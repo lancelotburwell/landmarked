@@ -264,7 +264,9 @@ export async function run(store: IgStore, posts: Post[], now = new Date(), opts:
   const held = await hall(store, K.held);
   const auto = await readAuto(store);
   const posted = await hall(store, K.posted);
-  const due = posts.filter((p) => p.date === date && p.time <= hm && willPost(p, approved, held, auto) && posted[p.key]?.state !== 'posted' && (posted[p.key]?.tries ?? 0) < MAX_TRIES);
+  // Due today, or already started (a reel posted early with "Post now" that Instagram was still processing).
+  const started = (p: Post) => posted[p.key]?.state === 'publishing' && !posted[p.key]?.error && !held[p.key];
+  const due = posts.filter((p) => ((p.date === date && p.time <= hm && willPost(p, approved, held, auto)) || started(p)) && posted[p.key]?.state !== 'posted' && (posted[p.key]?.tries ?? 0) < MAX_TRIES);
   for (const p of due) {
     const lock = await store.set(K.lock + p.key, '1', { nx: true, ex: 300 });
     if (!lock) continue; // another run is on it

@@ -67,6 +67,8 @@ jobs:
         env:
           CHROME_PATH: /usr/bin/google-chrome
         run: node scripts/render-reels.mjs "${{ matrix.key }}"
+      - name: Soundtrack (original ambient, "floating in space")
+        run: node scripts/ambient.mjs mux "social/out/${{ matrix.key }}.mp4" "${{ matrix.key }}"
       - name: Upload the video
         env:
           GH_TOKEN: ${{ github.token }}
