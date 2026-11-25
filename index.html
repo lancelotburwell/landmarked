@@ -133,16 +133,15 @@
               <button id="showall-btn" class="btn">See them on the globe</button>
             </div>
           </div>
-          <!-- Feedback (user's request, 2026-11-25: big, red and high up, right under the share buttons).
+          <!-- Feedback (user's request, 2026-11-25: red and high up, right under the share buttons; compact).
                api/feedback.ts emails it to the creator (Resend) and keeps a copy for the planner. -->
           <form id="fb-form" class="feedback">
-            <label for="fb-text" class="fb-title">✉ Tell the creator what you think</label>
-            <p class="fb-label">Ideas, bugs, a building you'd love to see? I read every message.</p>
-            <textarea id="fb-text" maxlength="2000" rows="4" required placeholder="Type your message… (add your email if you'd like a reply)"></textarea>
+            <label for="fb-text" class="fb-title">✉ Tell me what you think</label>
             <div class="fb-row">
-              <span id="fb-msg" class="fb-msg" role="status"></span>
-              <button id="fb-send" class="btn fb-send" type="submit">Send feedback</button>
+              <textarea id="fb-text" maxlength="2000" rows="1" required placeholder="Ideas, bugs, wishes…"></textarea>
+              <button id="fb-send" class="btn fb-send" type="submit">Send</button>
             </div>
+            <span id="fb-msg" class="fb-msg" role="status"></span>
           </form>
 
           <div id="countdown-row" class="countdown">Next buildings in <span id="countdown">--:--:--</span></div>

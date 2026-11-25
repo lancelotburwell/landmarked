@@ -518,6 +518,11 @@ const fb = {
   send: $<HTMLButtonElement>('fb-send'),
   msg: $('fb-msg'),
 };
+// One line to start; grows with the message (up to max-height in the CSS).
+fb.text.addEventListener('input', () => {
+  fb.text.style.height = '';
+  fb.text.style.height = `${Math.max(44, fb.text.scrollHeight + 2)}px`;
+});
 fb.form.addEventListener('submit', async (e) => {
   e.preventDefault();
   const message = fb.text.value.trim();
@@ -529,7 +534,7 @@ fb.form.addEventListener('submit', async (e) => {
   fb.send.disabled = false;
   if (ok) {
     fb.text.value = '';
-    fb.form.replaceChildren(h('div', 'fb-title', '✓ Thanks! Your message reached the creator.'));
+    fb.form.replaceChildren(h('div', 'fb-title', '✓ Thanks! Message sent.'));
     fb.form.classList.add('sent');
   } else {
     fb.msg.textContent = 'Could not send. Please try again later.';

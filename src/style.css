@@ -209,24 +209,26 @@ button { font: inherit; color: inherit; }
   color: var(--text); text-decoration: none; font-size: 12px; font-weight: 600;
 }
 .social:hover, .social:focus-visible { border-color: var(--accent); color: var(--accent); }
-/* Feedback: big and red on purpose (user, 2026-11-25), right under the share buttons. */
+/* Feedback: red and right under the share buttons, but compact (user, 2026-11-25). */
 .feedback {
-  display: grid; gap: 8px; margin-top: 16px; padding: 14px; text-align: left;
+  display: grid; gap: 6px; margin-top: 12px; padding: 10px 12px; text-align: left;
   background: rgba(226, 119, 92, 0.1); border: 1.5px solid var(--hard); border-radius: 12px;
-  box-shadow: 0 0 22px rgba(226, 119, 92, 0.18);
+  box-shadow: 0 0 16px rgba(226, 119, 92, 0.14);
 }
 .feedback.sent { text-align: center; box-shadow: none; }
-.fb-title { font-size: 16px; font-weight: 700; color: var(--hard); }
+.fb-title { font-size: 13px; font-weight: 700; color: var(--hard); }
 .fb-label { font-size: 12px; color: var(--muted); line-height: 1.45; }
 .feedback textarea {
-  width: 100%; box-sizing: border-box; resize: vertical; min-height: 110px; padding: 10px; border: 1px solid var(--line); border-radius: 8px;
+  width: 100%; box-sizing: border-box; resize: none; height: 44px; max-height: 140px; padding: 9px 10px; overflow-y: auto; border: 1px solid var(--line); border-radius: 8px;
   background: var(--bg); color: var(--text); font: inherit; font-size: 16px; line-height: 1.45;
 }
 .feedback textarea:focus { outline: none; border-color: var(--hard); }
-.fb-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.fb-row { display: flex; align-items: stretch; gap: 8px; }
+.fb-row textarea { flex: 1; min-width: 0; }
 .fb-msg { font-size: 12px; color: var(--muted); }
+.fb-msg:empty { display: none; }
 .fb-msg.ok { color: var(--accent); }
-.fb-send { background: var(--hard); border-color: var(--hard); color: #1a1a1a; font-weight: 700; }
+.fb-send { height: auto; padding: 0 14px; background: var(--hard); border-color: var(--hard); color: #1a1a1a; font-weight: 700; }
 .fb-send:hover, .fb-send:focus-visible { filter: brightness(1.1); }
 #countdown { color: var(--text); font-variant-numeric: tabular-nums; }
 
