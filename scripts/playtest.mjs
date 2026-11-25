@@ -87,11 +87,14 @@ async function run(name) {
     if (i === 0) await page.screenshot({ path: join(out, `${name}-2-question.png`) });
 
     const [dx, dy] = OFFSETS[i];
+    // Phones show the map and a small bar first; the full card rises once the camera has landed.
+    await page.evaluate(() => { const r = document.getElementById('result'); window.__t0 = performance.now(); window.__open = 0;
+      new MutationObserver(() => { if (!r.hidden && !r.classList.contains('peek') && !window.__open) window.__open = performance.now() - window.__t0; }).observe(r, { attributes: true }); });
     await tapLonLat(page, b.lon + dx, b.lat + dy, touch);
-    // Phones show the map and a small bar first; the full card rises ~2.4 s later.
-    await sleep(1900);
+    await sleep(1000);
     await page.screenshot({ path: join(out, `${name}-3-peek-${i + 1}.png`) });
     await waitIdle(page, 800);
+    console.log(`   card opened after ${Math.round(await page.evaluate(() => window.__open))} ms`);
     await page.screenshot({ path: join(out, `${name}-4-result-${i + 1}.png`) });
     const r = await page.evaluate(() => ({
       pts: document.getElementById('r-points').textContent,
