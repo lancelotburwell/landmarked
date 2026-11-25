@@ -4,6 +4,8 @@
   {"date":"2026-11-25","id":"sydney-opera-house","photo":"File:Sydney Opera House Tiles 2 (30683273675).jpg","crop":[0.2,0,0.5],"line":"More than a million tiles cover it, and they clean themselves when it rains.","first":"clue"},
   {"date":"2026-11-26","id":"alhambra","photo":"File:Andalusie 2010 042.jpg","crop":[0,0,0.4],"line":"Its name means 'the red one', after the colour of its walls.","first":"clue"},
   {"date":"2026-11-27","id":"habitat-67","photo":"File:Habitat 67 Montreal Quebec 13.jpg","crop":[0.25,0.04,0.55],"line":"Every terrace is the roof of the flat below. Its architect still keeps one of them.","first":"photo"},
+  {"date":"2026-11-27","time":"12:00","kind":"reel","template":"where","id":"sagrada-familia","photo":"File:Sagrada Familia Ceiling 6 (5839825934).jpg","crop":[0.03,0.17,0.34],"line":"Asked why it was taking so long, its architect said his client was not in a hurry."},
+  {"date":"2026-11-27","time":"20:00","kind":"reel","template":"who","id":"atomium","line":"It was meant to stand for just six months. That was in 1958."},
   {"date":"2026-11-28","id":"zeitz-mocaa","photo":"File:At Cape Town (MP) 2018 115.jpg","crop":[0.1,0.37,0.32],"line":"Inside, the atrium is shaped like a single grain of corn, blown up to fill the building.","first":"photo"},
   {"date":"2026-11-29","id":"cardboard-cathedral","photo":"File:Roof detail of Cardboard Cathedral, Christchurch, New Zealand 02.jpg","crop":[0.2,0,0.45],"line":"It rests on shipping containers, and its glass triangles reuse images from an older rose window.","first":"clue"}
 ]
