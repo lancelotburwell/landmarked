@@ -536,7 +536,7 @@
         const ready = p.text && p.images.length;
         const done = s?.state === 'posted';
         const btns = done ? '' : [
-          !past && (p.held ? `<button type="button" data-ig="release" data-date="${p.date}">Release</button>` : p.willPost ? `<button type="button" data-ig="hold" data-date="${p.date}">Hold</button>` : ''),
+          past ? '' : (p.held ? `<button type="button" data-ig="release" data-date="${p.date}">Release</button>` : p.willPost ? `<button type="button" data-ig="hold" data-date="${p.date}">Hold</button>` : ''),
           !past && ready && !d.auto?.on && !p.held ? (p.approved ? `<button type="button" data-ig="unapprove" data-date="${p.date}">Unapprove</button>` : `<button type="button" class="primary" data-ig="approve" data-date="${p.date}">Approve</button>`) : '',
           s?.error ? `<button type="button" data-ig="retry" data-date="${p.date}">Try again</button>` : '',
           ready && d.account && !past ? `<button type="button" data-ig="now" data-date="${p.date}">Post now</button>` : '',
