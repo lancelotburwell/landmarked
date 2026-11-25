@@ -54,6 +54,37 @@ html, body { margin: 0; width: ${W}px; height: ${H}px; overflow: hidden; backgro
 .photo { position: relative; width: 100%; height: 100%; overflow: hidden; }
 .photo img { position: absolute; }`;
 
+// photo: "File:…" in a post picks a different Commons photo than the game's: a closer,
+// high-resolution detail, so the crop can be tight without going soft (the user's rule,
+// 2026-11-25: the photo must not give the building away). It's downloaded at 3840 px to
+// social/src/<date>.jpg with its credit in <date>.json; CC0/PD/CC BY/CC BY-SA only.
+const UA = { 'User-Agent': 'landmarked-data/1.0 (static game data import)' };
+async function postPhoto(p) {
+  const img = new URL(`social/src/${p.date}.jpg`, root), meta = new URL(`social/src/${p.date}.json`, root);
+  if (existsSync(img) && existsSync(meta) && JSON.parse(readFileSync(meta, 'utf8')).file === p.photo) return JSON.parse(readFileSync(meta, 'utf8'));
+  const q = new URLSearchParams({ action: 'query', titles: p.photo, prop: 'imageinfo', iiprop: 'url|size|extmetadata', iiurlwidth: '3840', format: 'json' });
+  for (let attempt = 0; ; attempt++) {
+    try {
+      const j = await (await fetch(`https://commons.wikimedia.org/w/api.php?${q}`, { headers: UA })).json();
+      const info = Object.values(j.query.pages)[0].imageinfo?.[0];
+      if (!info) throw new Error(`${p.date}: ${p.photo} not found on Commons`);
+      const m = info.extmetadata;
+      const license = m.LicenseShortName?.value ?? '';
+      if (!/^(cc0|cc by(-sa)? [\d.]+|public domain|pd)/i.test(license)) throw new Error(`${p.date}: ${p.photo} has licence "${license}", not allowed`);
+      const artist = (m.Artist?.value ?? '').replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+      const res = await fetch(info.width <= 3840 ? info.url : info.thumburl, { headers: UA });
+      if (!res.ok) throw new Error(`download ${res.status}`);
+      writeFileSync(img, Buffer.from(await res.arrayBuffer()));
+      const c = { file: p.photo, artist, license, page: `https://commons.wikimedia.org/wiki/${encodeURIComponent(p.photo.replace(/ /g, '_'))}` };
+      writeFileSync(meta, JSON.stringify(c, null, 1));
+      return c;
+    } catch (e) {
+      if (attempt >= 4 || /not allowed|not found/.test(e.message)) throw e;
+      await new Promise((r) => setTimeout(r, 15000)); // Wikimedia rate limits
+    }
+  }
+}
+
 const browser = await puppeteer.launch({ executablePath: findChrome(), headless: true });
 const page = await browser.newPage();
 await page.setViewport({ width: W, height: H, deviceScaleFactor: 1 });
@@ -71,7 +102,8 @@ for (const p of todo) {
   await page.evaluate(() => document.fonts.ready);
   await page.screenshot({ path: out(`public/social/${p.date}-1.jpg`), type: 'jpeg', quality: 90 });
 
-  const src = `data:image/jpeg;base64,${readFileSync(new URL(`social/src/${p.id}.jpg`, root)).toString('base64')}`;
+  const own = p.photo ? await postPhoto(p) : null;
+  const src = `data:image/jpeg;base64,${readFileSync(new URL(`social/src/${own ? p.date : p.id}.jpg`, root)).toString('base64')}`;
   await page.setContent(`<style>${css}</style><div class="photo"><img></div>`);
   const [iw, ih] = await page.evaluate(async (s) => {
     const img = document.images[0]; img.src = s; await img.decode(); return [img.naturalWidth, img.naturalHeight];
@@ -83,7 +115,7 @@ for (const p of todo) {
     { width: `${iw * scale}px`, left: `${-x * iw * scale}px`, top: `${-y * ih * scale}px` });
   await page.screenshot({ path: out(`public/social/${p.date}-2.jpg`), type: 'jpeg', quality: 90 });
 
-  const c = credits[p.id];
+  const c = own ?? credits[p.id];
   const artist = c.artist
     .replace(/^The original uploader was (.*?) at .*$/, '$1')
     .replace(/^No machine-readable author provided\. (.*?) assumed.*$/, '$1');
@@ -97,7 +129,7 @@ Play at landmarked.land (link in bio)
 
 ${credit}`;
   captions.push({ date: p.date, id: p.id, name: b.name, tier: b.tier, round: round + 1, sourcePx: Math.round(w * iw), first: p.first, images: (p.first === 'photo' ? [2, 1] : [1, 2]).map((n) => `https://landmarked.land/social/${p.date}-${n}.jpg`), clue, text });
-  console.log(p.date, p.id, `round ${round + 1}`, `${p.first} first`, `crop is ${Math.round(w * iw)} px of source${w * iw < 500 ? ' (soft)' : ''}`);
+  console.log(p.date, p.id, `round ${round + 1}`, `${p.first} first`, `crop is ${Math.round(w * iw)} px of source${w * iw < 1080 ? ' (soft: under 1080)' : ''}`);
 }
 // Merge into the committed captions file, one entry per date (the weekly routine reads it for Metricool).
 const capFile = new URL('data/social-captions.json', root);
