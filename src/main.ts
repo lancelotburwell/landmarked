@@ -196,16 +196,14 @@ function lockIn(lon: number, lat: number) {
   const stage = el.globe.getBoundingClientRect();
   const fullWidth = el.result.getBoundingClientRect().width > stage.width * 0.6;
   if (fullWidth) el.result.classList.add('peek');
-  // The card rises PEEK_MS after the camera lands (with a fallback if the globe isn't there).
-  const landed = () => { clearTimeout(peekTimer); peekTimer = window.setTimeout(openCard, PEEK_MS); };
-  globe?.showResult({ lon: b.lon, lat: b.lat, name: b.name, color: SQUARE_COLOR[square(pts)], guess: { lon, lat } }, cardInset(), fullWidth ? landed : undefined);
-  if (fullWidth) peekTimer = window.setTimeout(openCard, 2400);
+  globe?.showResult({ lon: b.lon, lat: b.lat, name: b.name, color: SQUARE_COLOR[square(pts)], guess: { lon, lat } }, cardInset());
+  if (fullWidth) peekTimer = window.setTimeout(openCard, PEEK_MS);
   else el.next.focus({ preventScroll: true });
   setScore(total(), true);
 }
 
-/** How long the map stays in view after the camera lands, before the card rises (user, 2026-11-25: 2.4 s in all felt long). */
-const PEEK_MS = 450;
+/** The map stays in view this long after a guess before the card rises (user, 2026-11-25: 2.4 s was a bit long; waiting for the camera to land felt worse). */
+const PEEK_MS = 2000;
 let peekTimer = 0;
 /** How much of the stage the result card covers (0..0.6), so the camera frames the pair above it. */
 function cardInset() {

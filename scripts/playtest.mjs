@@ -87,7 +87,7 @@ async function run(name) {
     if (i === 0) await page.screenshot({ path: join(out, `${name}-2-question.png`) });
 
     const [dx, dy] = OFFSETS[i];
-    // Phones show the map and a small bar first; the full card rises once the camera has landed.
+    // Phones show the map and a small bar first; the full card rises 2 s after the tap.
     await page.evaluate(() => { const r = document.getElementById('result'); window.__t0 = performance.now(); window.__open = 0;
       new MutationObserver(() => { if (!r.hidden && !r.classList.contains('peek') && !window.__open) window.__open = performance.now() - window.__t0; }).observe(r, { attributes: true }); });
     await tapLonLat(page, b.lon + dx, b.lat + dy, touch);

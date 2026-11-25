@@ -395,14 +395,13 @@ export class Globe {
   }
 
   /** Guess dot, flag on the real spot, dashed line between, camera framing both. */
-  /** onLanded runs when the camera flight ends (or is cancelled). */
-  showResult(m: Marker & { guess: { lon: number; lat: number } }, bottomInset = 0, onLanded?: () => void) {
+  showResult(m: Marker & { guess: { lon: number; lat: number } }, bottomInset = 0) {
     this.clear();
     this.addDashedLine(m.guess, m);
     this.addGuessDot(m.guess.lon, m.guess.lat);
     this.addFlag(m.lon, m.lat, m.name, m.color);
     this.lastPair = [m.guess, m];
-    this.frame(m.guess, m, bottomInset, 60_000, undefined, onLanded);
+    this.frame(m.guess, m, bottomInset);
   }
 
   /** Re-frames the last result for a card that now covers bottomInset of the canvas. */
@@ -512,7 +511,7 @@ export class Globe {
    * Flies straight down over the midpoint of a and b, high enough that both fit
    * in the part of the canvas not covered by the result card (bottomInset: 0..1).
    */
-  private frame(a: { lon: number; lat: number }, b: { lon: number; lat: number }, bottomInset: number, minAlt = 60_000, duration?: number, onLanded?: () => void) {
+  private frame(a: { lon: number; lat: number }, b: { lon: number; lat: number }, bottomInset: number, minAlt = 60_000, duration = 1.8) {
     const camera = this.scene.camera;
     const geod = new EllipsoidGeodesic(
       Cartographic.fromDegrees(a.lon, a.lat),
@@ -538,16 +537,10 @@ export class Globe {
     } else {
       alt = Math.min(alt * 1.1, 2.4e7);
     }
-    const destination = Cartesian3.fromDegrees(CesiumMath.toDegrees(mid.longitude), Math.max(-85, lat), alt);
-    // Shorter moves fly faster: a full zoom in from the whole globe takes 1.6 s, a small
-    // shift (a far-off guess that keeps the globe in view) well under a second.
-    duration ??= CesiumMath.clamp(Cartesian3.distance(camera.positionWC, destination) / 1.2e7, 0.6, 1.6);
     camera.flyTo({
-      destination,
+      destination: Cartesian3.fromDegrees(CesiumMath.toDegrees(mid.longitude), Math.max(-85, lat), alt),
       orientation: { heading: 0, pitch: -CesiumMath.PI_OVER_TWO, roll: 0 },
       duration,
-      complete: onLanded,
-      cancel: onLanded,
     });
   }
 }
