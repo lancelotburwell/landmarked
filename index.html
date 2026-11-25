@@ -133,6 +133,18 @@
               <button id="showall-btn" class="btn">See them on the globe</button>
             </div>
           </div>
+          <!-- Feedback (user's request, 2026-11-25: big, red and high up, right under the share buttons).
+               api/feedback.ts emails it to the creator (Resend) and keeps a copy for the planner. -->
+          <form id="fb-form" class="feedback">
+            <label for="fb-text" class="fb-title">✉ Tell the creator what you think</label>
+            <p class="fb-label">Ideas, bugs, a building you'd love to see? I read every message.</p>
+            <textarea id="fb-text" maxlength="2000" rows="4" required placeholder="Type your message… (add your email if you'd like a reply)"></textarea>
+            <div class="fb-row">
+              <span id="fb-msg" class="fb-msg" role="status"></span>
+              <button id="fb-send" class="btn fb-send" type="submit">Send feedback</button>
+            </div>
+          </form>
+
           <div id="countdown-row" class="countdown">Next buildings in <span id="countdown">--:--:--</span></div>
           <div id="catchup" class="catchup" hidden></div>
           <!-- Social links. To add X: copy the <a> with href="https://x.com/<handle>" and an X icon. -->
@@ -142,19 +154,6 @@
               <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.4" cy="6.6" r="1.3" fill="currentColor"/></svg>
               <span>Instagram</span>
             </a>
-          </div>
-
-          <!-- Feedback: api/feedback.ts emails it to the creator (Resend) and keeps a copy for the planner. -->
-          <div class="feedback">
-            <button id="fb-open" class="btn small fb-open" type="button" aria-expanded="false" aria-controls="fb-form">✉ Feedback straight to the creator</button>
-            <form id="fb-form" class="fb-form" hidden>
-              <label for="fb-text" class="fb-label">Ideas, bugs, a building you'd love to see? I read every message.</label>
-              <textarea id="fb-text" maxlength="2000" rows="4" required placeholder="Type your message… (add your email if you'd like a reply)"></textarea>
-              <div class="fb-row">
-                <span id="fb-msg" class="fb-msg" role="status"></span>
-                <button id="fb-send" class="btn primary small" type="submit">Send</button>
-              </div>
-            </form>
           </div>
 
           <h3 class="end-h">Today's buildings</h3>

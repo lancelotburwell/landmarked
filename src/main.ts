@@ -513,17 +513,11 @@ el.shareBtn.addEventListener('click', async () => {
 
 // ---------- feedback (end screen) ----------
 const fb = {
-  open: $<HTMLButtonElement>('fb-open'),
   form: $<HTMLFormElement>('fb-form'),
   text: $<HTMLTextAreaElement>('fb-text'),
   send: $<HTMLButtonElement>('fb-send'),
   msg: $('fb-msg'),
 };
-fb.open.addEventListener('click', () => {
-  fb.form.hidden = !fb.form.hidden;
-  fb.open.setAttribute('aria-expanded', String(!fb.form.hidden));
-  if (!fb.form.hidden) fb.text.focus();
-});
 fb.form.addEventListener('submit', async (e) => {
   e.preventDefault();
   const message = fb.text.value.trim();
@@ -535,9 +529,8 @@ fb.form.addEventListener('submit', async (e) => {
   fb.send.disabled = false;
   if (ok) {
     fb.text.value = '';
-    fb.form.hidden = true;
-    fb.open.setAttribute('aria-expanded', 'false');
-    fb.open.textContent = '✓ Thanks! Message sent';
+    fb.form.replaceChildren(h('div', 'fb-title', '✓ Thanks! Your message reached the creator.'));
+    fb.form.classList.add('sent');
   } else {
     fb.msg.textContent = 'Could not send. Please try again later.';
   }
