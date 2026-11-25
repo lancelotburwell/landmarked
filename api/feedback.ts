@@ -1,4 +1,4 @@
-// POST /api/feedback  { message, day?, score?, rounds?, catchUp? }
+// POST /api/feedback  { message, kind?: "building", day?, score?, rounds?, catchUp? }
 // A player's message from the end screen ("Feedback straight to the creator").
 // It is emailed to FEEDBACK_TO through Resend (RESEND_API_KEY; optional FEEDBACK_FROM,
 // default Resend's onboarding sender, which only delivers to the Resend account's own address)
@@ -17,7 +17,7 @@ interface ListStore {
 const KEY = 'lm:feedback';
 const MAX_PER_MINUTE = 10; // across everyone: enough for real players, stops a flood
 
-export interface Feedback { at: string; message: string; day?: string; score?: number; rounds?: number; catchUp?: boolean; country?: string }
+export interface Feedback { at: string; message: string; kind?: 'building'; day?: string; score?: number; rounds?: number; catchUp?: boolean; country?: string }
 
 export function parseFeedback(body: unknown, country?: string | null, now = new Date()): Feedback | null {
   if (!body || typeof body !== 'object') return null;
@@ -25,7 +25,10 @@ export function parseFeedback(body: unknown, country?: string | null, now = new 
   if (typeof b.message !== 'string') return null;
   const message = b.message.replace(/\r\n/g, '\n').trim().slice(0, 2000);
   if (!message) return null;
-  const fb: Feedback = { at: now.toISOString(), message };
+  // A building suggestion (the panel's second tab, 2026-11-25): one short line, e.g. "Hallgrímskirkja, Reykjavík".
+  const building = b.kind === 'building';
+  const fb: Feedback = { at: now.toISOString(), message: building ? message.replace(/\s+/g, ' ').slice(0, 200) : message };
+  if (building) fb.kind = 'building';
   if (typeof b.day === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(b.day)) fb.day = b.day;
   if (typeof b.score === 'number' && Number.isInteger(b.score) && b.score >= 0 && b.score <= 1000) fb.score = b.score;
   if (typeof b.rounds === 'number' && Number.isInteger(b.rounds) && b.rounds >= 0 && b.rounds <= 5) fb.rounds = b.rounds;
@@ -50,7 +53,7 @@ async function email(fb: Feedback): Promise<boolean> {
     body: JSON.stringify({
       from: process.env.FEEDBACK_FROM || 'Landmarked feedback <onboarding@resend.dev>',
       to: to.split(',').map((s) => s.trim()),
-      subject: `Landmarked feedback: ${first}${fb.message.length > 60 ? '…' : ''}`,
+      subject: fb.kind === 'building' ? `Landmarked building suggestion: ${first}` : `Landmarked feedback: ${first}${fb.message.length > 60 ? '…' : ''}`,
       text: `${fb.message}\n\n---\n${context || 'No game context'}\nSent ${fb.at} from the end screen of landmarked.land`,
     }),
   });

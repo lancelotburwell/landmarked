@@ -135,10 +135,15 @@
           </div>
           <!-- Feedback (user's request, 2026-11-25: red and high up, right under the share buttons; compact).
                api/feedback.ts emails it to the creator (Resend) and keeps a copy for the planner. -->
+          <!-- Building suggestions (user's idea, 2026-11-25) share the panel: a second tab. -->
           <form id="fb-form" class="feedback">
-            <label for="fb-text" class="fb-title">✉ Tell me what you think</label>
+            <div class="fb-tabs" role="tablist" aria-label="Send">
+              <button type="button" role="tab" class="fb-tab" data-kind="feedback" aria-selected="true">✉ Tell me what you think</button>
+              <button type="button" role="tab" class="fb-tab" data-kind="building" aria-selected="false">🏛 Suggest a building</button>
+            </div>
+            <span id="fb-hint" class="fb-label" hidden>Which building should be in the game? Good picks get added.</span>
             <div class="fb-row">
-              <textarea id="fb-text" maxlength="2000" rows="1" required placeholder="Ideas, bugs, wishes…"></textarea>
+              <textarea id="fb-text" maxlength="2000" rows="1" required placeholder="Ideas, bugs, wishes…" aria-label="Your message"></textarea>
               <button id="fb-send" class="btn fb-send" type="submit">Send</button>
             </div>
             <span id="fb-msg" class="fb-msg" role="status"></span>

@@ -545,7 +545,22 @@ const fb = {
   text: $<HTMLTextAreaElement>('fb-text'),
   send: $<HTMLButtonElement>('fb-send'),
   msg: $('fb-msg'),
+  hint: $('fb-hint'),
+  kind: 'feedback' as 'feedback' | 'building',
 };
+// Two tabs in one panel: a message, or a building to add to the game.
+const FB_PLACEHOLDER = { feedback: 'Ideas, bugs, wishes…', building: 'e.g. Hallgrímskirkja, Reykjavík' };
+for (const tab of fb.form.querySelectorAll<HTMLButtonElement>('.fb-tab')) {
+  tab.addEventListener('click', () => {
+    fb.kind = tab.dataset.kind as typeof fb.kind;
+    for (const t of fb.form.querySelectorAll('.fb-tab')) t.setAttribute('aria-selected', String(t === tab));
+    fb.text.placeholder = FB_PLACEHOLDER[fb.kind];
+    fb.text.maxLength = fb.kind === 'building' ? 200 : 2000;
+    fb.hint.hidden = fb.kind !== 'building';
+    fb.msg.textContent = '';
+    fb.text.focus();
+  });
+}
 // One line to start; grows with the message (up to max-height in the CSS).
 fb.text.addEventListener('input', () => {
   fb.text.style.height = '';
@@ -558,11 +573,11 @@ fb.form.addEventListener('submit', async (e) => {
   fb.send.disabled = true;
   fb.msg.className = 'fb-msg';
   fb.msg.textContent = 'Sending…';
-  const ok = await sendFeedback({ message, day: date, score: total(), rounds: state.guesses.length, catchUp });
+  const ok = await sendFeedback({ message, kind: fb.kind, day: date, score: total(), rounds: state.guesses.length, catchUp });
   fb.send.disabled = false;
   if (ok) {
     fb.text.value = '';
-    fb.form.replaceChildren(h('div', 'fb-title', '✓ Thanks! Message sent.'));
+    fb.form.replaceChildren(h('div', 'fb-title', fb.kind === 'building' ? '✓ Thanks! Suggestion sent.' : '✓ Thanks! Message sent.'));
     fb.form.classList.add('sent');
   } else {
     fb.msg.textContent = 'Could not send. Please try again later.';

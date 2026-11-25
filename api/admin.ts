@@ -129,6 +129,18 @@ async function handle(b: Json): Promise<Json> {
       });
       return { commit: sha, credit };
     }
+    case 'suggest': { // a player's building suggestion, queued for the weekly routine (data/suggestions.json)
+      const text = String(b.text ?? '').replace(/\s+/g, ' ').trim().slice(0, 200);
+      if (!text) throw new Fail('empty suggestion');
+      const sha = await commit(`Queue building suggestion: ${text.slice(0, 60)}`, async (read) => {
+        let rows: Json[] = [];
+        try { rows = lines(await read('data/suggestions.json')); } catch { /* first one */ }
+        if (rows.some((r) => r.text.toLowerCase() === text.toLowerCase())) throw new Fail('already queued');
+        rows.push({ text, at: typeof b.at === 'string' ? b.at.slice(0, 30) : new Date().toISOString(), queued: new Date().toISOString().slice(0, 10), status: 'new' });
+        return { 'data/suggestions.json': serialise(rows) };
+      });
+      return { commit: sha };
+    }
     default:
       throw new Fail('unknown action');
   }

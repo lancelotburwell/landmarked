@@ -56,7 +56,7 @@ export async function finishAndRank(day: string, score: number): Promise<Rank | 
 
 /** Sends a feedback message to the creator (api/feedback.ts). Unlike the counters it
  *  sends from any host, so it can be tested locally. True when the server accepted it. */
-export async function sendFeedback(body: { message: string; day: string; score: number; rounds: number; catchUp: boolean }): Promise<boolean> {
+export async function sendFeedback(body: { message: string; kind?: 'feedback' | 'building'; day: string; score: number; rounds: number; catchUp: boolean }): Promise<boolean> {
   try {
     const res = await fetch(`${API}feedback`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
     return res.ok;
