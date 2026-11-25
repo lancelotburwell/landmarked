@@ -118,7 +118,8 @@ for (const p of todo) {
   const c = own ?? credits[p.id];
   const artist = c.artist
     .replace(/^The original uploader was (.*?) at .*$/, '$1')
-    .replace(/^No machine-readable author provided\. (.*?) assumed.*$/, '$1');
+    .replace(/^No machine-readable author provided\. (.*?) assumed.*$/, '$1')
+    .replace(/^Photo(graph)? by /i, '').replace(/\.$/, '');
   const credit = /public domain|cc0/i.test(c.license) ? '📷 Wikimedia Commons' : `📷 ${artist} · ${c.license} · cropped · Wikimedia Commons`;
   const text = `${p.line}
 
