@@ -55,7 +55,7 @@ jobs:
         with:
           node-version: 22
           cache: npm
-      - run: npm ci
+      - run: npm install --no-audit --no-fund  # npm ci rejects the lock file over an optional wasm dependency
       - name: ffmpeg
         run: command -v ffmpeg || (sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg)
       - run: npm run build
