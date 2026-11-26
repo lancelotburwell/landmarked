@@ -30,8 +30,12 @@
 //                                              Instagram to process it, without publishing
 // POST /api/instagram { action: "run" } with Authorization: Bearer <CRON_SECRET>, or the key:
 //   posts everything due today (Zurich time) and not posted yet, and refreshes an expiring
-//   token weekly. The "Publish Instagram posts" Action calls it every 15 minutes. A reel can
-//   take a few minutes to process: it is uploaded in one run and published in a later one.
+//   token weekly. A reel can take a few minutes to process: it is uploaded in one run and
+//   published in a later one.
+// GET  /api/instagram with Authorization: Bearer <CRON_SECRET>: the same run. Vercel's timed
+//   jobs (vercel.json "crons") call it once in every hour 05:00–21:59 UTC (Hobby: each job runs
+//   once a day, somewhere in its hour); the "Publish Instagram posts" Action (every 15
+//   minutes on GitHub's unreliable timer) stays as a backup.
 //
 // Environment (Vercel): STATS_KEY, CRON_SECRET, the Upstash vars, GITHUB_TOKEN (optional,
 // for reading the repo without the raw-file cache).
@@ -292,6 +296,18 @@ const isDate = (s: unknown): s is string => typeof s === 'string' && /^\d{4}-\d{
 const isKey = (s: unknown): s is string => typeof s === 'string' && /^\d{4}-\d{2}-\d{2}(-\d{4})?$/.test(s);
 
 export async function GET(request: Request): Promise<Response> {
+  // Vercel's timed jobs (vercel.json "crons", 2026-11-26) call with GET and the CRON_SECRET as a
+  // Bearer token: post whatever is due, like POST { action: "run" }. They replaced GitHub's
+  // timer as the main trigger, which dropped almost every run on 25–26 Nov.
+  const secret = process.env.CRON_SECRET;
+  if (secret && request.headers.get('authorization') === `Bearer ${secret}`) {
+    try {
+      const r = await run(redis() as unknown as IgStore, await loadPosts());
+      return Response.json(r, { status: r.failed.length ? 500 : 200, headers: noStore });
+    } catch (e) {
+      return Response.json({ error: (e as Error).message }, { status: 500 });
+    }
+  }
   const key = process.env.STATS_KEY;
   if (!key || new URL(request.url).searchParams.get('key') !== key) return Response.json({ error: 'wrong key' }, { status: 403 });
   try {
