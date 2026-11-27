@@ -118,6 +118,20 @@
   "text": "Inside, the atrium is shaped like a single grain of corn, blown up to fill the building.\n\nCan you find it on the globe? 🟥\nPlay at landmarked.land (link in bio)\n\n#architecture #geography #dailypuzzle #guessthebuilding\n\n📷 Mike Peel (www.mikepeel.net) · CC BY-SA 4.0 · cropped · Wikimedia Commons"
  },
  {
+  "key": "2026-11-28-1200",
+  "kind": "reel",
+  "date": "2026-11-28",
+  "time": "12:00",
+  "id": "elbphilharmonie",
+  "name": "Elbphilharmonie",
+  "tier": "medium",
+  "template": "who",
+  "video": "https://github.com/lancelotburwell/landmarked/releases/download/reels/2026-11-28-1200.mp4",
+  "clue": "A glass crown shaped like waves, on top of a brick cocoa warehouse in a big North Sea river port. The main hall is lined with 10,000 unique acoustic panels.",
+  "text": "An 82-metre curved escalator carries you up through an old warehouse to a plaza in the sky.\n\nWho am I? Comment A, B or C 👇 🟨\nPlay at landmarked.land (link in bio)\n\n#architecture #geography #dailypuzzle #guessthebuilding",
+  "notes": "On screen: A Jewish Museum Berlin · B Elbphilharmonie · C Wartburg. Answer: B. Reply to guesses without giving it away (\"warmer!\", \"right continent\").\nThe pin lands at 6.6 s: start the song so its beat drop hits there.\nNo location tag: Instagram shows it above the video, which gives the answer away."
+ },
+ {
   "key": "2026-11-28-1700",
   "kind": "carousel",
   "date": "2026-11-28",
@@ -136,6 +150,22 @@
   "text": "Its name means 'beautiful spring', after a well whose water was drunk by the imperial court.\n\nCan you find it on the globe? 🟩\nPlay at landmarked.land (link in bio)\n\n#architecture #geography #dailypuzzle #guessthebuilding\n\n📷 Herzi Pinki · CC BY-SA 3.0 at · cropped · Wikimedia Commons"
  },
  {
+  "key": "2026-11-28-2000",
+  "kind": "reel",
+  "date": "2026-11-28",
+  "time": "20:00",
+  "id": "pantheon",
+  "ids": [
+   "pantheon"
+  ],
+  "name": "Pantheon",
+  "tier": "easy",
+  "format": "pins",
+  "video": "https://github.com/lancelotburwell/landmarked/releases/download/reels/2026-11-28-2000.mp4",
+  "text": "Nearly 2,000 years old, and still the largest unreinforced concrete dome on Earth.\n\nOne clue, four pins. Comment 1, 2, 3 or 4 👇 🟩\nPlay at landmarked.land (link in bio)\n\n#architecture #geography #dailypuzzle #guessthebuilding",
+  "notes": "Format: pins. Answer: Pin 2: the Pantheon, Rome. (1 = Marseille, 3 = Athens, 4 = Tunis: decoys only.)\nReply to guesses without giving it away (\"so close!\", \"right continent\").\nMusic (optional, trending audio helps reach): calm, curious; a soft hit as each pin lands. Never a song that matches the place.\nNo location tag: Instagram shows it above the video."
+ },
+ {
   "date": "2026-11-29",
   "id": "cardboard-cathedral",
   "name": "Transitional Cathedral (Cardboard Cathedral)",
@@ -149,6 +179,22 @@
   ],
   "clue": "A Japanese architect famous for building with paper tubes made this A-frame church as a stopgap after an earthquake, in a South Pacific city known for its English-style gardens.",
   "text": "It rests on shipping containers, and its glass triangles reuse images from an older rose window.\n\nCan you find it on the globe? 🟥\nPlay at landmarked.land (link in bio)\n\n#architecture #geography #dailypuzzle #guessthebuilding\n\n📷 Michal Klajban · CC BY-SA 4.0 · cropped · Wikimedia Commons"
+ },
+ {
+  "key": "2026-11-29-1200",
+  "kind": "reel",
+  "date": "2026-11-29",
+  "time": "12:00",
+  "id": "canterbury-cathedral",
+  "ids": [
+   "canterbury-cathedral"
+  ],
+  "name": "Canterbury Cathedral",
+  "tier": "easy",
+  "format": "stop",
+  "video": "https://github.com/lancelotburwell/landmarked/releases/download/reels/2026-11-29-1200.mp4",
+  "text": "Founded in 597, burned in 1174, rebuilt in Gothic. Can you stop the globe right on it?\n\nPause the video when the crosshair is on it. Comment where you stopped 👇 🟩\nPlay at landmarked.land (link in bio)\n\n#architecture #geography #dailypuzzle #guessthebuilding",
+  "notes": "Format: stop. Answer: Canterbury Cathedral, Canterbury (England). The crosshair passes over it at 7.3 s.\nReply to guesses without giving it away (\"so close!\", \"right continent\").\nMusic (optional, trending audio helps reach): fast, driving electronic; the spin is the rhythm. Never a song that matches the place.\nNo location tag: Instagram shows it above the video."
  },
  {
   "key": "2026-11-29-1700",
@@ -167,5 +213,28 @@
   ],
   "clue": "An eight-sided brick church whose plain outside hides glittering gold mosaics of a Byzantine emperor and empress, in a former imperial capital near the Adriatic.",
   "text": "Consecrated in 547, it is one of eight buildings in its city on the World Heritage List.\n\nCan you find it on the globe? 🟨\nPlay at landmarked.land (link in bio)\n\n#architecture #geography #dailypuzzle #guessthebuilding\n\n📷 bradhostetler · CC BY-SA 2.0 · cropped · Wikimedia Commons"
+ },
+ {
+  "key": "2026-11-29-2000",
+  "kind": "reel",
+  "date": "2026-11-29",
+  "time": "20:00",
+  "id": "pantheon",
+  "ids": [
+   "pantheon",
+   "elbphilharmonie",
+   "jatiya-sangsad",
+   "selimiye-mosque",
+   "notre-dame-d-amiens",
+   "atomium",
+   "alhambra",
+   "sydney-opera-house"
+  ],
+  "name": "Pantheon, Elbphilharmonie, National Parliament House (Jatiya Sangsad Bhaban), Selimiye Mosque, Amiens Cathedral, Atomium, Alhambra, Sydney Opera House",
+  "tier": null,
+  "format": "wordsearch",
+  "video": "https://github.com/lancelotburwell/landmarked/releases/download/reels/2026-11-29-2000.mp4",
+  "text": "Eight cities are hiding in here. The first one you spot is where you're flying next.\n\nComment the first city you saw 👇\nPlay at landmarked.land (link in bio)\n\n#architecture #geography #dailypuzzle #guessthebuilding",
+  "notes": "Format: wordsearch. Answer: Hidden: ROME, HAMBURG, DHAKA, EDIRNE, AMIENS, BRUSSELS, GRANADA, SYDNEY (cities of buildings already played in Landmarked). No wrong answer: reply with that city's building.\nReply to guesses without giving it away (\"so close!\", \"right continent\").\nMusic (optional, trending audio helps reach): dreamy travel / wanderlust. Never a song that matches the place.\nNo location tag: Instagram shows it above the video."
  }
 ]
