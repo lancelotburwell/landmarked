@@ -20,9 +20,9 @@ import { writeFileSync } from 'node:fs';
 import { root, read, readOr, addDays, dayNum, distanceKm, isReel, postKey, postTime, POST_SLOTS, FROZEN_DAYS } from './lib/plan.mjs';
 
 const DRY = process.argv.includes('--dry');
-// Carousels need eyes on the photo (close-up rules), which a script doesn't have: the first
-// try (2026-11-27) picked whole façades, a sign and a night crowd. So by default this only
-// fills reels, as the fallback when the Claude step of the Action fails; --carousels tries anyway.
+// Reels only by default: carousels need eyes on the photo, which Claude in the Action has and this
+// script doesn't (2026-11-27: its picks showed whole façades and once the wrong building).
+// --carousels tries anyway (detail-titled Commons files, else the game photo cropped tight).
 const CAROUSELS = process.argv.includes('--carousels');
 const UA = { 'User-Agent': 'landmarked-social/1.0 (https://landmarked.land; automated Instagram posts)' };
 const B = read('data/buildings.json');
@@ -95,9 +95,14 @@ function teaser(b, clue, seed) {
 }
 
 // ---------- carousel photos: a high-resolution detail from the building's Commons category ----------
-const DETAIL = /detail|close|ornament|relief|carving|capital|tile|mosaic|pattern|texture|window|door|portal|ceiling|vault|dome|facade|façade|column|brick|stone|gate|lattice|roof|arch/i;
-const AVOID = /portrait|painting|drawing|engraving|lithograph|map|plan\b|plaque|sign|inscription|logo|visitors|people|tourist|crowd|night|panorama|aerial|drone|by [A-Z]|\d{3,4}\s*x\s*\d{3,4}|museum (collection|object)|exhibit/i;
-const LICENCE = /^(cc0|cc by(-sa)? [\d.]+|public domain|pd)/i;
+// Only files whose title says they show a detail (2026-11-27: taking any photo of the building
+// gave whole façades, skylines and street scenes). Searched in the building's category tree
+// (Wikidata P373) and, failing that, all of Commons with the building's name in the title.
+const DETAIL = /details?|close-?up|closeup|ornament|relief|carving|carved|capital|tiles?|azulejo|mosaic|pattern|texture|ceiling|vault|portal|doors?|lattice|fresco|stucco|frieze|muqarnas|marble|brickwork|cladding|sculpt|decorat|inlay|ironwork|grille|rosette|cornice|corbel|gargoyle|spandrel|tracery|stained glass/i;
+const AVOID = /portrait|painting|drawing|engraving|lithograph|map|plan|plaque|sign|inscription|logo|visitor|people|tourist|crowd|night|panorama|aerial|drone|skyline|cityscape|view|seen from|from the|street|sunset|sunrise|by [A-Z]|museum (collection|object)|exhibit|bush|garden|interior with|statue of|bust of|tomb of [A-Z]|text|letter|book|coin|stamp|bridge|pose|photograph|in front|fresco|retrieval|google art project|nara|bestanddeel|rijksmuseum|unsplash| and the |and/i;
+// Second tier, when no detail is on Commons: parts of the building (the crop stays tight).
+const PART = /fa[cç]ade|window|dome|cupola|column|arch|tower|spire|minaret|gate|wall|roof|entrance|exterior|tympanum|pediment|balcony|steel|glass|concrete|brick|stone|wood/i;
+const LICENCE = /^(cc0|cc by(-sa)? [d.]+|public domain|pd)/i;
 async function category(qid) {
   if (!qid) return null;
   const j = await api('www.wikidata.org', { action: 'wbgetclaims', entity: qid, property: 'P373' });
@@ -107,25 +112,39 @@ async function info(titles) {
   const j = await api('commons.wikimedia.org', { action: 'query', prop: 'imageinfo', iiprop: 'size|extmetadata', titles: titles.join('|') });
   return Object.values(j.query?.pages ?? {}).map((p) => ({ title: p.title, ...(p.imageinfo?.[0] ?? {}) })).filter((x) => x.width);
 }
+async function search(q) {
+  const j = await api('commons.wikimedia.org', { action: 'query', list: 'search', srnamespace: '6', srlimit: '100', srsearch: q }).catch(() => null);
+  return (j?.query?.search ?? []).map((r) => r.title);
+}
+const COMMON = new Set('palace tower towers museum cathedral church basilica temple monastery castle mosque house hall building center centre national world trade saint great theatre theater hotel arts opera royal city new old grand central state'.split(' '));
 async function closeUp(b, used) {
   const cat = await category(b.qid).catch(() => null);
+  // Files from the building's own category are of the building; anything found more widely must
+  // name it (a distinctive word of its name) in the title: deep categories hold museum collections.
+  const own = words(b.name).filter((w) => !COMMON.has(w));
+  const named = (t) => own.length > 0 && own.some((w) => t.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').includes(w));
+  let titles = cat ? await search(`incategory:"${cat}" filew:>3000`) : [];
+  if (cat) titles.push(...(await search(`deepcat:"${cat}" filew:>3000 detail`)).filter(named));
+  titles.push(...(await search(`"${b.name.replace(/s*(.*)$/, '')}" detail filew:>3000`)).filter(named));
+  titles = [...new Set(titles)].filter((t) => /.jpe?g$/i.test(t) && (DETAIL.test(t) || PART.test(t)) && !AVOID.test(t.replace(/^File:/, '')) && !used.has(t));
   const cands = [];
-  if (cat) {
-    const j = await api('commons.wikimedia.org', { action: 'query', list: 'search', srnamespace: '6', srlimit: '50', srsearch: `incategory:"${cat}" filew:>3000 filetype:bitmap` });
-    const titles = (j.query?.search ?? []).map((r) => r.title).filter((t) => /\.jpe?g$/i.test(t) && !AVOID.test(t) && !used.has(t));
-    for (let i = 0; i < titles.length; i += 40) cands.push(...await info(titles.slice(i, i + 40)));
-  }
-  const good = cands.filter((c) => LICENCE.test(c.extmetadata?.LicenseShortName?.value ?? '') && !/nc|nd/i.test(c.extmetadata?.LicenseShortName?.value ?? '') && c.width >= 3000);
-  const detail = good.filter((c) => DETAIL.test(c.title));
-  if (detail.length) return pick(detail, b.id + detail.length).title;
-  // Else the game photo's original, if it's large enough for a tight crop.
+  for (let i = 0; i < titles.length && i < 120; i += 40) cands.push(...await info(titles.slice(i, i + 40)));
+  const good = cands.filter((c) => { const l = c.extmetadata?.LicenseShortName?.value ?? ''; return LICENCE.test(l) && !/nc|nd/i.test(l) && c.width >= 3000 && c.height >= 2000; });
+  // 1. A file whose title says it's a detail.
+  const detail = good.filter((c) => DETAIL.test(c.title)).sort((x, y) => y.width - x.width);
+  if (detail.length) return pick(detail.slice(0, 3), b.id + time()).title;
+  // 2. The game's own photo (chosen by hand, it shows the building well) at full size, cropped tight.
   const page = credits[b.id]?.page;
-  if (!page) return good.length ? pick(good, b.id).title : null;
-  const file = decodeURIComponent(page.split('/wiki/')[1]).replace(/_/g, ' ');
-  const [orig] = await info([file]);
-  if (orig?.width >= 2600 && !used.has(file)) return file;
-  return good.length ? pick(good, b.id).title : null;
+  if (page) {
+    const file = decodeURIComponent(page.split('/wiki/')[1]).replace(/_/g, ' ');
+    const [orig] = await info([file]).catch(() => []);
+    if (orig?.width >= 3000 && !used.has(file)) return file;
+  }
+  // 3. Another photo of a part of the building.
+  const part = good.filter((c) => PART.test(c.title)).sort((x, y) => y.width - x.width);
+  return part.length ? pick(part.slice(0, 3), b.id + time()).title : null;
 }
+let clock = 0; const time = () => String(clock++);
 
 const GENERIC_REEL = ['One clue is all you get. Think you know where it is?', 'Most people get the region. Can you name the building?', 'You have seen it in photos. Can you place it?'];
 const GENERIC_CAROUSEL = ["One of today's five buildings, up close. Where in the world is it?", "A close-up of one of today's buildings. Could you find it on the globe?"];
