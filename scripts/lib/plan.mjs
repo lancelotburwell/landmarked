@@ -39,6 +39,8 @@ export const isReel = (p) => p.kind === 'reel';
 // listing it here.
 export const REEL_FORMATS = ['ladder', 'pins', 'emoji', 'stop', 'speed', 'silhouettes', 'wordsearch', 'distance', 'mistake'];
 export const postTime = (p) => p.time ?? '08:00';
+// Every day's Instagram posts, Zurich time (user, 2026-11-25): carousels at 08:00 and 17:00, reels at 12:00 and 20:00.
+export const POST_SLOTS = ['08:00', '12:00', '17:00', '20:00'];
 export const postKey = (p) => (!isReel(p) && postTime(p) === '08:00' ? p.date : `${p.date}-${postTime(p).replace(':', '')}`);
 
 // data/pins.json: manual decisions the scheduler always respects. One entry per line:
@@ -110,11 +112,19 @@ export function checkPlan({ pool, schedule, socialList = readOr('data/social.jso
     }
   }
 
-  // Instagram: a post for every locked day; today and tomorrow are urgent.
+  // Instagram: every locked day has its four posts (user, 2026-11-25: carousels at 08:00 and
+  // 17:00, reels at 12:00 and 20:00); today and tomorrow are urgent, and their posts must be
+  // rendered (a caption in data/social-captions.json), or nothing goes out at that time.
+  const rendered = new Set(readOr('data/social-captions.json', []).map((c) => c.key ?? postKey(c)));
   for (let d = today; d <= locked; d = addDays(d, 1)) {
     const ids = social.get(d) ?? [];
     const day = byDate.get(d);
-    if (!ids.length) (d <= addDays(today, 1) ? errors : warns).push(`${d}: no Instagram post`);
+    const urgent = d <= addDays(today, 1);
+    const posts = socialList.filter((s) => s.date === d);
+    const have = new Set(posts.map(postTime));
+    const missing = POST_SLOTS.filter((t) => !have.has(t));
+    if (missing.length) (urgent ? errors : warns).push(`${d}: no Instagram post at ${missing.join(', ')}`);
+    if (urgent) for (const s of posts) if (!rendered.has(postKey(s))) errors.push(`${postKey(s)}: the Instagram post isn't rendered yet`);
     for (const id of ids) if (day && !day.ids.includes(id)) errors.push(`${d}: an Instagram carousel shows ${id}, which is not in that day's puzzle`);
   }
   // Two posts can't share a slot, and a reel only shows a building whose day has been played
