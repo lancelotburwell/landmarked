@@ -1,0 +1,87 @@
+# Fills the Instagram queue every night, with no computer of the owner's involved (user,
+# 2026-11-27: "the same automation as i.smell.music"): Claude (anthropics/claude-code-action,
+# on the owner's Claude subscription via the CLAUDE_CODE_OAUTH_TOKEN secret) writes the
+# missing posts for tomorrow through today + 8 by .github/upkeep-prompt.md, and on Saturdays
+# adds buildings. If that step fails or leaves gaps, scripts/auto-social.mjs fills the reels
+# mechanically. Then the two render Actions are started (a push made with the workflow's
+# token doesn't start them by itself), and api/instagram.ts posts everything at its time.
+#
+# Started by a Vercel timed job (api/instagram.ts ?fill=1, 01:00 UTC), since GitHub's own
+# timer drops runs; the schedule below is the backup. Two runs never overlap.
+name: Fill Instagram queue
+
+on:
+  schedule:
+    - cron: '41 2 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+  id-token: write
+
+concurrency:
+  group: fill
+  cancel-in-progress: false
+
+jobs:
+  fill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    env:
+      HAS_CLAUDE: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN != '' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm install --no-audit --no-fund
+      - run: pip install pillow
+      - name: Identity (Vercel only builds commits by Burwell Projects)
+        run: |
+          git config user.name "Burwell Projects"
+          git config user.email "burwell.projects@gmail.com"
+
+      - name: Claude writes the posts
+        id: claude
+        continue-on-error: true
+        if: env.HAS_CLAUDE == 'true'
+        uses: anthropics/claude-code-action@v1
+        env:
+          CHROME_PATH: /usr/bin/google-chrome
+          GH_TOKEN: ${{ github.token }}
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          github_token: ${{ github.token }}
+          prompt: ${{ format('Today is {0}. Follow the instructions in .github/upkeep-prompt.md.', github.run_started_at) }}
+          claude_args: >-
+            --model claude-opus-5-5
+            --max-turns 400
+            --allowedTools "Bash,Read,Write,Edit,Glob,Grep,WebSearch,WebFetch"
+
+      - name: "Fallback: fill any reel slot still empty"
+        if: always()
+        run: |
+          git config user.name "Burwell Projects"
+          git config user.email "burwell.projects@gmail.com"
+          git pull --rebase || true
+          node scripts/auto-social.mjs
+          if git diff --quiet data/social.json; then echo "Nothing to add."; exit 0; fi
+          git add data/social.json
+          git commit -m "Instagram reels (automatic fallback)"
+          git pull --rebase && git push
+
+      - name: Start the renders
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh workflow run social.yml --ref main
+          gh workflow run reels.yml --ref main
+
+      - name: Health check
+        if: always()
+        run: git pull --rebase || true; node scripts/check-plan.mjs

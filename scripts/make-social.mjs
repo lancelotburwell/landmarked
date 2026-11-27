@@ -110,6 +110,42 @@ for (const p of todo) {
   const [iw, ih] = await page.evaluate(async (s) => {
     const img = document.images[0]; img.src = s; await img.decode(); return [img.naturalWidth, img.naturalHeight];
   }, src);
+  // crop "auto" (scripts/auto-social.mjs): the most detailed 4:5 window, as tight as the
+  // source allows while covering at least ~1,150 px of it, away from the edges; written back.
+  if (p.crop === 'auto') {
+    p.crop = await page.evaluate((minPx) => {
+      const img = document.images[0], iw = img.naturalWidth, ih = img.naturalHeight;
+      const S = 320 / iw, cw = 320, ch = Math.round(ih * S);
+      const c = document.createElement('canvas'); c.width = cw; c.height = ch;
+      const g = c.getContext('2d'); g.drawImage(img, 0, 0, cw, ch);
+      const d = g.getImageData(0, 0, cw, ch).data, L = new Float32Array(cw * ch);
+      for (let i = 0; i < cw * ch; i++) L[i] = 0.3 * d[i * 4] + 0.59 * d[i * 4 + 1] + 0.11 * d[i * 4 + 2];
+      // Detail = local gradient energy; flat sky and blur score low.
+      const E = new Float32Array(cw * ch);
+      for (let y = 1; y < ch - 1; y++) for (let x = 1; x < cw - 1; x++) {
+        const i = y * cw + x, gx = L[i + 1] - L[i - 1], gy = L[i + cw] - L[i - cw];
+        E[i] = Math.min(60, Math.hypot(gx, gy));
+      }
+      const I = new Float64Array((cw + 1) * (ch + 1)); // integral image
+      for (let y = 0; y < ch; y++) for (let x = 0; x < cw; x++) I[(y + 1) * (cw + 1) + x + 1] = E[y * cw + x] + I[y * (cw + 1) + x + 1] + I[(y + 1) * (cw + 1) + x] - I[y * (cw + 1) + x];
+      const sum = (x0, y0, x1, y1) => I[y1 * (cw + 1) + x1] - I[y0 * (cw + 1) + x1] - I[y1 * (cw + 1) + x0] + I[y0 * (cw + 1) + x0];
+      let w = Math.min(0.6, Math.max(0.3, minPx / iw));
+      if (w * iw * 1.25 > ih) w = ih / (iw * 1.25);
+      const ww = Math.round(w * cw), wh = Math.round(ww * 1.25);
+      let best = null;
+      for (let y = 0; y + wh <= ch; y += 3) for (let x = 0; x + ww <= cw; x += 3) {
+        const m = sum(x, y, x + ww, y + wh) / (ww * wh);
+        // Evenness: the detail should fill the frame, not sit in one corner (quarters' minimum).
+        const hx = x + (ww >> 1), hy = y + (wh >> 1);
+        const q = Math.min(sum(x, y, hx, hy), sum(hx, y, x + ww, hy), sum(x, hy, hx, y + wh), sum(hx, hy, x + ww, y + wh)) / ((ww * wh) / 4);
+        const score = 0.6 * m + 0.4 * q;
+        if (!best || score > best.score) best = { score, x, y };
+      }
+      const r = (v) => Math.round(v * 1000) / 1000;
+      return [r(best.x / cw), r(best.y / ch), r(w)];
+    }, 1150);
+    console.log(postKey(p), 'auto crop', JSON.stringify(p.crop));
+  }
   const [x, y, w] = p.crop;
   const scale = W / (w * iw);
   if (x + w > 1.001 || y * ih + H / scale > ih + 1) throw new Error(`${p.date} ${p.id}: crop runs off the photo`);
@@ -143,3 +179,5 @@ const merged = new Map((existsSync(capFile) ? JSON.parse(readFileSync(capFile, '
 for (const c of captions) merged.set(c.key, c);
 writeFileSync(capFile, JSON.stringify([...merged.values()].sort((a, b) => (a.key ?? a.date).localeCompare(b.key ?? b.date)), null, 1) + '\n');
 await browser.close();
+// Auto crops are written back, so a re-render keeps them.
+writeFileSync(new URL('data/social.json', root), '[\n' + posts.map((p) => '  ' + JSON.stringify(p)).join(',\n') + '\n]\n');

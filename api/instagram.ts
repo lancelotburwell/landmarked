@@ -301,6 +301,17 @@ export async function GET(request: Request): Promise<Response> {
   // timer as the main trigger, which dropped almost every run on 25–26 Nov.
   const secret = process.env.CRON_SECRET;
   if (secret && request.headers.get('authorization') === `Bearer ${secret}`) {
+    // ?fill=1 (one timed job a night): start the "Fill Instagram queue" Action, which writes the
+    // coming days' posts (Claude, with a mechanical fallback) and renders them. GitHub's own
+    // timer drops runs, so Vercel starts it.
+    if (new URL(request.url).searchParams.get('fill')) {
+      const repo = process.env.GITHUB_REPO ?? 'lancelotburwell/landmarked';
+      const res = await fetch(`https://api.github.com/repos/${repo}/actions/workflows/fill.yml/dispatches`, {
+        method: 'POST', body: JSON.stringify({ ref: process.env.GITHUB_BRANCH ?? 'main' }),
+        headers: { Authorization: `Bearer ${process.env.GITHUB_TOKEN}`, Accept: 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28' },
+      });
+      return Response.json({ fill: res.status === 204 ? 'started' : `GitHub answered ${res.status}: ${(await res.text()).slice(0, 200)}` }, { status: res.status === 204 ? 200 : 502, headers: noStore });
+    }
     try {
       const r = await run(redis() as unknown as IgStore, await loadPosts());
       return Response.json(r, { status: r.failed.length ? 500 : 200, headers: noStore });

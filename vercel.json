@@ -35,6 +35,7 @@
     }
   ],
   "crons": [
+    { "path": "/api/instagram?fill=1", "schedule": "0 1 * * *" },
     { "path": "/api/instagram?h=5", "schedule": "0 5 * * *" },
     { "path": "/api/instagram?h=6", "schedule": "0 6 * * *" },
     { "path": "/api/instagram?h=7", "schedule": "0 7 * * *" },
